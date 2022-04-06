@@ -1,27 +1,40 @@
 export default {
-    baseUrl: 'https://pifa.5laoye.com',
-    // baseUrl: 'http://192.168.50.142:9013',
-    // baseUrl: 'https://bmlu5c56.dnat.tech',
-    // baseUrl:'http://pinapi.hxqhhhh.shop',
-    login: '/admin/login', //登录
-    category:'/admin/category',//分类管理
-    productstorehouse:'/admin/productstorehouse',//商品仓库管理
-    size:'/admin/size',//尺寸管理
-    upload_pic:'/admin/upload_pic',//上传图片
-    color:'/admin/color',//颜色管理
-    product_type:'/admin/product_type',//眼镜分类
-    coatings:'/admin/coatings',//涂层管理
-    product:'/admin/product',//商品管理
-    tags:'/admin/tags',//标签管理
-    product_status:'/admin/product_status',//修改商品状态
-    basicindex:'/admin/basicindex',//眼镜偏光率管理
-    user_list:'/admin/user_list',//用户列表
-    country:'/admin/country',//国家列表
-    order_list:'/admin/order_list',//订单列表
-    order_send:'/admin/order_send',//订单发货
-    coupon:'/admin/coupon',//优惠券管理
-    shipping_region:'/admin/shipping_region',//运费模板管理
-    productlevel:'/admin/productlevel',//眼镜等级管理,
-    webconfig_detail:'/admin/webconfig_detail',//商品参数配置
-    webconfig_update:'/admin/webconfig_update',//配置参数修改
+    baseUrl: 'http://test2.hezhiqiangaixuexi.asia/manage',
+    doLogin:'/doLogin',//登录
+    getUserList:'/getUserList',//获取用户列表
+    addMallCategory:'/addMallCategory',//获取所有分类
+    updateCategory:'/updateCategory',//添加/修改分类
+    deleteCategory:'/deleteCategory',//删除分类
+    getBoxList:'/getBoxList',//获取盲盒列表
+    updateBoxPrice:'/updateBoxAllInfo',//新增/修改盲盒
+    getShopList:'/getShopList',//获取商品列表
+    addShopInfo:'/addShopInfo',//新增商品
+    addPhoto:'/addPhoto',//上传图片
+    changeShopInfo:'/changeShopInfo',//修改商品
+    getCardTypeList:'/getCardTypeList',//获取虚拟物品列表
+    getShopByCategory:'/getShopByCategory',//获取分类下的商品列表
+    addCategoryShop:'/addCategoryShop',//添加分类商品
+    deleteCateGoryShop:'/deleteCateGoryShop',//移除分类商品
+    getCategoryWithoutShopList:'/getCategoryWithoutShopList',//获取可以添加到该分类的商品
+    deleteBox:'/deleteBox',//删除盲盒信息
+    getBoxDetail:'/getBoxDetail',//获取盲盒对应的商品
+    getOrderListByStatus:'/getOrderListByStatus',//获取订单列表
+    importCardListFromExcel:'/importCardListFromExcel',//导入卡密
+    exportCard:'/exportCard',//导出卡号卡密
+    changeOrderToCancle:'/changeOrderToCancle',//取消订单
+    changeOrderToError:'/changeOrderToError',//修改订单状态为异常订单
+    changeOrderToSended:'/changeOrderToSended',//发货
+    getCardListByOrderid:'/getCardListByOrderid',//获取虚拟发货的卡号
+    changeOrderToSendedByCard:'/changeOrderToSendedByCard',//虚拟物品发货
+    getCancelOperate:'/getCancelOperate',//取消订单相关数据
+    getOperate:'/getOperate',//获取运营数据
+    getManageHistory:'/getManageHistory',//查看操作日志
+    getManageList:'/getManageList',//获取管理员列表
+    getBoxCanAddShopList:'/weight/getBoxCanAddShopList',//获取可以添加到盲盒的商品
+    addBoxShop:'/weight/addBoxShop',//添加/修改盲盒商品
+    deleteBoxShop:'/weight/deleteBoxShop',//删除盲盒商品
+    getManageMemberPower:'/member/getManageMemberPower',//获取指定用户的权限
+    addManageMemberWithPower:'/member/addManageMemberWithPower',//添加管理员
+    updateManageInfo:'/member/updateManageInfo',//修改管理员信息
+    deleteManageById:'/deleteManageById',//删除管理员
 }

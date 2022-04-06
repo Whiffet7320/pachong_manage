@@ -39,24 +39,11 @@
       </div>
       <div class="myTable">
         <vxe-table
-          :tree-config="{
-            children: 'children',
-          }"
           align="center"
           :data="tableData"
         >
-          <vxe-table-column field="id" title="ID"></vxe-table-column>
-          <vxe-table-column tree-node field="category_name" title="分类名称"></vxe-table-column>
-          <vxe-table-column field="pic" title="分类图标">
-            <template slot-scope="scope">
-              <el-image :src="scope.row.icon_url" fit="fill" style="width: 40px; height: 40px">
-                <div slot="error" class="image-slot">
-                  <i class="el-icon-picture-outline"></i>
-                </div>
-              </el-image>
-            </template>
-          </vxe-table-column>
-          <vxe-table-column field="sort" title="排序"></vxe-table-column>
+          <vxe-table-column field="id" width='100' title="ID"></vxe-table-column>
+          <vxe-table-column field="name" title="分类名称"></vxe-table-column>
           <!-- <vxe-table-column field="is_show" title="状态(是否显示)">
             <template slot-scope="scope">
               <el-switch
@@ -92,10 +79,10 @@
           label-width="100px"
           class="demo-addForm"
         >
-          <el-row>
+          <!-- <el-row>
             <el-col :span="20">
               <el-form-item label="父级">
-                <!-- <el-select size="small" v-model="addForm.pid" placeholder="请选择">
+                <el-select size="small" v-model="addForm.pid" placeholder="请选择">
                   <el-option label="顶级分类" value="0"></el-option>
                   <el-option
                     v-for="item in tableData"
@@ -103,11 +90,11 @@
                     :label="item.cate_name"
                     :value="item.id"
                   ></el-option>
-                </el-select>-->
+                </el-select>
                 <el-cascader v-model="addForm.pid" size="small" :options="tableData" :props="props"></el-cascader>
               </el-form-item>
             </el-col>
-          </el-row>
+          </el-row> -->
           <el-row>
             <el-col :span="20">
               <el-form-item label="分类名称" prop="category_name">
@@ -115,7 +102,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
+          <!-- <el-row>
             <el-col :span="20">
               <el-form-item label="分类图标">
                 <div @click="companyList('tb')" class="myImg">
@@ -130,7 +117,7 @@
                 </div>
               </el-form-item>
             </el-col>
-          </el-row>
+          </el-row> -->
 
           <!-- <el-row>
             <el-col :span="12">
@@ -176,12 +163,7 @@ export default {
       tableData: [],
       addDialogVisible: false,
       addForm: {
-        pid: "",
-        cate_name: "",
-        pic: "",
-        big_pic: "",
-        sort: "",
-        is_show: "显示"
+        category_name: "",
       },
       rules: {
         category_name: [
@@ -205,19 +187,17 @@ export default {
   },
   methods: {
     async getData() {
-      const res = await this.$api.category({
-        pid: 0
-      });
+      const res = await this.$api.addMallCategory();
       console.log(res);
-      this.tableData = res.data.data;
-      this.tableData.forEach(ele => {
-        ele.is_showKG = ele.is_show == "1" ? true : false;
-        if (ele.children) {
-          ele.children.forEach(item => {
-            item.is_showKG = item.is_show == "1" ? true : false;
-          });
-        }
-      });
+      this.tableData = res.data;
+      // this.tableData.forEach(ele => {
+      //   ele.is_showKG = ele.is_show == "1" ? true : false;
+      //   if (ele.children) {
+      //     ele.children.forEach(item => {
+      //       item.is_showKG = item.is_show == "1" ? true : false;
+      //     });
+      //   }
+      // });
     },
     // 开关（显示/隐藏）
     async changeKG(row) {
@@ -253,14 +233,14 @@ export default {
       this.id = row.id;
       this.isAdd = false;
       this.addDialogVisible = true;
-      row.is_show = row.is_show == "0" ? "隐藏" : "显示";
-      row.pid = row.pid == "0" ? "顶级菜单" : row.pid;
-      this.addForm = { ...row };
+      // row.is_show = row.is_show == "0" ? "隐藏" : "显示";
+      // row.pid = row.pid == "0" ? "顶级菜单" : row.pid;
+      this.addForm.category_name = row.name;
     },
     async tabDel(row) {
       console.log(row);
-      const res = await this.$api.deleteCategory(row.id);
-      if (res.code == 200) {
+      const res = await this.$api.deleteCategory({id:row.id});
+      if (res.status == 200) {
         this.$message({
           message: res.msg,
           type: "success"
@@ -278,17 +258,10 @@ export default {
       this.$refs[formName].validate(async valid => {
         if (valid) {
           if (this.isAdd) {
-            const res = await this.$api.addCategory({
-              icon_url: this.addForm.pic,
-              pid:
-                this.addForm.pid.length == 1
-                  ? this.addForm.pid[0]
-                  : this.addForm.pid.length == 2
-                  ? this.addForm.pid[1]
-                  : this.addForm.pid[2],
-              category_name: this.addForm.category_name
+            const res = await this.$api.updateCategory({
+              name: this.addForm.category_name
             });
-            if (res.code == 200) {
+            if (res.status == 200) {
               this.$message({
                 message: res.msg,
                 type: "success"
@@ -299,18 +272,11 @@ export default {
           } else {
             const res = await this.$api.updateCategory(
               {
-                icon_url: this.addForm.pic,
-                pid:
-                  this.addForm.pid.length == 1
-                    ? this.addForm.pid[0]
-                    : this.addForm.pid.length == 2
-                    ? this.addForm.pid[1]
-                    : this.addForm.pid[2],
-                category_name: this.addForm.category_name
+                id:this.id,
+                name: this.addForm.category_name
               },
-              this.id
             );
-            if (res.code == 200) {
+            if (res.status == 200) {
               this.$message({
                 message: res.msg,
                 type: "success"

@@ -23,12 +23,28 @@
         <el-form ref="form" :model="form" label-width="80px">
           <el-row>
             <el-col :span="20">
+              <el-form-item label="类型：">
+                <el-radio-group @change="changeRad2" v-model="form.rad2" size="small">
+                  <el-radio-button label="0">所有类型</el-radio-button>
+                  <el-radio-button label="1">盲盒开箱</el-radio-button>
+                  <el-radio-button label="2">置换商品</el-radio-button>
+                </el-radio-group>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="22">
               <el-form-item label="订单状态：">
-                <el-radio-group @change='changeRad1' v-model="form.rad1" size="small">
-                  <el-radio-button label="0">待发货</el-radio-button>
-                  <el-radio-button label="1">待收货</el-radio-button>
-                  <el-radio-button label="2">待评价</el-radio-button>
-                  <el-radio-button label="3">交易完成</el-radio-button>
+                <el-radio-group @change="changeRad1" v-model="form.rad1" size="small">
+                  <el-radio-button label="-1">盲盒购买订单</el-radio-button>
+                  <el-radio-button label="0">待提取</el-radio-button>
+                  <el-radio-button label="1">待发货</el-radio-button>
+                  <el-radio-button label="2">待收货</el-radio-button>
+                  <el-radio-button label="3">已分解</el-radio-button>
+                  <el-radio-button label="4">已置换</el-radio-button>
+                  <el-radio-button label="5">已完成</el-radio-button>
+                  <el-radio-button label="6">异常订单</el-radio-button>
+                  <el-radio-button label="7">已取消</el-radio-button>
                 </el-radio-group>
               </el-form-item>
             </el-col>
@@ -96,9 +112,9 @@
           </el-row>-->
         </el-form>
       </div>
-      <div class="myTable">
+      <div class="myTable" v-show="form.rad1 != '-1'">
         <vxe-table :data="tableData">
-          <vxe-table-column type="expand" width="30" :fixed="null">
+          <!-- <vxe-table-column type="expand" width="30" :fixed="null">
             <template #content="{ row }">
               <template>
                 <div class="xiala">
@@ -113,45 +129,93 @@
                       <div class="item">邮费：{{ row.total_postage ? row.total_postage : '无'}}</div>
                     </el-col>
                   </el-row>
-                  <!-- <div style="margin-top: 16px"></div>
+                  <div style="margin-top: 16px"></div>
                   <el-row :gutter="20">
                     <el-col :span="20">
                       <div class="item">用户备注：无</div>
                     </el-col>
-                  </el-row>-->
+                  </el-row>
                 </div>
               </template>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="trade_no" min-width="180" title="订单号"></vxe-table-column>
-          <vxe-table-column min-width="80" field="myStatus" title="订单状态"></vxe-table-column>
-          <vxe-table-column min-width="80" field="real_name" title="用户信息">
+          </vxe-table-column>-->
+          <vxe-table-column field="order_id" min-width="60" title="订单号"></vxe-table-column>
+          <vxe-table-column min-width="80" field="order_status_name" title="订单状态"></vxe-table-column>
+          <vxe-table-column min-width="80" field="order_express_company" title="快递公司"></vxe-table-column>
+          <vxe-table-column min-width="80" field="order_courier" title="快递单号"></vxe-table-column>
+          <vxe-table-column min-width="180" title="用户信息">
             <template slot-scope="scope">
               <div
                 style="font-size:12px"
-              >{{scope.row.addressinfo.real_name_first}} {{scope.row.addressinfo.real_name_second}}</div>
+              >{{scope.row.address_person}} {{scope.row.address_phone}} {{scope.row.address_area}}{{scope.row.address_detail}}</div>
             </template>
           </vxe-table-column>
-          <vxe-table-column
-            show-overflow="title"
-            field="scope.row.orderinfo"
-            min-width="200"
-            title="商品信息"
-          >
+          <vxe-table-column show-overflow="title" min-width="200" title="商品信息">
             <template slot-scope="scope">
-              <div class="shopxx" v-for="item in scope.row.orderinfo" :key="item.id">
-                <img class="shopImg" :src="item.product_img" alt />
-                <div class="txt">
-                  {{ item.product_name }} |
-                  {{ item.color_name }} |
-                  {{ item.product_price }}元
-                </div>
+              <div class="shopxx">
+                <img class="shopImg" :src="scope.row.shop_img" alt />
+                <div class="txt">{{ scope.row.shop_name }}</div>
               </div>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="add_time" min-width="160" title="支付时间"></vxe-table-column>
-          <vxe-table-column field="pay_price" min-width="80" title="实际支付"></vxe-table-column>
-          <vxe-table-column field="myStatus" min-width="80" title="支付状态"></vxe-table-column>
+          <vxe-table-column field="myOpen_time" min-width="160" title="开箱时间"></vxe-table-column>
+          <vxe-table-column title="操作状态" v-if="form.rad1 != '7' && form.rad1 != '6'" width="180">
+            <template slot-scope="scope">
+              <div class="flex">
+                <!-- 实物 -->
+                <el-button
+                  v-if="form.rad1 == '1' && scope.row.card_type_id == 0"
+                  size="small"
+                  @click="fahuo(scope.row)"
+                  type="text"
+                >发货</el-button>
+                <!-- 虚拟 -->
+                <el-button
+                  v-if="form.rad1 == '1' && scope.row.card_type_id > 0"
+                  size="small"
+                  @click="fahuo2(scope.row)"
+                  type="text"
+                >发货</el-button>
+                <el-button
+                  style="margin-right: 8px"
+                  size="small"
+                  @click="yichangDingdan(scope.row)"
+                  type="text"
+                >异常订单</el-button>
+                <el-popconfirm
+                  confirm-button-text="需要退款"
+                  cancel-button-text="不需要"
+                  title="是否需要退款?"
+                  icon="el-icon-warning"
+                  icon-color="red"
+                  @confirm="quxiaoDingdan(scope.row,true)"
+                  @cancel="quxiaoDingdan(scope.row,false)"
+                >
+                  <el-button slot="reference" size="small" type="text">取消订单</el-button>
+                </el-popconfirm>
+              </div>
+            </template>
+          </vxe-table-column>
+        </vxe-table>
+        <el-pagination
+          class="fenye"
+          @size-change="this.handleSizeChange"
+          @current-change="this.handleCurrentChange"
+          :current-page="this.dingdanliebiaoPage"
+          :page-size="10"
+          :page-sizes="[10, 15, 20, 30]"
+          layout="total,sizes, prev, pager, next, jumper"
+          :total="this.total"
+        ></el-pagination>
+      </div>
+      <div class="myTable" v-show="form.rad1 == '-1'">
+        <vxe-table :data="tableData">
+          <vxe-table-column field="box_buy_id" title="购买盲盒ID"></vxe-table-column>
+          <vxe-table-column field="box_name" title="盲盒名称"></vxe-table-column>
+          <vxe-table-column field="box_num" title="购买数量"></vxe-table-column>
+          <vxe-table-column field="box_price" title="盲盒价格"></vxe-table-column>
+          <vxe-table-column field="myBox_time" title="获得时间"></vxe-table-column>
+          <vxe-table-column field="user_id" title="购买用户ID"></vxe-table-column>
           <vxe-table-column title="操作状态" width="100">
             <template slot-scope="scope">
               <div class="flex">
@@ -186,21 +250,21 @@
       :before-close="fahuoHandleClose"
     >
       <div class="fahuomyForm">
-        <el-form
-          :model="fahuoForm"
-          :rules="rules"
-          ref="fahuoForm"
-          label-width="100px"
-          class="demo-ruleForm"
-        >
-          <el-form-item label="快递单号" prop="express_code">
-            <el-input size="small" v-model="fahuoForm.express_code"></el-input>
+        <el-form :model="fahuoForm" ref="fahuoForm" label-width="100px" class="demo-ruleForm">
+          <el-form-item label="快递单号">
+            <el-input size="small" v-model="fahuoForm.order_courier"></el-input>
           </el-form-item>
-          <el-form-item label="快递名称" prop="express_name">
-            <el-input size="small" v-model="fahuoForm.express_name"></el-input>
+          <el-form-item label="快递公司">
+            <el-input size="small" v-model="fahuoForm.company"></el-input>
+          </el-form-item>
+          <el-form-item label="快递公司拼音">
+            <el-input size="small" v-model="fahuoForm.company_cn"></el-input>
+          </el-form-item>
+          <el-form-item label="发件人手机号">
+            <el-input size="small" v-model="fahuoForm.sender_phone"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button size="small" type="primary" @click="submitForm('fahuoForm')">发货</el-button>
+            <el-button size="small" type="primary" @click="submitForm">发货</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -228,8 +292,8 @@ export default {
     return {
       activeName: "3",
       form: {
-        rad1: "0",
-        rad2: "",
+        rad1: "-1",
+        rad2: "0",
         time: [],
         search: "",
         select: ""
@@ -239,8 +303,10 @@ export default {
       fahuoId: "",
       fahuoDialogVisible: false,
       fahuoForm: {
-        express_code: "",
-        express_name: ""
+        order_courier: "",
+        company: "",
+        company_cn: "",
+        sender_phone: ""
       },
       rules: {
         express_code: [
@@ -257,63 +323,132 @@ export default {
   },
   methods: {
     async getData() {
-      const res = await this.$api.order_list({
-        page: this.dingdanliebiaoPage,
-        limit: this.dingdanliebiaoPageSize,
-        status: this.form.rad1
+      const res = await this.$api.getOrderListByStatus({
+        pagenum: this.dingdanliebiaoPage,
+        pagesize: this.dingdanliebiaoPageSize,
+        status: this.form.rad1,
+        type: this.form.rad2
       });
       console.log(res.data);
       this.total = res.data.total;
-      this.tableData = res.data.data;
-      this.tableData.forEach(ele => {
-        // ele.myAble_delivery = ele.info.able_delivery == 1 ? "是" : "否";
-        // ele.myBuy_way = ele.paid == "0" ? "未支付" : "已支付";
-        if (ele.status == 0) {
-          ele.myStatus = "待发货";
-        } else if (ele.status == 1) {
-          ele.myStatus = "待收货";
-        } else if (ele.status == 2) {
-          ele.myStatus = "待评价";
-        } else if (ele.status == 3) {
-          ele.myStatus = "已完成";
+      // this.tableData = res.data.data;
+      res.data.data.forEach(ele => {
+        if (ele.open_time) {
+          ele.myOpen_time = this.formatDate(ele.open_time);
+        }
+        if (ele.box_time) {
+          ele.myBox_time = this.formatDate(ele.box_time);
         }
       });
+      this.$set(this, "tableData", res.data.data);
     },
-    async submitForm(formName) {
-      this.$refs[formName].validate(async valid => {
-        if (valid) {
-          const res = await this.$api.order_send({
-            id: this.fahuoId,
-            express_code: this.fahuoForm.express_code,
-            express_name: this.fahuoForm.express_name
-          });
-          console.log(res);
-          if (res.code == 200) {
-            this.$message({
-              message: res.message,
-              type: "success"
-            });
-            this.getData();
-            this.fahuoDialogVisible = false;
-          } else {
-            this.$message.error(res.message);
-          }
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
+    formatDate(now) {
+      var time = new Date(now);
+      var year = time.getFullYear();
+      var month = time.getMonth() + 1;
+      var date = time.getDate();
+      var hour = time.getHours();
+      var minute = time.getMinutes();
+      var second = time.getSeconds();
+      return (
+        year +
+        "-" +
+        month +
+        "-" +
+        date +
+        " " +
+        hour +
+        ":" +
+        minute +
+        ":" +
+        second
+      );
+    },
+    async submitForm() {
+      const res = await this.$api.changeOrderToSended({
+        order_id: this.fahuoId,
+        order_courier: this.fahuoForm.order_courier,
+        company: this.fahuoForm.company,
+        company_cn: this.fahuoForm.company_cn,
+        sender_phone: this.fahuoForm.sender_phone
       });
+      console.log(res);
+      if (res.status == 200) {
+        this.$message({
+          message: res.msg,
+          type: "success"
+        });
+        this.getData();
+        this.fahuoDialogVisible = false;
+      } else {
+        this.$message.error(res.msg);
+      }
     },
     onSubmit() {
       console.log(this.form);
     },
-    changeRad1(){
-      this.getData()
+    changeRad1() {
+      this.getData();
+    },
+    changeRad2() {
+      this.getData();
     },
     fahuo(row) {
       console.log(row);
-      this.fahuoId = row.id;
+      this.fahuoId = row.order_id;
       this.fahuoDialogVisible = true;
+    },
+    async fahuo2(row) {
+      console.log(row);
+      this.fahuoId = row.order_id;
+      const res = await this.$api.getCardListByOrderid({
+        order_id: row.order_id
+      });
+      console.log(res);
+      if (res.data.length > 0) {
+        var card_id = res.data[0].card_id;
+        const res2 = await this.$api.changeOrderToSendedByCard({
+          order_id: row.order_id,
+          card_id
+        });
+        if (res2.status == 200) {
+          this.$message({
+            message: res2.msg,
+            type: "success"
+          });
+          this.getData();
+        } else {
+          this.$message.error(res2.msg);
+        }
+      } else {
+        this.$message.error(res.msg);
+      }
+    },
+    async yichangDingdan(row) {
+      const res = await this.$api.changeOrderToError({
+        order_id: row.order_id
+      });
+      if (res.status == 200) {
+        this.$message({
+          message: res.msg,
+          type: "success"
+        });
+        this.getData();
+      }
+    },
+    async quxiaoDingdan(row, flag) {
+      console.log(row);
+      const res = await this.$api.changeOrderToCancle({
+        order_id: row.order_id,
+        need_refund: flag
+      });
+      if (res.status == 200) {
+        this.$message({
+          message: res.msg,
+          type: "success"
+        });
+        this.getData();
+      }
     },
     async toEditShop(row) {
       console.log(row);
@@ -348,9 +483,11 @@ export default {
 };
 </script>
 
+
 <style lang="scss" scoped>
 .index {
 }
+
 .nav1 {
   margin: 0 -18px;
   background-color: #fff;

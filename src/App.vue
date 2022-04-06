@@ -21,6 +21,12 @@ export default {
 }
 </style>
 <style lang="scss">
+.el-popconfirm__main{
+  font-size: 12px;
+  margin: 4px 0 10px 0;
+  display: flex;
+  justify-content: center;
+}
 .el-popover {
   transform: translateY(-6px);
   .el-checkbox {

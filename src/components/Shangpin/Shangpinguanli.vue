@@ -8,12 +8,20 @@
           <el-tab-pane label="下架的商品" name="2"></el-tab-pane>
           <el-tab-pane label="已经售馨商品" name="3"></el-tab-pane>
         </el-tabs>
-      </div> -->
+      </div>-->
     </div>
     <div class="nav2">
-      <!-- <div class="myForm">
+      <div class="myForm">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
-          <el-form-item label="商品分类：">
+          <!-- <el-form-item label="订单状态：">
+            <el-radio-group @change="changeRad1" v-model="formInline.rad1" size="small">
+              <el-radio-button label="0">待发货</el-radio-button>
+              <el-radio-button label="1">待收货</el-radio-button>
+              <el-radio-button label="2">待评价</el-radio-button>
+              <el-radio-button label="3">交易完成</el-radio-button>
+            </el-radio-group>
+          </el-form-item>-->
+          <!-- <el-form-item label="商品分类：">
             <el-cascader
               size="small"
               :options="options"
@@ -32,21 +40,15 @@
             <el-button size="small" type="primary" @click="onSubmit"
               >查询</el-button
             >
-          </el-form-item>
+          </el-form-item>-->
         </el-form>
-      </div> -->
+      </div>
       <div class="tit1">
-        <el-button
-          @click="toAddShop"
-          size="small"
-          type="primary"
-          icon="el-icon-plus"
-          >添加商品</el-button
-        >
+        <el-button @click="toAddShop" size="small" type="primary" icon="el-icon-plus">添加商品</el-button>
       </div>
       <div class="myTable">
         <vxe-table :data="tableData">
-          <vxe-table-column type="expand" width="30" :fixed="null">
+          <!-- <vxe-table-column type="expand" width="30" :fixed="null">
             <template #content="{ row }">
               <template>
                 <div class="xiala">
@@ -73,13 +75,14 @@
                 </div>
               </template>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="id" title="商品ID"></vxe-table-column>
-          <vxe-table-column field="product_num" title="商品编号"></vxe-table-column>
-          <vxe-table-column field="role" title="商品封面图片">
+          </vxe-table-column>-->
+          <vxe-table-column field="shop_id" title="商品ID"></vxe-table-column>
+          <!-- <vxe-table-column field="product_num" title="商品编号"></vxe-table-column> -->
+          <vxe-table-column field="role" title="商品图片">
             <template slot-scope="scope">
               <el-image
-                :src="scope.row.product_img"
+                :src="scope.row.shop_img"
+                :preview-src-list="[scope.row.shop_img]"
                 fit="fill"
                 style="width: 40px; height: 40px"
               >
@@ -89,49 +92,43 @@
               </el-image>
             </template>
           </vxe-table-column>
-          <vxe-table-column
-            field="product_name"
-            title="商品名称"
-          ></vxe-table-column>
-          <vxe-table-column field="product_price" title="商品售价"></vxe-table-column>
-          <!-- <vxe-table-column field="ficti" title="销量"></vxe-table-column> -->
-          <!-- <vxe-table-column field="stock" title="库存"></vxe-table-column> -->
-          <vxe-table-column field="status" title="状态(是否显示)">
+          <vxe-table-column field="role" title="商品轮播图片">
             <template slot-scope="scope">
-              <el-switch
-                @change="changeKG(scope.row)"
-                v-model="scope.row.myStatus"
-              >
-              </el-switch>
+              <div style="display:inline-block;margin:0 3px" v-for="(item,i) in scope.row.shop_rotation" :key="i">
+                <el-image
+                  v-if="item != ''"
+                  :src="item"
+                  :preview-src-list="[item]"
+                  fit="fill"
+                  style="width: 40px; height: 40px"
+                >
+                  <div slot="error" class="image-slot">
+                    <i class="el-icon-picture-outline"></i>
+                  </div>
+                </el-image>
+              </div>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="myJingxuan" title="是否精选">
-          </vxe-table-column>
-          <vxe-table-column field="myShangxin" title="是否上心">
-          </vxe-table-column>
-          <vxe-table-column field="myRexiao" title="是否热销">
-          </vxe-table-column>
+          <vxe-table-column field="shop_name" title="商品名称"></vxe-table-column>
+          <!-- <vxe-table-column field="product_price" title="商品售价"></vxe-table-column> -->
+          <!-- <vxe-table-column field="ficti" title="销量"></vxe-table-column> -->
+          <!-- <vxe-table-column field="stock" title="库存"></vxe-table-column> -->
+          <!-- <vxe-table-column field="status" title="状态(是否显示)">
+            <template slot-scope="scope">
+              <el-switch @change="changeKG(scope.row)" v-model="scope.row.myStatus"></el-switch>
+            </template>
+          </vxe-table-column>-->
           <vxe-table-column title="操作状态" width="120">
             <template slot-scope="scope">
               <div class="flex">
-                <el-button
-                  size="small"
-                  @click="toEditShop(scope.row)"
-                  type="text"
-                  >编辑</el-button
-                >
+                <el-button size="small" @click="toEditShop(scope.row)" type="text">编辑</el-button>
                 <!-- <el-button
                   size="small"
                   @click="toEditShop(scope.row)"
                   type="text"
                   >查看评论</el-button
-                > -->
-                <el-button
-                  size="small"
-                  @click="toDelShop(scope.row)"
-                  type="text"
-                  >删除</el-button
-                >
+                >-->
+                <el-button size="small" @click="toDelShop(scope.row)" type="text">删除</el-button>
               </div>
             </template>
           </vxe-table-column>
@@ -145,9 +142,134 @@
           :page-sizes="[10, 15, 20, 30]"
           layout="total,sizes, prev, pager, next, jumper"
           :total="this.total"
-        >
-        </el-pagination>
+        ></el-pagination>
       </div>
+      <!-- 添加商品 -->
+      <el-dialog
+        title="添加商品"
+        :visible.sync="addDialogVisible"
+        width="700px"
+        :before-close="addHandleClose"
+      >
+        <div class="myAddForm">
+          <el-form :model="addForm" ref="addForm" label-width="100px" class="demo-addForm">
+            <!-- <el-row>
+            <el-col :span="20">
+              <el-form-item label="父级">
+                <el-select size="small" v-model="addForm.pid" placeholder="请选择">
+                  <el-option label="顶级分类" value="0"></el-option>
+                  <el-option
+                    v-for="item in tableData"
+                    :key="item.id"
+                    :label="item.cate_name"
+                    :value="item.id"
+                  ></el-option>
+                </el-select>
+                <el-cascader v-model="addForm.pid" size="small" :options="tableData" :props="props"></el-cascader>
+              </el-form-item>
+            </el-col>
+            </el-row>-->
+            <el-row>
+              <el-col :span="20">
+                <el-form-item label="商品名称" prop="category_name">
+                  <el-input size="small" placeholder="请输入商品名称" v-model="addForm.shop_name"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="20">
+                <el-form-item label="商品图片">
+                  <div @click="companyList('tb')" class="myImg">
+                    <el-image :src="addForm.shop_img" fit="fill" style="width: 60px; height: 60px">
+                      <div slot="error" class="image-slot">
+                        <i class="el-icon-picture-outline"></i>
+                      </div>
+                    </el-image>
+                    <div @click.stop="delImg('tb')" class="closeBtn">
+                      <el-button circle>×</el-button>
+                    </div>
+                  </div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="20">
+                <el-form-item label="商品轮播图片：" prop="shop_rotation">
+                  <div
+                    @click="companyList('lbt', i)"
+                    class="myImg"
+                    v-for="(item, i) in addForm.shop_rotation"
+                    :key="i"
+                  >
+                    <el-image :src="item" fit="fill" style="width: 60px; height: 60px">
+                      <div slot="error" class="image-slot">
+                        <i class="el-icon-picture-outline"></i>
+                      </div>
+                    </el-image>
+                    <div @click.stop="delImg('lbt', i)" class="closeBtn">
+                      <el-button circle>×</el-button>
+                    </div>
+                  </div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="20">
+                <el-form-item label="商品详情">
+                  <el-input size="small" type="textarea" v-model="addForm.shop_detail"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="20">
+                <el-form-item label="商品价格">
+                  <el-input size="small" placeholder="请输入商品价格" v-model="addForm.shop_price"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="20">
+                <el-form-item label="虚拟卡ID">
+                  <el-select size="small" v-model="addForm.card_id" filterable placeholder="请选择">
+                    <el-option
+                      v-for="item in options"
+                      :key="item.card_type_id"
+                      :label="item.card_name"
+                      :value="item.card_type_id"
+                    ></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- <el-row>
+            <el-col :span="12">
+              <el-form-item label="状态" prop="is_show">
+                <el-radio-group v-model="addForm.is_show">
+                  <el-radio label="显示"></el-radio>1
+                  <el-radio label="隐藏"></el-radio>0
+                </el-radio-group>
+              </el-form-item>
+            </el-col>
+            </el-row>-->
+            <el-row>
+              <el-col :span="20">
+                <el-form-item>
+                  <el-button size="small" type="primary" @click="AddOnSubmit">提交</el-button>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </div>
+      </el-dialog>
+      <input
+        type="file"
+        name="companyLogo"
+        id="file0"
+        class="displayN"
+        multiple="multiple"
+        @change="companyLogo($event)"
+        ref="fileInputList"
+      />
     </div>
   </div>
 </template>
@@ -156,83 +278,154 @@
 import { mapState } from "vuex";
 export default {
   computed: {
-    ...mapState(["shangpingliebiaoPage", "shangpingliebiaoPageSize"]),
+    ...mapState(["shangpingliebiaoPage", "shangpingliebiaoPageSize"])
   },
   watch: {
-    shangpingliebiaoPage: function (page) {
+    shangpingliebiaoPage: function(page) {
       this.$store.commit("shangpingliebiaoPage", page);
       this.getData();
     },
-    shangpingliebiaoPageSize: function (pageSize) {
+    shangpingliebiaoPageSize: function(pageSize) {
       this.$store.commit("shangpingliebiaoPageSize", pageSize);
       this.getData();
-    },
+    }
   },
   data() {
     return {
       // activeName: "3",
+      addForm: {
+        shop_name: "",
+        shop_img: "",
+        shop_rotation: ["", "", "", "", "", "", "", "", "", ""],
+        shop_detail: "",
+        shop_price: "",
+        card_id: ""
+      },
       formInline: {
+        rad1: "",
         country_pos: "",
         country_code: "",
         country_name: "",
         country_english_name: "",
         two_code: "",
-        three_code: "",
+        three_code: ""
       },
+      addDialogVisible: false,
       options: [],
       tableData: [],
       total: 0,
+      isAdd: true,
+      imgStatus: "",
+      imgIndex: "",
+      id: ""
     };
   },
   created() {
+    this.getMangheData();
     this.getData();
   },
   methods: {
     async getData() {
-      const res = await this.$api.product({
-        limit: this.shangpingliebiaoPageSize,
-        page: this.shangpingliebiaoPage,
+      const res = await this.$api.getShopList({
+        pagesize: this.shangpingliebiaoPageSize,
+        pagenum: this.shangpingliebiaoPage
       });
       console.log(res.data.data);
       this.total = res.data.total;
       this.tableData = res.data.data;
-      this.tableData.forEach((ele) => {
-        ele.myStatus = ele.status == "1" ? true : false;
-        ele.myJingxuan = ele.jingxuan == "1" ? '是' : '否';
-        ele.myShangxin = ele.shangxin == "1" ? '是' : '否';
-        ele.myRexiao = ele.rexiao == "1" ? '是' : '否';
+      this.tableData.forEach(ele => {
+        if(ele.shop_rotation != ''){
+          ele.shop_rotation = JSON.parse(ele.shop_rotation);
+        }
       });
-      const res2 = await this.$api.category({
-        pid: 0,
-      });
-      this.options = res2.data.data;
+    },
+    async getMangheData() {
+      const res = await this.$api.getCardTypeList();
+      this.options = res.data;
+    },
+    async AddOnSubmit() {
+      if (this.isAdd) {
+        const res = await this.$api.addShopInfo({
+          shop_name: this.addForm.shop_name,
+          shop_img: this.addForm.shop_img,
+          shop_rotation: JSON.stringify(this.addForm.shop_rotation),
+          shop_detail: this.addForm.shop_detail,
+          shop_price: this.addForm.shop_price,
+          card_id: this.addForm.card_id
+        });
+        if (res.status == 200) {
+          this.$message({
+            message: res.msg,
+            type: "success"
+          });
+          this.addDialogVisible = false;
+          this.getData();
+        } else {
+          this.$message.error(res.msg);
+        }
+      } else {
+        const res = await this.$api.changeShopInfo({
+          shop_id: this.id,
+          shop_name: this.addForm.shop_name,
+          shop_img: this.addForm.shop_img,
+          shop_rotation: JSON.stringify(this.addForm.shop_rotation),
+          shop_detail: this.addForm.shop_detail,
+          shop_price: this.addForm.shop_price,
+          card_id: this.addForm.card_id
+        });
+        if (res.status == 200) {
+          this.$message({
+            message: res.msg,
+            type: "success"
+          });
+          this.addDialogVisible= false;
+          this.getData();
+        } else {
+          this.$message.error(res.msg);
+        }
+      }
+    },
+    addHandleClose() {
+      this.addDialogVisible = false;
+    },
+    changeRad1() {
+      this.getData();
     },
     // 开关（上架/下架）
     async changeKG(row) {
       console.log(row);
       const res = await this.$api.product_status({
         id: row.id,
-        status: row.myStatus == true ? "1" : "0",
+        status: row.myStatus == true ? "1" : "0"
       });
       if (res.code == 200) {
         this.$message({
           message: res.message,
-          type: "success",
+          type: "success"
         });
         this.getData();
       }
     },
     toEditShop(row) {
+      this.isAdd = false;
+      this.id = row.shop_id;
       console.log(row);
-      this.$store.commit("shopObj", row);
-      this.$router.push({ name: "Tianjiashangping" });
+      this.addForm = { ...row };
+      if (row.shop_rotation == "") {
+        this.addForm.shop_rotation = ["", "", "", "", "", "", "", "", "", ""];
+      } else {
+        this.addForm.shop_rotation = row.shop_rotation
+        // if(this.addForm.shop_rotation.length)
+      }
+      this.addForm.card_id = row.card_type_id;
+      this.addDialogVisible = true;
     },
-    async toDelShop(row){
-      const res = await this.$api.deleteProduct(row.id)
+    async toDelShop(row) {
+      const res = await this.$api.deleteProduct(row.id);
       if (res.code == 200) {
         this.$message({
           message: res.message,
-          type: "success",
+          type: "success"
         });
         this.getData();
       }
@@ -244,8 +437,70 @@ export default {
       console.log("submit!");
     },
     toAddShop() {
-      this.$store.commit("shopObj", null);
-      this.$router.push({ name: "Tianjiashangping" });
+      this.isAdd = true;
+      for (const key in this.addForm) {
+        if (key == "shop_rotation") {
+          this.$set(this.addForm, key, [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ]);
+        } else {
+          this.$set(this.addForm, key, "");
+        }
+      }
+      this.addDialogVisible = true;
+    },
+    // 删除图片
+    delImg(val, i) {
+      if (val == "tb") {
+        this.$set(this.addForm, "shop_img", "");
+      } else if (this.imgStatus == "lbt") {
+        this.$set(this.addForm.shop_rotation, i, "");
+      }
+    },
+    // 上传图片
+    companyList(val, i) {
+      this.imgStatus = val;
+      this.imgIndex = i;
+      this.$refs.fileInputList.click();
+    },
+    async companyLogo(event) {
+      const that = this;
+      var file = event.target.files[0];
+      var fileSize = file.size; //文件大小
+      var filetType = file.type; //文件类型
+      //创建文件读取对象
+      // console.log(file);
+      if (fileSize <= 10240 * 1024) {
+        if (
+          filetType == "image/png" ||
+          filetType == "image/jpeg" ||
+          filetType == "image/gif"
+        ) {
+          this.imgFile = new FormData();
+          this.imgFile.append("file", file);
+          sessionStorage.setItem("img", 123);
+          const res = await that.$api.upload_pic(this.imgFile);
+          if (this.imgStatus == "tb") {
+            this.$set(this.addForm, "shop_img", `${res.data}`);
+          } else if (this.imgStatus == "lbt") {
+            this.$set(this.addForm.shop_rotation, this.imgIndex, `${res.data}`);
+          }
+          that.$refs.fileInputList.value = "";
+        } else {
+          this.$message.error("图片格式不正确");
+        }
+      } else {
+        this.$message.error("图片大小不正确");
+      }
     },
     // 分页
     handleSizeChange(val) {
@@ -255,8 +510,8 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
       this.$store.commit("shangpingliebiaoPage", val);
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -334,5 +589,61 @@ export default {
       border-radius: 4px;
     }
   }
+}
+.myAddForm {
+  /deep/ .el-select {
+    width: 100%;
+  }
+  /deep/ .el-form-item__label {
+    font-size: 12px;
+    width: 130px !important;
+  }
+  /deep/ .el-form-item__content {
+    margin-left: 130px !important;
+  }
+  /deep/ .el-radio__label {
+    font-size: 12px;
+  }
+  /deep/ .el-button {
+    width: 100%;
+  }
+  .myImg {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    display: inline-block;
+    margin-right: 12px;
+    .closeBtn {
+      position: absolute;
+      top: -6px;
+      right: -4px;
+      width: 20px;
+      height: 20px;
+      .el-button {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    /deep/ .image-slot {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background-color: #fafafa;
+      width: 58px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      .el-icon-picture-outline {
+        font-size: 20px;
+      }
+    }
+  }
+}
+.displayN {
+  display: none;
 }
 </style>

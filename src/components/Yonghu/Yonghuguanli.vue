@@ -56,7 +56,7 @@
       </div>
       <div class="myTable">
         <vxe-table :data="tableData">
-          <vxe-table-column type="expand" width="30" :fixed="null">
+          <!-- <vxe-table-column type="expand" width="30" :fixed="null">
             <template #content="{ row }">
               <template>
                 <div class="xiala">
@@ -83,30 +83,29 @@
                 </div>
               </template>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="uid" title="ID"></vxe-table-column>
-          <vxe-table-column field="avatar" title="头像">
+          </vxe-table-column>-->
+          <vxe-table-column field="user_id" title="ID"></vxe-table-column>
+          <vxe-table-column field="user_icon" title="头像">
             <template slot-scope="scope">
-              <el-image :src="scope.row.avatar" fit="fill" style="width: 40px; height: 40px">
+              <el-image :src="scope.row.user_icon" fit="fill" style="width: 40px; height: 40px">
                 <div slot="error" class="image-slot">
                   <i class="el-icon-picture-outline"></i>
                 </div>
               </el-image>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="nickname" title="姓名"></vxe-table-column>
-          <vxe-table-column field="account" title="账号"></vxe-table-column>
-          <vxe-table-column field="myIs_vip" title="是否会员"></vxe-table-column>
-          <vxe-table-column field="now_money" title="余额"></vxe-table-column>
-          <!-- <vxe-table-column title="操作状态" width="160">
+          <vxe-table-column field="user_name" title="用户名"></vxe-table-column>
+          <vxe-table-column field="user_lucky" title="幸运值"></vxe-table-column>
+          <vxe-table-column field="user_bean" title="余额(聚豆)"></vxe-table-column>
+          <vxe-table-column title="操作状态" width="160">
             <template slot-scope="scope">
               <div class="flex">
-                <el-button size="small" @click="toEdit(scope.row)" type="text">编辑</el-button>
-                <el-button size="small" @click="seeMingxi(scope.row)" type="text">查看明细</el-button>
-                <el-button size="small" @click="toPingtuanjilu(scope.row)" type="text">拼团记录</el-button>
+                <!-- <el-button size="small" @click="toEdit(scope.row)" type="text">编辑</el-button> -->
+                <el-button size="small" @click="seeMingxi(scope.row)" type="text">查看取消订单数据</el-button>
+                <!-- <el-button size="small" @click="toPingtuanjilu(scope.row)" type="text">拼团记录</el-button> -->
               </div>
             </template>
-          </vxe-table-column> -->
+          </vxe-table-column>
         </vxe-table>
         <el-pagination
           class="fenye"
@@ -120,9 +119,9 @@
         ></el-pagination>
       </div>
     </div>
-    <!-- 查看明细 -->
-    <el-dialog title="查看明细" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
-      <div class="myForm">
+    <!-- 查看取消订单数据 -->
+    <el-dialog title="查看取消订单数据" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
+      <!-- <div class="myForm">
         <el-form ref="mingxiFrom" :model="mingxiFrom" label-width="80px">
           <el-row>
             <el-col :span="20">
@@ -136,18 +135,15 @@
             </el-col>
           </el-row>
         </el-form>
-      </div>
+      </div> -->
       <div class="myTable">
         <vxe-table :data="mingxiTableData">
-          <vxe-table-column field="user_id" title="ID"></vxe-table-column>
-          <vxe-table-column field="myPm" title="支出/获得"></vxe-table-column>
-          <vxe-table-column field="number" title="变动金额"></vxe-table-column>
-          <vxe-table-column field="balance" title="变动后金额"></vxe-table-column>
-          <vxe-table-column field="mark" width="250" title="备注"></vxe-table-column>
-          <vxe-table-column field="pay_way" width="120" title="支付方式"></vxe-table-column>
-          <vxe-table-column field="myAdd_time" title="时间"></vxe-table-column>
+          <vxe-table-column field="cancle_today_time" title="今日取消次数"></vxe-table-column>
+          <vxe-table-column field="cancle_today_total" title="今日取消总额"></vxe-table-column>
+          <vxe-table-column field="cancle_total_time" title="总取消次数"></vxe-table-column>
+          <vxe-table-column field="cancle_total_total" title="取消总额"></vxe-table-column>
         </vxe-table>
-        <el-pagination
+        <!-- <el-pagination
           class="fenye"
           @size-change="this.handleSizeChange"
           @current-change="this.handleCurrentChange"
@@ -156,7 +152,7 @@
           :page-sizes="[10, 15, 20, 30]"
           layout="total,sizes, prev, pager, next, jumper"
           :total="this.mingxiTotal"
-        ></el-pagination>
+        ></el-pagination> -->
       </div>
     </el-dialog>
     <!-- 编辑 -->
@@ -237,31 +233,31 @@ export default {
   },
   methods: {
     async getData() {
-      const res = await this.$api.user_list({
-        limit: this.yonghuguanliPageSize,
-        page: this.yonghuguanliPage
+      const res = await this.$api.getUserList({
+        pagesize: this.yonghuguanliPageSize,
+        pagenum: this.yonghuguanliPage
       });
       console.log(res.data.data);
       this.total = res.data.total;
       this.tableData = res.data.data;
-      this.tableData.forEach(ele => {
-        ele.myIs_vip = ele.is_vip == "1" ? "是" : "否";
-        ele.myOverdue_vip_time = this.formatDate(ele.overdue_vip_time * 1000);
-      });
-      const res2 = await this.$api.categoryIndex({
-        pid: 0
-      });
-      res2.data.forEach(ele => {
-        ele.value = ele.id;
-        ele.label = ele.cate_name;
-        if (ele.children) {
-          ele.children.forEach(item => {
-            item.value = item.id;
-            item.label = item.cate_name;
-          });
-        }
-      });
-      this.options = res2.data;
+      // this.tableData.forEach(ele => {
+      //   ele.myIs_vip = ele.is_vip == "1" ? "是" : "否";
+      //   ele.myOverdue_vip_time = this.formatDate(ele.overdue_vip_time * 1000);
+      // });
+      // const res2 = await this.$api.categoryIndex({
+      //   pid: 0
+      // });
+      // res2.data.forEach(ele => {
+      //   ele.value = ele.id;
+      //   ele.label = ele.cate_name;
+      //   if (ele.children) {
+      //     ele.children.forEach(item => {
+      //       item.value = item.id;
+      //       item.label = item.cate_name;
+      //     });
+      //   }
+      // });
+      // this.options = res2.data;
     },
     async getMingxiData() {
       const res = await this.$api.user_bill_log({
@@ -310,8 +306,17 @@ export default {
       this.editDialogVisible = true;
     },
     async seeMingxi(row) {
-      this.mingxiUser_id = row.user_id;
-      this.getMingxiData();
+      this.mingxiTableData = [];
+      const res = await this.$api.getCancelOperate({ query_id: row.user_id });
+      this.mingxiTableData.push({
+        cancle_today_time: res.data.cancle_today_time,
+        cancle_today_total: res.data.cancle_today_total,
+        cancle_total_time: res.data.cancle_total_time,
+        cancle_total_total: res.data.cancle_total_total,
+      });
+      // this.mingxiTableData = res.data
+      // this.mingxiUser_id = row.user_id;
+      // this.getMingxiData();
       this.dialogVisible = true;
     },
     toPingtuanjilu(row) {

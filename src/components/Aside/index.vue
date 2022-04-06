@@ -19,110 +19,71 @@
         text-color="#fff"
         router
       >
-        <el-menu-item :route="{ name: 'Shouye' }" index="1-1">
-          <i class="el-icon-s-home"></i>
-          <span slot="title">首页</span>
-        </el-menu-item>
-        <el-submenu index="2">
-          <template slot="title">
-            <i class="el-icon-s-goods"></i>
-            <span>商品</span>
-          </template>
-          <!-- <el-menu-item :route="{ name: 'Shangpinguanli' }" index="2-1">商品管理</el-menu-item> -->
-          <el-menu-item :route="{ name: 'Shangpincangkuguanli' }" index="2-5">商品仓库管理</el-menu-item>
-          <!-- <el-menu-item :route="{ name: 'Chicunguanli' }" index="2-6">尺寸管理</el-menu-item> -->
-          <el-menu-item :route="{ name: 'Yanseguanli' }" index="2-7">颜色管理</el-menu-item>
-          <el-menu-item :route="{ name: 'Tucengguanli' }" index="2-9">涂层管理</el-menu-item>
-          <el-menu-item :route="{ name: 'Biaoqianguanli' }" index="2-10">标签管理</el-menu-item>
-          <el-menu-item :route="{ name: 'Pianguangduguanli' }" index="2-11">眼镜偏光率管理</el-menu-item>
-          <el-menu-item :route="{ name: 'Yanjingdengjifenlei' }" index="2-12">眼镜等级管理</el-menu-item>
-          <el-menu-item :route="{ name: 'Yanjingfenleiguanli' }" index="2-8">眼镜分类管理</el-menu-item>
-          <el-menu-item :route="{ name: 'Shangpingfenlei' }" index="2-2">商品分类</el-menu-item>
-          <!-- <el-menu-item :route="{ name: 'Shangpingpinglun' }" index="2-3"
-            >商品评论</el-menu-item
-          >-->
-          <el-menu-item :route="{ name: 'Yunfeimoban' }" index="2-4">运费模板</el-menu-item>
-        </el-submenu>
-        <el-submenu index="3">
-          <template slot="title">
-            <i class="el-icon-s-order"></i>
-            <span>订单</span>
-          </template>
-          <el-menu-item :route="{ name: 'Dingdanguanli' }" index="3-1">订单管理</el-menu-item>
-        </el-submenu>
-        <!-- <el-submenu index="4">
-          <template slot="title">
-            <i class="el-icon-s-ticket"></i>
-            <span>营销</span>
-          </template>
-          <el-submenu index="4-1">
-            <span slot="title">拼团管理</span>
-            <el-menu-item :route="{ name: 'Pingtuanshangping' }" index="4-1-1">拼团商品</el-menu-item>
-            <el-menu-item :route="{ name: 'Pingtuanliebiao' }" index="4-1-2">拼团列表</el-menu-item>
-            <el-menu-item :route="{ name: 'Jishouliebiao' }" index="4-1-3">寄售列表</el-menu-item>
-            <el-menu-item :route="{ name: 'Pingtuanjilu' }" index="4-1-4">拼团记录</el-menu-item>
+        <div v-for="item in menu" :key="item.menu_index">
+          <el-menu-item v-if="item.menu_index == 1" :route="{ name: 'Shouye' }" index="1-1">
+            <i class="el-icon-s-home"></i>
+            <span slot="title">首页</span>
+          </el-menu-item>
+          <el-submenu v-else :index="item.menu_index">
+            <template slot="title">
+              <i :class="item.icon"></i>
+              <span>{{item.name}}</span>
+            </template>
+            <el-menu-item
+              v-for="item2 in item.sub_menu"
+              :key="item2.url"
+              :route="{ name: item2.url }"
+              :index="item2.menu_index"
+            >{{item2.route.name}}</el-menu-item>
           </el-submenu>
-          <el-submenu index="4-2">
-            <span slot="title">卖场活动</span>
-            <el-menu-item :route="{ name: 'Maichanghuodong' }" index="4-2-1">活动列表</el-menu-item>
+        </div>
+
+        <template v-if="false">
+          <el-menu-item :route="{ name: 'Shouye' }" index="1-1">
+            <i class="el-icon-s-home"></i>
+            <span slot="title">首页</span>
+          </el-menu-item>
+          <el-submenu index="2">
+            <template slot="title">
+              <i class="el-icon-s-goods"></i>
+              <span>商品</span>
+            </template>
+            <el-menu-item :route="{ name: 'Shangpinguanli' }" index="2-1">商品管理</el-menu-item>
+            <el-menu-item :route="{ name: 'Mangheshangping' }" index="2-16">盲盒商品管理</el-menu-item>
+            <el-menu-item :route="{ name: 'Xunishangping' }" index="2-14">虚拟商品管理</el-menu-item>
+            <el-menu-item :route="{ name: 'Fenleishangping' }" index="2-15">分类商品管理</el-menu-item>
+            <el-menu-item :route="{ name: 'Shangpingfenlei' }" index="2-2">商品分类</el-menu-item>
+            <el-menu-item :route="{ name: 'Mangheguanli' }" index="2-13">盲盒管理</el-menu-item>
           </el-submenu>
-        </el-submenu> -->
-        <el-submenu index="5">
-          <template slot="title">
-            <i class="el-icon-s-custom"></i>
-            <span>用户</span>
-          </template>
-          <el-menu-item :route="{ name: 'Yonghuguanli' }" index="5-1">用户管理</el-menu-item>
-          <!-- <el-menu-item :route="{ name: 'Lianghaoliebiao' }" index="5-2">靓号列表</el-menu-item> -->
-          <!-- <el-menu-item :route="{ name: 'Tixianliebiao' }" index="5-3">提现列表</el-menu-item> -->
-        </el-submenu>
-        <!-- <el-submenu index="6">
-          <template slot="title">
-            <i class="el-icon-share"></i>
-            <span>分销</span>
-          </template>
-          <el-menu-item :route="{ name: 'Fenxiaoshezhi' }" index="6-1">分销设置</el-menu-item>
-        </el-submenu> -->
-        <!-- <el-submenu index="7">
-          <template slot="title">
-            <i class="el-icon-s-check"></i>
-            <span>财务</span>
-          </template>
-          <el-submenu index="7-1">
-            <span slot="title">财务操作</span>
-            <el-menu-item :route="{ name: 'Tixianshenqing' }" index="7-1-1"
-              >提现申请</el-menu-item
-            >
+          <el-submenu index="3">
+            <template slot="title">
+              <i class="el-icon-s-order"></i>
+              <span>订单</span>
+            </template>
+            <el-menu-item :route="{ name: 'Dingdanguanli' }" index="3-1">订单管理</el-menu-item>
           </el-submenu>
-          <el-submenu index="7-2">
-            <span slot="title">佣金记录</span>
-            <el-menu-item :route="{ name: 'Yongjinjilu' }" index="7-2-1"
-              >佣金记录</el-menu-item
-            >
+          <el-submenu index="5">
+            <template slot="title">
+              <i class="el-icon-s-custom"></i>
+              <span>用户</span>
+            </template>
+            <el-menu-item :route="{ name: 'Yonghuguanli' }" index="5-1">用户管理</el-menu-item>
           </el-submenu>
-        </el-submenu>-->
-        <!-- <el-submenu index="9">
-          <template slot="title">
-            <i class="el-icon-s-finance"></i>
-            <span>文章</span>
-          </template>
-          <el-menu-item :route="{ name: 'Wenzhangliebiao' }" index="9-1">文章列表</el-menu-item>
-        </el-submenu> -->
-        <el-submenu index="8">
-          <template slot="title">
-            <i class="el-icon-s-tools"></i>
-            <span>设置</span>
-          </template>
-          <!-- <el-menu-item :route="{ name: 'Xiaoxiguanli' }" index="8-1">消息管理</el-menu-item> -->
-          <!-- <el-menu-item :route="{ name: 'Qitashezhi' }" index="8-2">其他设置</el-menu-item> -->
-          <!-- <el-menu-item :route="{ name: 'Lunbotushezhi' }" index="8-3">轮播图设置</el-menu-item>
-          <el-menu-item :route="{ name: 'Lunbotuliebiao' }" index="8-4">轮播图列表</el-menu-item>
-          <el-menu-item :route="{ name: 'Kaipinyeshezhi' }" index="8-5">开屏页设置</el-menu-item>
-          <el-menu-item :route="{ name: 'Shujuzhongxin' }" index="8-6">数据中心</el-menu-item> -->
-          <el-menu-item :route="{ name: 'Qitashezhi' }" index="8-2">其他设置</el-menu-item>
-          <el-menu-item :route="{ name: 'Guojiaguanli' }" index="8-7">国家管理</el-menu-item>
-          <el-menu-item :route="{ name: 'Youhuiquan' }" index="8-8">优惠券管理</el-menu-item>
-        </el-submenu>
+          <el-submenu index="8">
+            <template slot="title">
+              <i class="el-icon-s-tools"></i>
+              <span>设置</span>
+            </template>
+            <el-menu-item :route="{ name: 'Zhanghaoguanli' }" index="8-11">权限账号管理</el-menu-item>
+          </el-submenu>
+          <el-submenu index="80">
+            <template slot="title">
+              <i class="el-icon-s-data"></i>
+              <span>日志</span>
+            </template>
+            <el-menu-item :route="{ name: 'Caozuorizhi' }" index="80-1">操作日志</el-menu-item>
+          </el-submenu>
+        </template>
       </el-menu>
     </div>
   </div>
@@ -231,6 +192,34 @@ export default {
           "headerTit",
           `商品 / <span style="color: #515a61;
         font-weight: 700;">眼镜等级管理</span>`
+        );
+      } else if (to.path == "/Shangpin/Mangheguanli") {
+        this.menuActiveIndex = "2-13";
+        this.$store.commit(
+          "headerTit",
+          `商品 / <span style="color: #515a61;
+        font-weight: 700;">盲盒管理</span>`
+        );
+      } else if (to.path == "/Shangpin/Xunishangping") {
+        this.menuActiveIndex = "2-14";
+        this.$store.commit(
+          "headerTit",
+          `商品 / <span style="color: #515a61;
+        font-weight: 700;">虚拟商品管理</span>`
+        );
+      } else if (to.path == "/Shangpin/Fenleishangping") {
+        this.menuActiveIndex = "2-15";
+        this.$store.commit(
+          "headerTit",
+          `商品 / <span style="color: #515a61;
+        font-weight: 700;">分类商品管理</span>`
+        );
+      } else if (to.path == "/Shangpin/Mangheshangping") {
+        this.menuActiveIndex = "2-16";
+        this.$store.commit(
+          "headerTit",
+          `商品 / <span style="color: #515a61;
+        font-weight: 700;">盲盒商品管理</span>`
         );
       } else if (to.path == "/Dingdan/Dingdanguanli") {
         this.menuActiveIndex = "3-1";
@@ -386,6 +375,20 @@ export default {
           `文章 / <span style="color: #515a61;
         font-weight: 700;">文章列表</span>`
         );
+      } else if (to.path == "/Rizhi/Caozuorizhi") {
+        this.menuActiveIndex = "80-1";
+        this.$store.commit(
+          "headerTit",
+          `日志 / <span style="color: #515a61;
+        font-weight: 700;">操作日志</span>`
+        );
+      } else if (to.path == "/Shezhi/Zhanghaoguanli") {
+        this.menuActiveIndex = "8-11";
+        this.$store.commit(
+          "headerTit",
+          `设置 / <span style="color: #515a61;
+        font-weight: 700;">权限账号管理</span>`
+        );
       }
     }
   },
@@ -394,8 +397,13 @@ export default {
       activeIndex: 0,
       menuActiveIndex: "",
       userInfo: null,
-      isCollapse: false
+      isCollapse: false,
+      menu: []
     };
+  },
+  created() {
+    this.menu = JSON.parse(sessionStorage.getItem("menu"));
+    console.log(this.menu);
   },
   methods: {
     myisColl() {

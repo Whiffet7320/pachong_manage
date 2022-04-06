@@ -1,5 +1,6 @@
 <template>
   <div class="index">
+    <!-- <div class="txttt">今日数据</div>
     <div class="top">
       <div class="box">
         <div class="icon1">
@@ -8,8 +9,8 @@
           </div>
         </div>
         <div class="tit">
-          <div class="txt1">{{wait_send}}</div>
-          <div class="txt2">待发货订单数</div>
+          <div class="txt1">{{substitution_num2}}</div>
+          <div class="txt2">今日置换次数</div>
         </div>
       </div>
       <div class="box">
@@ -19,8 +20,30 @@
           </div>
         </div>
         <div class="tit">
-          <div class="txt1">{{wait_check}}</div>
-          <div class="txt2">待售后订单数</div>
+          <div class="txt1">{{pick_total2}}</div>
+          <div class="txt2">今日提取金额</div>
+        </div>
+      </div>
+      <div class="box">
+        <div class="icon1 i1-2">
+          <div class="icon2 i1-2">
+            <i class="el-icon-s-claim"></i>
+          </div>
+        </div>
+        <div class="tit">
+          <div class="txt1">{{pick_time2}}</div>
+          <div class="txt2">今日提取次数</div>
+        </div>
+      </div>
+      <div class="box">
+        <div class="icon1 i1-2">
+          <div class="icon2 i1-2">
+            <i class="el-icon-s-claim"></i>
+          </div>
+        </div>
+        <div class="tit">
+          <div class="txt1">{{decompose_time2}}</div>
+          <div class="txt2">今日分解次数</div>
         </div>
       </div>
       <div class="box">
@@ -30,14 +53,104 @@
           </div>
         </div>
         <div class="tit">
-          <div class="txt1">{{wait_refund}}</div>
-          <div class="txt2">待退款订单数</div>
+          <div class="txt1">{{decompose_total2}}</div>
+          <div class="txt2">今日分解金额</div>
         </div>
       </div>
     </div>
-    <div id="main1"></div>
+    <div class="myTable" >
+      <vxe-table :data="tableData" align='center'>
+        <vxe-table-column field="box_name" title="盲盒名称"></vxe-table-column>
+        <vxe-table-column field="box_num" title="购买数量"> </vxe-table-column>
+        <vxe-table-column field="box_price" title="价格"></vxe-table-column>
+      </vxe-table>
+    </div>
+    <div style="margin-top:30px" class="txttt">总数据</div>-->
+    <div class="myForm">
+      <el-form :inline="true" :model="formInline" class="demo-form-inline">
+        <el-form-item label="日期：">
+          <el-date-picker
+            size="small"
+            v-model="formInline.time"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            value-format="yyyy-MM-dd"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item>
+          <el-button size="small" type="primary" @click="onSubmit">查询</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+    <div class="top">
+      <div class="box">
+        <div class="icon1">
+          <div class="icon2">
+            <i class="el-icon-s-order"></i>
+          </div>
+        </div>
+        <div class="tit">
+          <div class="txt1">{{substitution_num}}</div>
+          <div class="txt2">总置换次数</div>
+        </div>
+      </div>
+      <div class="box">
+        <div class="icon1 i1-2">
+          <div class="icon2 i1-2">
+            <i class="el-icon-s-claim"></i>
+          </div>
+        </div>
+        <div class="tit">
+          <div class="txt1">{{pick_total}}</div>
+          <div class="txt2">总提取金额</div>
+        </div>
+      </div>
+      <div class="box">
+        <div class="icon1 i1-2">
+          <div class="icon2 i1-2">
+            <i class="el-icon-s-claim"></i>
+          </div>
+        </div>
+        <div class="tit">
+          <div class="txt1">{{pick_time}}</div>
+          <div class="txt2">总提取次数</div>
+        </div>
+      </div>
+      <div class="box">
+        <div class="icon1 i1-2">
+          <div class="icon2 i1-2">
+            <i class="el-icon-s-claim"></i>
+          </div>
+        </div>
+        <div class="tit">
+          <div class="txt1">{{decompose_time}}</div>
+          <div class="txt2">总分解次数</div>
+        </div>
+      </div>
+      <div class="box">
+        <div class="icon1 i1-3">
+          <div class="icon2 i1-3">
+            <i class="el-icon-s-release"></i>
+          </div>
+        </div>
+        <div class="tit">
+          <div class="txt1">{{decompose_total}}</div>
+          <div class="txt2">总分解金额</div>
+        </div>
+      </div>
+    </div>
+    <div class="myTable">
+      <vxe-table :data="tableData2" align="center">
+        <vxe-table-column field="box_name" title="盲盒名称"></vxe-table-column>
+        <vxe-table-column field="box_num" title="购买数量"></vxe-table-column>
+        <vxe-table-column field="box_price" title="价格"></vxe-table-column>
+      </vxe-table>
+    </div>
+    <!-- <div id="main1"></div>
     <div id="main2"></div>
-    <div id="main3"></div>
+    <div id="main3"></div>-->
   </div>
 </template>
 
@@ -46,15 +159,67 @@ import * as echarts from "echarts";
 export default {
   data() {
     return {
-        wait_send:0,
-        wait_check:0,
-        wait_refund:0,
+      formInline: {
+        time: []
+      },
+      substitution_num: 0,
+      pick_total: 0,
+      decompose_total: 0,
+      decompose_time: 0,
+      pick_time: 0,
+      substitution_num2: 0,
+      pick_total2: 0,
+      decompose_total2: 0,
+      decompose_time2: 0,
+      pick_time2: 0,
+      tableData: [],
+      tableData2: [],
+      nowDate:'',
     };
   },
   created() {
-    this.getData();
+    // this.getData();
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    if (month < 10) {
+      month = "0" + month;
+    }
+    if (day < 10) {
+      day = "0" + day;
+    }
+    this.formInline.time[0] = year + "-" + month + "-" + day;
+    this.formInline.time[1] = year + "-" + month + "-" + day;
+    this.getData2();
   },
   methods: {
+    async getData2() {
+      // const res = await this.$api.getOperate({
+      //   isToday: false
+      // });
+      // console.log(res);
+      // this.decompose_total = res.data.decompose_total;
+      // this.substitution_num = res.data.substitution_num;
+      // this.pick_total = res.data.pick_total;
+      // this.decompose_time = res.data.decompose_time;
+      // this.pick_time = res.data.pick_time;
+      // this.tableData = res.data.box_sale;
+      const res2 = await this.$api.getOperate({
+        // isToday: true,
+        start_time:this.formInline.time[0],
+        end_time:this.formInline.time[1],
+      });
+      this.decompose_total = res2.data.decompose_total;
+      this.substitution_num = res2.data.substitution_num;
+      this.pick_total = res2.data.pick_total;
+      this.decompose_time = res2.data.decompose_time;
+      this.pick_time = res2.data.pick_time;
+      this.tableData2 = res2.data.box_sale;
+    },
+    onSubmit() {
+      this.getData2()
+    },
     async getData() {
       const res = await this.$api.dashboard();
       console.log(res);
@@ -240,6 +405,54 @@ export default {
 <style lang="scss" scoped>
 .index {
 }
+.myForm {
+  /deep/ .el-form-item__label {
+    font-size: 12px;
+  }
+  /deep/ .el-form-item {
+    margin-right: 30px;
+    margin-bottom: 20px;
+  }
+}
+.txttt {
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 800;
+}
+.myTable {
+  margin: 10px 0;
+  .xiala {
+    padding: 10px 20px;
+    .item {
+      font-size: 12px;
+    }
+  }
+  .flex {
+    display: flex;
+    align-items: center;
+  }
+  .fenye {
+    margin-top: 10px;
+  }
+  /deep/ .vxe-table--render-default .vxe-body--column {
+    line-height: 14px;
+    vertical-align: middle;
+  }
+  /deep/ .vxe-cell--label {
+    font-size: 12px;
+  }
+  /deep/ .vxe-cell--title {
+    font-size: 12px;
+  }
+  /deep/ .image-slot {
+    width: 38px;
+    height: 38px;
+    border: 1px solid #ddd;
+    line-height: 38px;
+    text-align: center;
+    border-radius: 4px;
+  }
+}
 .top {
   width: 100%;
   display: flex;
@@ -247,7 +460,7 @@ export default {
   margin: 0 0 20px 0;
   height: 120px;
   .box {
-    &:nth-child(3) {
+    &:nth-child(5) {
       margin-right: 0px;
     }
     border-radius: 10px;
@@ -290,12 +503,12 @@ export default {
           font-size: 26px;
           color: #ffffff;
         }
-        .el-icon-s-release{
-            font-size: 26px;
+        .el-icon-s-release {
+          font-size: 26px;
           color: #ffffff;
         }
-        .el-icon-s-claim{
-            font-size: 26px;
+        .el-icon-s-claim {
+          font-size: 26px;
           color: #ffffff;
         }
       }

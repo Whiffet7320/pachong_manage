@@ -24,7 +24,17 @@ Vue.use(Viewer)
 Viewer.setDefaults({
   Options: { 'inline': true, 'button': true, 'navbar': true, 'title': true, 'toolbar': true, 'tooltip': true, 'movable': true, 'zoomable': true, 'rotatable': true, 'scalable': true, 'transition': true, 'fullscreen': true, 'keyboard': true, 'url': 'data-source' }
 })
-
+function formatDate(now) { 
+  var time = new Date(now)
+  var year=time.getFullYear(); 
+  var month=time.getMonth()+1; 
+  var date=time.getDate(); 
+  var hour=time.getHours(); 
+  var minute=time.getMinutes(); 
+  var second=time.getSeconds(); 
+  return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second; 
+} 
+Vue.prototype.$formatDate = formatDate
 router.beforeEach((to, from, next) => {
   console.log(to)
   // 如果有token 说明该用户已登陆
