@@ -320,7 +320,8 @@ export default {
         pagesize: this.shangpingliebiaoPageSize,
         pagenum: this.shangpingliebiaoPage,
         start_time: this.formInline.time[0],
-        end_time: this.formInline.time[1]
+        end_time: this.formInline.time[1],
+        query_id:this.formInline.manage_id,
       });
       console.log(res.data.data);
       this.total = res.data.total;
