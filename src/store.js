@@ -23,8 +23,12 @@ export default new Vuex.Store({
     fabuXinwenPage: 1,
     syStartTime:'',
     syEndTime:'',
+    syIndex:0,
   },
   mutations: {
+    syIndex(state, str) {
+      state.syIndex = str;
+    },
     userInfo(state, str) {
       state.userInfo = str;
     },

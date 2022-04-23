@@ -7,12 +7,12 @@
         <div class="r3"></div>
         <div class="r4"></div>
         <div class="n1-content">
-          <div @click="changeIndex(0)" :class="{'n1-txt':true,'active':nowIndex == 0}">全部</div>
+          <div @click="changeIndex(0)" :class="{'n1-txt':true,'active':syIndex == 0}">全部</div>
           <div
             @click="changeIndex(i+1,item)"
             v-for="(item,i) in navList"
             :key="item.id"
-            :class="{'n1-txt':true,'active':nowIndex == i+1}"
+            :class="{'n1-txt':true,'active':syIndex == i+1}"
           >{{item.title}}</div>
         </div>
       </div>
@@ -193,12 +193,12 @@ export default {
       "startTime",
       "endTime",
       "syStartTime",
-      "syEndTime"
+      "syEndTime",
+      "syIndex"
     ])
   },
   data() {
     return {
-      nowIndex: 0,
       isyuntu: true,
       tableData1: [],
       // sytableIndex: 1,
@@ -209,18 +209,27 @@ export default {
       myZoushi: null,
       dialogVisible1: false,
       navList: [],
-      site_id: 0,
       page: 1,
-      scroll: true
+      scroll: true,
+      site_id: ""
     };
   },
   created() {
     this.getxinwenData();
-    if (this.sytableIndex == 0) {
-      this.getData();
-    } else if (this.sytableIndex == 1) {
-      this.getData2();
-    }
+    const loading = this.$loading({
+      lock: true,
+      text: "加载中...",
+      spinner: "el-icon-loading",
+      background: "rgba(0, 0, 0, 0.7)"
+    });
+    setTimeout(() => {
+      if (this.sytableIndex == 0) {
+        this.getData();
+      } else if (this.sytableIndex == 1) {
+        this.getData2();
+      }
+      loading.close();
+    }, 500);
   },
   mounted() {
     this.myYuntu = echarts.init(document.getElementById("yuntu"));
@@ -351,6 +360,12 @@ export default {
     async getxinwenData() {
       const res = await this.$api.site_list();
       this.navList = res.list;
+      if (this.syIndex == 0) {
+        this.site_id = 0;
+      } else {
+        this.site_id = this.navList[this.syIndex - 1].id;
+      }
+      console.log(this.site_id);
     },
     async getData() {
       const loading = this.$loading({
@@ -413,7 +428,7 @@ export default {
       } else {
         this.site_id = item.id;
       }
-      this.nowIndex = i;
+      this.$store.commit("syIndex", i);
       this.tableData1 = [];
       this.page = 1;
       if (this.sytableIndex == 0) {
@@ -448,9 +463,15 @@ export default {
     },
     goToUrl() {
       if (this.sytableIndex == 0) {
-        this.$router.push({ name: "Xinwen",params:{site_id:this.site_id} });
+        this.$router.push({
+          name: "Xinwen",
+          params: { site_id: this.site_id }
+        });
       } else if (this.sytableIndex == 1) {
-        this.$router.push({ name: "Yuqing",params:{site_id:this.site_id}  });
+        this.$router.push({
+          name: "Yuqing",
+          params: { site_id: this.site_id }
+        });
       } else if (this.sytableIndex == 2) {
         this.$router.push({ name: "Shipin" });
       }
@@ -484,6 +505,9 @@ export default {
   /deep/ .el-button--text {
     color: #fff;
   }
+}
+/deep/ .vxe-body--column.col-active {
+  line-height: 48px;
 }
 .nav1 {
   height: 63px;

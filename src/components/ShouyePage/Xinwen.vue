@@ -95,6 +95,9 @@ export default {
 <style lang="scss" scoped>
 .index {
 }
+/deep/ .vxe-body--column.col-active{
+  line-height: 48px;
+}
 .myTable {
   display: flex;
   align-items: center;

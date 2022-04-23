@@ -70,10 +70,10 @@
           <el-date-picker size="mini" v-model="time2" type="date" placeholder="选择日期"></el-date-picker>
         </div>
       </div>
-      <div class="titt2">
+      <!-- <div class="titt2">
         <el-button size="mini" type="primary">批量发布</el-button>
         <el-button size="mini" type="danger">批量删除</el-button>
-      </div>
+      </div> -->
     </div>
     <div class="myTable">
       <vxe-table
