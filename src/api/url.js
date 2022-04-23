@@ -1,40 +1,16 @@
 export default {
-    baseUrl: 'http://test2.hezhiqiangaixuexi.asia/manage',
-    doLogin:'/doLogin',//登录
-    getUserList:'/getUserList',//获取用户列表
-    addMallCategory:'/addMallCategory',//获取所有分类
-    updateCategory:'/updateCategory',//添加/修改分类
-    deleteCategory:'/deleteCategory',//删除分类
-    getBoxList:'/getBoxList',//获取盲盒列表
-    updateBoxPrice:'/updateBoxAllInfo',//新增/修改盲盒
-    getShopList:'/getShopList',//获取商品列表
-    addShopInfo:'/addShopInfo',//新增商品
-    addPhoto:'/addPhoto',//上传图片
-    changeShopInfo:'/changeShopInfo',//修改商品
-    getCardTypeList:'/getCardTypeList',//获取虚拟物品列表
-    getShopByCategory:'/getShopByCategory',//获取分类下的商品列表
-    addCategoryShop:'/addCategoryShop',//添加分类商品
-    deleteCateGoryShop:'/deleteCateGoryShop',//移除分类商品
-    getCategoryWithoutShopList:'/getCategoryWithoutShopList',//获取可以添加到该分类的商品
-    deleteBox:'/deleteBox',//删除盲盒信息
-    getBoxDetail:'/getBoxDetail',//获取盲盒对应的商品
-    getOrderListByStatus:'/getOrderListByStatus',//获取订单列表
-    importCardListFromExcel:'/importCardListFromExcel',//导入卡密
-    exportCard:'/exportCard',//导出卡号卡密
-    changeOrderToCancle:'/changeOrderToCancle',//取消订单
-    changeOrderToError:'/changeOrderToError',//修改订单状态为异常订单
-    changeOrderToSended:'/changeOrderToSended',//发货
-    getCardListByOrderid:'/getCardListByOrderid',//获取虚拟发货的卡号
-    changeOrderToSendedByCard:'/changeOrderToSendedByCard',//虚拟物品发货
-    getCancelOperate:'/getCancelOperate',//取消订单相关数据
-    getOperate:'/getOperate',//获取运营数据
-    getManageHistory:'/getManageHistory',//查看操作日志
-    getManageList:'/getManageList',//获取管理员列表
-    getBoxCanAddShopList:'/weight/getBoxCanAddShopList',//获取可以添加到盲盒的商品
-    addBoxShop:'/weight/addBoxShop',//添加/修改盲盒商品
-    deleteBoxShop:'/weight/deleteBoxShop',//删除盲盒商品
-    getManageMemberPower:'/member/getManageMemberPower',//获取指定用户的权限
-    addManageMemberWithPower:'/member/addManageMemberWithPower',//添加管理员
-    updateManageInfo:'/member/updateManageInfo',//修改管理员信息
-    deleteManageById:'/deleteManageById',//删除管理员
+    baseUrl: 'https://api.pc.5laoye.com/service/admin',
+    login:'/login',//登录
+    keyword_list:'/keyword_list',//关键词列表
+    add_keyword:"/add_keyword",//添加爬虫关键词
+    del_keyword:'/del_keyword',//删除爬虫关键词
+    site_list:"/site_list",//爬虫网站列表
+    news_list:'/news_list',//爬虫新闻列表
+    comment_list:'/comment_list',//评论(舆情)列表
+    config:'/config',//配置参数详情
+    adminuser_list:'/adminuser_list',//账号列表
+    add_adminuser:"/add_adminuser",//账号--添加账号
+    limits:'/limits',//账号--权限列表
+    update_adminuser:'/update_adminuser',//账号--修改账号
+    adminuser_del:'/adminuser_del',//账号--删除账号
 }

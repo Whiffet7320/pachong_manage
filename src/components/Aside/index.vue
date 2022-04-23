@@ -5,84 +5,63 @@
       <div class="tit1">切换账号</div>
     </div>-->
     <div class="menu">
-      <div class="myisCollBtn">
-        <el-button @click="myisColl">
-          <i class="el-icon-menu"></i>
-        </el-button>
-      </div>
+      <div class="myisCollBtn">爬虫后台</div>
 
       <el-menu
         :default-active="menuActiveIndex"
         class="el-menu-vertical-demo"
         :collapse="isCollapse"
-        background-color="#001529"
+        background-color="#10183c"
         text-color="#fff"
+        active-text-color="#fff"
         router
       >
-        <div v-for="item in menu" :key="item.menu_index">
-          <el-menu-item v-if="item.menu_index == 1" :route="{ name: 'Shouye' }" index="1-1">
-            <i class="el-icon-s-home"></i>
-            <span slot="title">首页</span>
-          </el-menu-item>
-          <el-submenu v-else :index="item.menu_index">
-            <template slot="title">
-              <i :class="item.icon"></i>
-              <span>{{item.name}}</span>
-            </template>
-            <el-menu-item
-              v-for="item2 in item.sub_menu"
-              :key="item2.url"
-              :route="{ name: item2.url }"
-              :index="item2.menu_index"
-            >{{item2.route.name}}</el-menu-item>
-          </el-submenu>
-        </div>
-
-        <template v-if="false">
+        <template v-if="true">
           <el-menu-item :route="{ name: 'Shouye' }" index="1-1">
             <i class="el-icon-s-home"></i>
             <span slot="title">首页</span>
           </el-menu-item>
-          <el-submenu index="2">
+          <el-submenu index="80">
             <template slot="title">
-              <i class="el-icon-s-goods"></i>
-              <span>商品</span>
+              <i class="el-icon-s-opportunity"></i>
+              <span>采集</span>
             </template>
-            <el-menu-item :route="{ name: 'Shangpinguanli' }" index="2-1">商品管理</el-menu-item>
-            <el-menu-item :route="{ name: 'Mangheshangping' }" index="2-16">盲盒商品管理</el-menu-item>
-            <el-menu-item :route="{ name: 'Xunishangping' }" index="2-14">虚拟商品管理</el-menu-item>
-            <el-menu-item :route="{ name: 'Fenleishangping' }" index="2-15">分类商品管理</el-menu-item>
-            <el-menu-item :route="{ name: 'Shangpingfenlei' }" index="2-2">商品分类</el-menu-item>
-            <el-menu-item :route="{ name: 'Mangheguanli' }" index="2-13">盲盒管理</el-menu-item>
+            <!-- <el-menu-item :route="{ name: 'Redulianjie' }" index="80-1">热度链接</el-menu-item> -->
+            <el-menu-item :route="{ name: 'Yuntureci' }" index="80-2">云图热词</el-menu-item>
+            <!-- <el-submenu index="80-3">
+              <template slot="title">历史发布</template>
+              <el-menu-item
+                @click="clickFabu('新闻','80-3-1')"
+                :route="{ name: 'FabuXinwen' }"
+                index="80-3-1"
+              >新闻</el-menu-item>
+              <el-menu-item
+                @click="clickFabu('舆情','80-3-2')"
+                :route="{ name: 'FabuXinwen' }"
+                index="80-3-2"
+              >舆情</el-menu-item>
+              <el-menu-item
+                @click="clickFabu('视频','80-3-3')"
+                :route="{ name: 'FabuXinwen' }"
+                index="80-3-3"
+              >视频</el-menu-item>
+            </el-submenu> -->
           </el-submenu>
-          <el-submenu index="3">
-            <template slot="title">
-              <i class="el-icon-s-order"></i>
-              <span>订单</span>
-            </template>
-            <el-menu-item :route="{ name: 'Dingdanguanli' }" index="3-1">订单管理</el-menu-item>
-          </el-submenu>
-          <el-submenu index="5">
+          <el-submenu index="81">
             <template slot="title">
               <i class="el-icon-s-custom"></i>
-              <span>用户</span>
+              <span>账号</span>
             </template>
-            <el-menu-item :route="{ name: 'Yonghuguanli' }" index="5-1">用户管理</el-menu-item>
+            <!-- <el-menu-item :route="{ name: 'Quanxianguanli' }" index="81-1">权限管理</el-menu-item> -->
+            <el-menu-item :route="{ name: 'Zhanghaoguanli' }" index="81-2">账号管理</el-menu-item>
           </el-submenu>
-          <el-submenu index="8">
+          <!-- <el-submenu index="8">
             <template slot="title">
               <i class="el-icon-s-tools"></i>
               <span>设置</span>
             </template>
             <el-menu-item :route="{ name: 'Zhanghaoguanli' }" index="8-11">权限账号管理</el-menu-item>
-          </el-submenu>
-          <el-submenu index="80">
-            <template slot="title">
-              <i class="el-icon-s-data"></i>
-              <span>日志</span>
-            </template>
-            <el-menu-item :route="{ name: 'Caozuorizhi' }" index="80-1">操作日志</el-menu-item>
-          </el-submenu>
+          </el-submenu>-->
         </template>
       </el-menu>
     </div>
@@ -90,8 +69,21 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
+  computed: {
+    ...mapState(["caijiFabuName",'caijiFabuIndex'])
+  },
   watch: {
+    caijiFabuName: function() {
+      if (this.caijiFabuName == "新闻") {
+        this.menuActiveIndex = "80-3-1";
+      } else if (this.caijiFabuName == "舆情") {
+        this.menuActiveIndex = "80-3-2";
+      } else if (this.caijiFabuName == "视频") {
+        this.menuActiveIndex = "80-3-3";
+      }
+    },
     $route(to) {
       console.log(to.path); //到哪去
       if (to.path == "/Shouye") {
@@ -389,6 +381,16 @@ export default {
           `设置 / <span style="color: #515a61;
         font-weight: 700;">权限账号管理</span>`
         );
+      } else if (to.path == "/Caiji/Redulianjie") {
+        this.menuActiveIndex = "80-1";
+      } else if (to.path == "/Caiji/Yuntureci") {
+        this.menuActiveIndex = "80-2";
+      } else if (to.path == "/Caiji/FabuXinwen") {
+        this.menuActiveIndex = "80-3-1";
+      } else if (to.path == "/Zhanghao/Quanxianguanli") {
+        this.menuActiveIndex = "81-1";
+      } else if (to.path == "/Zhanghao/Zhanghaoguanli") {
+        this.menuActiveIndex = "81-2";
       }
     }
   },
@@ -406,6 +408,11 @@ export default {
     console.log(this.menu);
   },
   methods: {
+    clickFabu(val,i) {
+      this.$store.commit("caijiFabuName", val);
+      this.$store.commit("caijiFabuIndex", i);
+      this.menuActiveIndex = this.caijiFabuIndex;
+    },
     myisColl() {
       this.isCollapse = !this.isCollapse;
     },
@@ -428,8 +435,96 @@ export default {
     /deep/ .el-menu-vertical-demo:not(.el-menu--collapse) {
       width: 200px;
     }
+    /deep/ .el-menu-vertical-demo.el-menu {
+      background: #10183c !important;
+      margin: 0 18px;
+    }
+    /deep/ .el-menu-item.is-active {
+      background: #388bf4 !important;
+      position: relative;
+    }
+
+    /deep/ .el-submenu.is-active.is-opened {
+      // 第二层
+      .el-submenu__title {
+        background: #388bf4 !important;
+        i {
+          color: #ffffff;
+        }
+      }
+      .el-menu-item {
+        padding-left: 48px !important;
+      }
+      .el-menu-item.is-active {
+        background: #10183c !important;
+        position: relative;
+        // padding-left: 48px !important;
+      }
+      .el-menu-item.is-active::after {
+        position: absolute;
+        top: 50%;
+        left: 26px;
+        transform: translateY(-50%);
+        content: "";
+        width: 10px;
+        height: 10px;
+        background: #388bf4;
+        border-radius: 50%;
+      }
+      .el-submenu {
+        .el-submenu__title {
+          padding-left: 48px !important;
+          background: #10183c !important;
+        }
+        .el-menu-item {
+          padding-left: 60px !important;
+        }
+      }
+      // 有三层的第二层
+      .el-submenu.is-active.is-opened {
+        position: relative;
+        .el-submenu__title {
+          background: #10183c !important;
+          // padding-left: 48px !important;
+          i {
+            color: #ffffff;
+          }
+          ::after {
+            content: "";
+            width: 0px;
+            height: 0px;
+          }
+          ::after {
+            position: absolute;
+            top: 50%;
+            // left: 26px;
+            left: 144px;
+            transform: translateY(-50%);
+            content: "";
+            width: 10px;
+            height: 10px;
+            background: #388bf4;
+            border-radius: 50%;
+          }
+        }
+
+        .el-menu-item.is-active {
+          color: #388bf4 !important;
+        }
+        .el-menu-item.is-active::after {
+          content: "";
+          width: 0px !important;
+          height: 0px !important;
+        }
+      }
+    }
     .myisCollBtn {
-      margin-top: 10px;
+      margin: 32px 0 16px 0;
+      font-size: 24px;
+      font-family: PingFang SC, PingFang SC-Heavy;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.26px;
       display: flex;
       justify-content: center;
     }

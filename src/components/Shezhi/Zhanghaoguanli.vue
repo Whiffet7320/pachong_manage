@@ -597,6 +597,10 @@ export default {
 /deep/ .el-checkbox__label {
   font-size: 12px;
 }
+.flex{
+  display: flex;
+  align-content: center;
+}
 .index {
 }
 .nav1 {

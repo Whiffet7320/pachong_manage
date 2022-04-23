@@ -11,6 +11,9 @@ import 'xe-utils';
 import VXETable from 'vxe-table';
 import 'vxe-table/lib/style.css';
 import VueParticles from 'vue-particles'  
+import iView from 'iview'
+import 'iview/dist/styles/iview.css'
+require('echarts-wordcloud')
 Vue.use(VueParticles)  
 Vue.use(VXETable)
 
@@ -21,6 +24,7 @@ Vue.prototype.$url = 'https://pifa.5laoye.com'
 
 Vue.use(ElementUI);
 Vue.use(Viewer)
+Vue.use(iView)
 Viewer.setDefaults({
   Options: { 'inline': true, 'button': true, 'navbar': true, 'title': true, 'toolbar': true, 'tooltip': true, 'movable': true, 'zoomable': true, 'rotatable': true, 'scalable': true, 'transition': true, 'fullscreen': true, 'keyboard': true, 'url': 'data-source' }
 })

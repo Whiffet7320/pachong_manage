@@ -127,38 +127,20 @@ export default {
   methods: {
     // 登录
     async onLogin() {
-      const res = await this.$api.doLogin(
+      const res = await this.$api.login(
         this.loginForm.username,
         this.loginForm.password
       );
       console.log(res);
-      if (res.status == 200) {
-        sessionStorage.setItem("token", res.data.manage_token);
-        sessionStorage.setItem("manage_id", res.data.manage_id);
+      if (res.result == 1) {
+        sessionStorage.setItem("token", res.token);
         sessionStorage.setItem("isLogin", true);
         // sessionStorage.setItem("userInfo", JSON.stringify(res.data.info));
         this.$message({
-          message: res.message,
+          message: res.msg,
           type: "success",
         });
-        sessionStorage.setItem("menu", JSON.stringify(res.data.menu_list));
-        // const res2 = await this.$api.getManageMemberPower({
-        //   query_id:sessionStorage.getItem("manage_id"),
-        // })
-        // console.log(res2.data)
-        // var menu = []
-        // res2.data.forEach(ele=>{
-        //   var a = ele.child.filter(ele2=>{
-        //     return ele2.has_power
-        //   })
-        //   if(a.length>0){
-        //     menu.push({
-        //       type:ele.type,
-        //       child:a
-        //     })
-        //   }
-        // })
-        // sessionStorage.setItem("menu", JSON.stringify(menu));
+        // sessionStorage.setItem("menu", JSON.stringify(res.data.menu_list));
         setTimeout(() => {
           this.$router.push({ path: "/" });
           this.$router.go(0);

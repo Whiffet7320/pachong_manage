@@ -1,402 +1,477 @@
 <template>
   <div class="index">
-    <!-- <div class="txttt">今日数据</div>
-    <div class="top">
-      <div class="box">
-        <div class="icon1">
-          <div class="icon2">
-            <i class="el-icon-s-order"></i>
-          </div>
-        </div>
-        <div class="tit">
-          <div class="txt1">{{substitution_num2}}</div>
-          <div class="txt2">今日置换次数</div>
-        </div>
-      </div>
-      <div class="box">
-        <div class="icon1 i1-2">
-          <div class="icon2 i1-2">
-            <i class="el-icon-s-claim"></i>
-          </div>
-        </div>
-        <div class="tit">
-          <div class="txt1">{{pick_total2}}</div>
-          <div class="txt2">今日提取金额</div>
+    <el-row>
+      <div class="nav1">
+        <div class="r1"></div>
+        <div class="r2"></div>
+        <div class="r3"></div>
+        <div class="r4"></div>
+        <div class="n1-content">
+          <div @click="changeIndex(0)" :class="{'n1-txt':true,'active':nowIndex == 0}">全部</div>
+          <div
+            @click="changeIndex(i+1,item)"
+            v-for="(item,i) in navList"
+            :key="item.id"
+            :class="{'n1-txt':true,'active':nowIndex == i+1}"
+          >{{item.title}}</div>
         </div>
       </div>
-      <div class="box">
-        <div class="icon1 i1-2">
-          <div class="icon2 i1-2">
-            <i class="el-icon-s-claim"></i>
+    </el-row>
+    <div class="nav2">
+      <el-row :gutter="24">
+        <!-- <el-col :span="7">
+          <div class="n2-left">
+            <div class="n2l-top">
+              <div class="r1"></div>
+              <div class="r2"></div>
+              <div class="r3"></div>
+              <div class="r4"></div>
+              <div class="n2lt-content">
+                <div class="tit1">
+                  <div class="dian"></div>
+                  <div class="txtt">热度词条</div>
+                </div>
+                <div class="items">
+                  <div v-for="(item,i) in 10" :key="i" class="item">1、名师“领雁”助力教育“共富</div>
+                </div>
+              </div>
+            </div>
+            <div class="n2l-down">
+              <div class="r1"></div>
+              <div class="r2"></div>
+              <div class="r3"></div>
+              <div class="r4"></div>
+              <div class="n2ld-content">
+                <template>
+                  <div v-show="isyuntu" class="tit1">
+                    <div class="t1-l">
+                      <div class="dian"></div>
+                      <div class="txtt">热词云图</div>
+                    </div>
+                    <div class="t1-r" @click="isyuntu = false;myZoushi.setOption(option2);">
+                      <div class="r1-r"></div>
+                      <div class="r2-r"></div>走势图
+                    </div>
+                  </div>
+                  <div v-show="isyuntu" class="reciyuntu">
+                    <div style="height:260px" id="yuntu"></div>
+                  </div>
+                </template>
+                <template>
+                  <div v-show="!isyuntu" class="tit1">
+                    <div class="t1-l">
+                      <div class="dian"></div>
+                      <div class="txtt">走势图</div>
+                    </div>
+                    <div class="t1-r" @click="isyuntu = true">
+                      <div class="r1-r"></div>
+                      <div class="r2-r"></div>热词云图
+                    </div>
+                  </div>
+                  <div v-show="!isyuntu" @click="toZoushitu" class="zoushitu">
+                    <div style="height:230px;width:380px;margin-top:6px" id="zoushi"></div>
+                  </div>
+                </template>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="tit">
-          <div class="txt1">{{pick_time2}}</div>
-          <div class="txt2">今日提取次数</div>
-        </div>
-      </div>
-      <div class="box">
-        <div class="icon1 i1-2">
-          <div class="icon2 i1-2">
-            <i class="el-icon-s-claim"></i>
+        </el-col>-->
+        <el-col :span="24">
+          <div class="n2-right">
+            <div class="r1"></div>
+            <div class="r2"></div>
+            <div class="r3"></div>
+            <div class="r4"></div>
+            <div class="n2r-content">
+              <div class="n2r-tit1">
+                <div class="left">
+                  <div class="dian"></div>
+                  <div @click="changeTabIndex(0)" :class="{'txt':true,active:sytableIndex == 0}">新闻</div>
+                  <div @click="changeTabIndex(1)" :class="{'txt':true,active:sytableIndex == 1}">舆情</div>
+                  <!-- <div @click="changeTabIndex(2)" :class="{'txt':true,active:sytableIndex == 2}">视频</div> -->
+                </div>
+                <div class="right">
+                  <div @click="shuaxin" class="txt1">刷新</div>
+                  <div class="txt2" @click="goToUrl">
+                    更多
+                    <i class="el-icon-d-arrow-right"></i>
+                  </div>
+                </div>
+              </div>
+              <vxe-table
+                v-if="sytableIndex == 0"
+                class="myTab"
+                border="none"
+                align="center"
+                height="520"
+                :cell-class-name="cellClassName"
+                :data="tableData1"
+                @scroll="scrollEvent"
+              >
+                <vxe-column field="title" show-overflow title="标题"></vxe-column>
+                <vxe-column field="site_name" show-overflow title="作者"></vxe-column>
+                <vxe-column field="content" show-overflow title="新闻内容"></vxe-column>
+                <vxe-column field="hit_type" show-overflow title="关注度"></vxe-column>
+                <vxe-column field="reptile_date" show-overflow title="发布时间"></vxe-column>
+                <vxe-column field="lj" show-overflow title="链接">
+                  <template #default="{ row }">
+                    <a
+                      style="color:#04F9DB"
+                      :href="`${row.new_url}`"
+                      target="_black"
+                    >{{row.new_url}}</a>
+                  </template>
+                </vxe-column>
+                <vxe-column field="source" show-overflow title="来源"></vxe-column>
+                <!-- <vxe-table-column title="操作状态" width="100">
+                  <template slot-scope="scope">
+                    <div class="flex">
+                      <el-button size="small" @click="yidongYuqin(scope.row)" type="text">移动至舆情</el-button>
+                    </div>
+                  </template>
+                </vxe-table-column>-->
+              </vxe-table>
+              <vxe-table
+                v-else
+                class="myTab"
+                border="none"
+                align="center"
+                height="520"
+                :cell-class-name="cellClassName"
+                :data="tableData1"
+                @scroll="scrollEvent"
+              >
+                <vxe-column field="news_name" show-overflow title="新闻标题"></vxe-column>
+                <vxe-column field="site_name" show-overflow title="作者"></vxe-column>
+                <vxe-column field="comment_content" show-overflow title="评论内容"></vxe-column>
+                <vxe-column field="user_name" show-overflow title="评论用户"></vxe-column>
+                <vxe-column field="comment_time" show-overflow title="发布时间"></vxe-column>
+                <vxe-column field="lj" show-overflow title="链接">
+                  <template #default="{ row }">
+                    <a
+                      style="color:#04F9DB"
+                      :href="`${row.new_url}`"
+                      target="_black"
+                    >{{row.new_url}}</a>
+                  </template>
+                </vxe-column>
+                <vxe-column field="source" show-overflow title="来源"></vxe-column>
+                <!-- <vxe-table-column title="操作状态" width="100">
+                  <template slot-scope="scope">
+                    <div class="flex">
+                      <el-button size="small" @click="yidongYuqin(scope.row)" type="text">移动至新闻</el-button>
+                    </div>
+                  </template>
+                </vxe-table-column>-->
+              </vxe-table>
+            </div>
           </div>
-        </div>
-        <div class="tit">
-          <div class="txt1">{{decompose_time2}}</div>
-          <div class="txt2">今日分解次数</div>
-        </div>
-      </div>
-      <div class="box">
-        <div class="icon1 i1-3">
-          <div class="icon2 i1-3">
-            <i class="el-icon-s-release"></i>
-          </div>
-        </div>
-        <div class="tit">
-          <div class="txt1">{{decompose_total2}}</div>
-          <div class="txt2">今日分解金额</div>
-        </div>
-      </div>
+        </el-col>
+      </el-row>
     </div>
-    <div class="myTable" >
-      <vxe-table :data="tableData" align='center'>
-        <vxe-table-column field="box_name" title="盲盒名称"></vxe-table-column>
-        <vxe-table-column field="box_num" title="购买数量"> </vxe-table-column>
-        <vxe-table-column field="box_price" title="价格"></vxe-table-column>
-      </vxe-table>
-    </div>
-    <div style="margin-top:30px" class="txttt">总数据</div>-->
-    <div class="myForm">
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="日期：">
-          <el-date-picker
-            size="small"
-            v-model="formInline.time"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            value-format="yyyy-MM-dd"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item>
-          <el-button size="small" type="primary" @click="onSubmit">查询</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-    <div class="top">
-      <div class="box">
-        <div class="icon1">
-          <div class="icon2">
-            <i class="el-icon-s-order"></i>
-          </div>
-        </div>
-        <div class="tit">
-          <div class="txt1">{{substitution_num}}</div>
-          <div class="txt2">总置换次数</div>
+    <!-- 移动到舆情 -->
+    <el-dialog :visible.sync="dialogVisible1" width="586px" :before-close="handleClose1">
+      <div class="dia1">
+        <div class="txt1">确定将这条新闻信息移动至舆情中？</div>
+        <div class="btns">
+          <div @click="dialogVisible1 = false" class="btn1">取消</div>
+          <div class="btn2">确定</div>
         </div>
       </div>
-      <div class="box">
-        <div class="icon1 i1-2">
-          <div class="icon2 i1-2">
-            <i class="el-icon-s-claim"></i>
-          </div>
-        </div>
-        <div class="tit">
-          <div class="txt1">{{pick_total}}</div>
-          <div class="txt2">总提取金额</div>
-        </div>
-      </div>
-      <div class="box">
-        <div class="icon1 i1-2">
-          <div class="icon2 i1-2">
-            <i class="el-icon-s-claim"></i>
-          </div>
-        </div>
-        <div class="tit">
-          <div class="txt1">{{pick_time}}</div>
-          <div class="txt2">总提取次数</div>
-        </div>
-      </div>
-      <div class="box">
-        <div class="icon1 i1-2">
-          <div class="icon2 i1-2">
-            <i class="el-icon-s-claim"></i>
-          </div>
-        </div>
-        <div class="tit">
-          <div class="txt1">{{decompose_time}}</div>
-          <div class="txt2">总分解次数</div>
-        </div>
-      </div>
-      <div class="box">
-        <div class="icon1 i1-3">
-          <div class="icon2 i1-3">
-            <i class="el-icon-s-release"></i>
-          </div>
-        </div>
-        <div class="tit">
-          <div class="txt1">{{decompose_total}}</div>
-          <div class="txt2">总分解金额</div>
-        </div>
-      </div>
-    </div>
-    <div class="myTable">
-      <vxe-table :data="tableData2" align="center">
-        <vxe-table-column field="box_name" title="盲盒名称"></vxe-table-column>
-        <vxe-table-column field="box_num" title="购买数量"></vxe-table-column>
-        <vxe-table-column field="box_price" title="价格"></vxe-table-column>
-      </vxe-table>
-    </div>
-    <!-- <div id="main1"></div>
-    <div id="main2"></div>
-    <div id="main3"></div>-->
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import * as echarts from "echarts";
+import { mapState } from "vuex";
+// import wordCloud from 'echarts-wordcloud';
 export default {
+  computed: {
+    ...mapState([
+      "sytableIndex",
+      "startTime",
+      "endTime",
+      "syStartTime",
+      "syEndTime"
+    ])
+  },
   data() {
     return {
-      formInline: {
-        time: []
-      },
-      substitution_num: 0,
-      pick_total: 0,
-      decompose_total: 0,
-      decompose_time: 0,
-      pick_time: 0,
-      substitution_num2: 0,
-      pick_total2: 0,
-      decompose_total2: 0,
-      decompose_time2: 0,
-      pick_time2: 0,
-      tableData: [],
-      tableData2: [],
-      nowDate:'',
+      nowIndex: 0,
+      isyuntu: true,
+      tableData1: [],
+      // sytableIndex: 1,
+      option1: {},
+      option2: {},
+      myYuntu: null,
+      keywords: null,
+      myZoushi: null,
+      dialogVisible1: false,
+      navList: [],
+      site_id: 0,
+      page: 1,
+      scroll: true
     };
   },
   created() {
-    // this.getData();
-    var date = new Date();
-    var year = date.getFullYear();
-    var month = date.getMonth() + 1;
-    var day = date.getDate();
-    if (month < 10) {
-      month = "0" + month;
+    this.getxinwenData();
+    if (this.sytableIndex == 0) {
+      this.getData();
+    } else if (this.sytableIndex == 1) {
+      this.getData2();
     }
-    if (day < 10) {
-      day = "0" + day;
-    }
-    this.formInline.time[0] = year + "-" + month + "-" + day;
-    this.formInline.time[1] = year + "-" + month + "-" + day;
-    this.getData2();
+  },
+  mounted() {
+    this.myYuntu = echarts.init(document.getElementById("yuntu"));
+    this.keywords = [
+      { name: "男神", value: 2.64 },
+      { name: "好身材", value: 4.03 },
+      { name: "校草", value: 4.95 },
+      { name: "酷", value: 4.04 },
+      { name: "时尚", value: 5.27 },
+      { name: "阳光活力", value: 5.8 },
+      { name: "初恋", value: 3.09 },
+      { name: "英俊潇洒", value: 2.71 },
+      { name: "霸气", value: 6.33 },
+      { name: "腼腆", value: 2.55 },
+      { name: "蠢萌", value: 1.88 },
+      { name: "青春", value: 4.04 },
+      { name: "网红", value: 2.87 },
+      { name: "萌", value: 1.97 },
+      { name: "认真", value: 2.53 },
+      { name: "古典", value: 2.49 },
+      { name: "温柔", value: 1.91 },
+      { name: "有个性", value: 1.25 },
+      { name: "可爱", value: 1.93 },
+      { name: "幽默诙谐", value: 2.65 }
+    ];
+    this.option1 = {
+      series: [
+        {
+          type: "wordCloud",
+          sizeRange: [12, 20],
+          rotationRange: [0, 0],
+          rotationStep: 45,
+          gridSize: 8,
+          shape: "pentagon",
+          width: "100%",
+          height: "100%",
+          textStyle: {
+            color: function(e) {
+              if (e.dataIndex == 2) {
+                return "#FFBA00";
+              } else {
+                return "#ffffff";
+              }
+            }
+          },
+          data: this.keywords
+        }
+      ]
+    };
+    this.myYuntu.setOption(this.option1);
+    this.myZoushi = echarts.init(document.getElementById("zoushi"));
+    this.option2 = {
+      legend: {
+        data: ["频率"],
+        x: "80%",
+        textStyle: {
+          fontSize: 12,
+          color: "#ffffff",
+          fontWeight: 700
+        }
+      },
+      grid: {
+        left: "3%",
+        right: "4%",
+        bottom: "3%",
+        top: "14%",
+        containLabel: true
+      },
+      xAxis: {
+        type: "category",
+        boundaryGap: false,
+        data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        axisLine: {
+          lineStyle: {
+            // 设置x轴颜色
+            color: "#1794E4"
+          }
+        },
+        axisLabel: {
+          textStyle: {
+            fontSize: 12,
+            color: "#fff"
+          }
+        }
+      },
+      yAxis: {
+        type: "value",
+        axisLine: {
+          lineStyle: {
+            // 设置y轴颜色
+            color: "#0C9DDB"
+          }
+        },
+        axisLabel: {
+          textStyle: {
+            fontSize: 12,
+            color: "#0c9ddb",
+            fontWeight: 700
+          }
+        }
+      },
+      series: [
+        {
+          data: [150, 230, 224, 218, 135, 147, 260],
+          name: "频率",
+          type: "line",
+          stack: "Total",
+          symbolSize: 4,
+          itemStyle: {
+            normal: {
+              label: {
+                show: true
+              },
+              borderColor: "#ffaea3", // 拐点边框颜色
+              symbol: "circle",
+              lineStyle: {
+                width: 2, // 设置线宽
+                color: "#ffaea3"
+              }
+            }
+          }
+        }
+      ]
+    };
+    // this.myZoushi.setOption(this.option2);
   },
   methods: {
-    async getData2() {
-      // const res = await this.$api.getOperate({
-      //   isToday: false
-      // });
-      // console.log(res);
-      // this.decompose_total = res.data.decompose_total;
-      // this.substitution_num = res.data.substitution_num;
-      // this.pick_total = res.data.pick_total;
-      // this.decompose_time = res.data.decompose_time;
-      // this.pick_time = res.data.pick_time;
-      // this.tableData = res.data.box_sale;
-      const res2 = await this.$api.getOperate({
-        // isToday: true,
-        start_time:this.formInline.time[0],
-        end_time:this.formInline.time[1],
-      });
-      this.decompose_total = res2.data.decompose_total;
-      this.substitution_num = res2.data.substitution_num;
-      this.pick_total = res2.data.pick_total;
-      this.decompose_time = res2.data.decompose_time;
-      this.pick_time = res2.data.pick_time;
-      this.tableData2 = res2.data.box_sale;
-    },
-    onSubmit() {
-      this.getData2()
+    async getxinwenData() {
+      const res = await this.$api.site_list();
+      this.navList = res.list;
     },
     async getData() {
-      const res = await this.$api.dashboard();
-      console.log(res);
-      this.wait_send = res.data.wait_send;
-      this.wait_check = res.data.wait_check;
-      this.wait_refund = res.data.wait_refund;
-      var chartDom1 = document.getElementById("main1");
-      var myChart1 = echarts.init(chartDom1);
-      var chartDom2 = document.getElementById("main2");
-      var myChart2 = echarts.init(chartDom2);
-      var chartDom3 = document.getElementById("main3");
-      var myChart3 = echarts.init(chartDom3);
-      var option1 = {
-        title: {
-          x: "20",
-          text: "近7天订单数"
-        },
-        tooltip: {
-          trigger: "axis"
-        },
-        legend: {
-          data: ["订单数"]
-        },
-        grid: {
-          left: "3%",
-          right: "4%",
-          bottom: "3%",
-          containLabel: true
-        },
-        toolbox: {
-          x: "180",
-          y: "-2",
-          feature: {
-            saveAsImage: {
-              //保存图片
-              show: true
-            }
-          }
-        },
-        xAxis: {
-          type: "category",
-          boundaryGap: false
-        },
-        yAxis: {
-          type: "value"
-        },
-        series: [
-          {
-            name: "订单数",
-            type: "line",
-            stack: "总量"
-          }
-        ]
-      };
-      var option2 = {
-        title: {
-          x: "20",
-          text: "近7天新增用户数"
-        },
-        tooltip: {
-          trigger: "axis"
-        },
-        legend: {
-          data: ["新增用户数"]
-        },
-        grid: {
-          left: "3%",
-          right: "4%",
-          bottom: "3%",
-          containLabel: true
-        },
-        toolbox: {
-          x: "180",
-          y: "-2",
-          feature: {
-            saveAsImage: {
-              //保存图片
-              show: true
-            }
-          }
-        },
-        xAxis: {
-          type: "category",
-          boundaryGap: false
-        },
-        yAxis: {
-          type: "value"
-        },
-        series: [
-          {
-            name: "新增用户数",
-            type: "line",
-            stack: "总量",
-            itemStyle: {
-              normal: {
-                color: "#ff9900",
-                borderColor: "#ff9900" //拐点边框颜色
-              }
-            }
-          }
-        ]
-      };
-      var option3 = {
-        title: {
-          x: "20",
-          text: "近7天活跃用户数"
-        },
-        tooltip: {
-          trigger: "axis"
-        },
-        legend: {
-          data: ["活跃用户数"]
-        },
-        grid: {
-          left: "3%",
-          right: "4%",
-          bottom: "3%",
-          containLabel: true
-        },
-        toolbox: {
-          x: "180",
-          y: "-2",
-          feature: {
-            saveAsImage: {
-              //保存图片
-              show: true
-            }
-          }
-        },
-        xAxis: {
-          type: "category",
-          boundaryGap: false
-        },
-        yAxis: {
-          type: "value"
-        },
-        series: [
-          {
-            name: "活跃用户数",
-            type: "line",
-            stack: "总量",
-            itemStyle: {
-              normal: {
-                color: "#19be6b",
-                borderColor: "#19be6b" //拐点边框颜色
-              }
-            }
-          }
-        ]
-      };
-      let week_orderKeyArr = [];
-      let week_orderZhiArr = [];
-      for (const key in res.data.week_order) {
-        week_orderKeyArr.push(key);
-        week_orderZhiArr.push(res.data.week_order[key]);
+      const loading = this.$loading({
+        lock: true,
+        text: "加载中...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)"
+      });
+      const res = await this.$api.news_list({
+        site_id: this.site_id,
+        start_day: this.syStartTime,
+        end_day: this.syEndTime,
+        page: this.page,
+        pagesize: 15
+      });
+      if (res.list) {
+        this.tableData1 = this.tableData1.concat(res.list);
+      } else {
+        this.$message("没有更多了");
       }
-      option1.xAxis.data = week_orderKeyArr;
-      option1.series[0].data = week_orderZhiArr;
-      option1 && myChart1.setOption(option1);
-      let week_new_userKeyArr = [];
-      let week_new_userZhiArr = [];
-      for (const key in res.data.week_new_user) {
-        week_new_userKeyArr.push(key);
-        week_new_userZhiArr.push(res.data.week_new_user[key]);
+      loading.close();
+    },
+    async getData2() {
+      const loading = this.$loading({
+        lock: true,
+        text: "加载中...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)"
+      });
+      const res = await this.$api.comment_list({
+        site_id: this.site_id,
+        start_day: this.syStartTime,
+        end_day: this.syEndTime,
+        page: this.page,
+        pagesize: 15
+      });
+      if (res.list) {
+        this.tableData1 = this.tableData1.concat(res.list);
+      } else {
+        this.$message("没有更多了");
       }
-      option2.xAxis.data = week_new_userKeyArr;
-      option2.series[0].data = week_new_userZhiArr;
-      option2 && myChart2.setOption(option2);
-      let week_activity_userKeyArr = [];
-      let week_activity_userZhiArr = [];
-      for (const key in res.data.week_activity_user) {
-        week_activity_userKeyArr.push(key);
-        week_activity_userZhiArr.push(res.data.week_activity_user[key]);
+      loading.close();
+    },
+    scrollEvent({ scrollTop, scrollHeight }) {
+      if (scrollTop + 470 >= scrollHeight) {
+        this.page++;
+        if (this.sytableIndex == 0) {
+          this.getData();
+        } else if (this.sytableIndex == 1) {
+          this.getData2();
+        }
       }
-      option3.xAxis.data = week_activity_userKeyArr;
-      option3.series[0].data = week_activity_userZhiArr;
-      option3 && myChart3.setOption(option3);
+    },
+    handleClose1() {
+      this.dialogVisible1 = false;
+    },
+    changeIndex(i, item) {
+      if (i == 0) {
+        this.site_id = 0;
+      } else {
+        this.site_id = item.id;
+      }
+      this.nowIndex = i;
+      this.tableData1 = [];
+      this.page = 1;
+      if (this.sytableIndex == 0) {
+        this.getData();
+      } else if (this.sytableIndex == 1) {
+        this.getData2();
+      }
+    },
+    changeTabIndex(i) {
+      // this.sytableIndex = i;
+      this.$store.commit("sytableIndex", i);
+      this.tableData1 = [];
+      this.page = 1;
+      if (this.sytableIndex == 0) {
+        this.getData();
+      } else if (this.sytableIndex == 1) {
+        this.getData2();
+      }
+    },
+    yidongYuqin(row) {
+      console.log(row);
+      this.dialogVisible1 = true;
+    },
+    shuaxin() {
+      this.tableData1 = [];
+      this.page = 1;
+      if (this.sytableIndex == 0) {
+        this.getData();
+      } else if (this.sytableIndex == 1) {
+        this.getData2();
+      }
+    },
+    goToUrl() {
+      if (this.sytableIndex == 0) {
+        this.$router.push({ name: "Xinwen",params:{site_id:this.site_id} });
+      } else if (this.sytableIndex == 1) {
+        this.$router.push({ name: "Yuqing",params:{site_id:this.site_id}  });
+      } else if (this.sytableIndex == 2) {
+        this.$router.push({ name: "Shipin" });
+      }
+    },
+    toZoushitu() {
+      this.$router.push({ name: "Zoushitu" });
+    },
+    cellClassName({ column }) {
+      if (column.property == "lj") {
+        return "active";
+      } else {
+        return "col-active";
+      }
+
+      // if (column.property == "sex" && this.nowVip == 1) {
+      //   return "col-active";
+      // } else if (column.property == "age" && this.nowVip == 2) {
+      //   return "col-active";
+      // } else if (column.property == "address" && this.nowVip == 3) {
+      //   return "col-active";
+      // }
     }
   }
 };
@@ -405,152 +480,470 @@ export default {
 <style lang="scss" scoped>
 .index {
 }
-.myForm {
-  /deep/ .el-form-item__label {
-    font-size: 12px;
-  }
-  /deep/ .el-form-item {
-    margin-right: 30px;
-    margin-bottom: 20px;
+.myTab {
+  /deep/ .el-button--text {
+    color: #fff;
   }
 }
-.txttt {
-  margin-bottom: 10px;
-  font-size: 16px;
-  font-weight: 800;
-}
-.myTable {
-  margin: 10px 0;
-  .xiala {
-    padding: 10px 20px;
-    .item {
-      font-size: 12px;
-    }
+.nav1 {
+  height: 63px;
+  background: #121531;
+  border: 2px solid #1794e4;
+  box-shadow: 0px 0px 30px 0px rgba(23, 148, 228, 0.86) inset;
+  position: relative;
+  .r1 {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-top: 2px solid #04f9db;
+    border-left: 2px solid #04f9db;
+    top: -2px;
+    left: -2px;
   }
-  .flex {
-    display: flex;
-    align-items: center;
+  .r2 {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-top: 2px solid #04f9db;
+    border-right: 2px solid #04f9db;
+    top: -2px;
+    right: -2px;
   }
-  .fenye {
-    margin-top: 10px;
+  .r3 {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-bottom: 2px solid #04f9db;
+    border-left: 2px solid #04f9db;
+    bottom: -2px;
+    left: -2px;
   }
-  /deep/ .vxe-table--render-default .vxe-body--column {
-    line-height: 14px;
-    vertical-align: middle;
+  .r4 {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-bottom: 2px solid #04f9db;
+    border-right: 2px solid #04f9db;
+    bottom: -2px;
+    right: -2px;
   }
-  /deep/ .vxe-cell--label {
-    font-size: 12px;
+  .n1-content::-webkit-scrollbar {
+    width: 10px;
+    height: 6px;
   }
-  /deep/ .vxe-cell--title {
-    font-size: 12px;
-  }
-  /deep/ .image-slot {
-    width: 38px;
-    height: 38px;
-    border: 1px solid #ddd;
-    line-height: 38px;
-    text-align: center;
-    border-radius: 4px;
-  }
-}
-.top {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  margin: 0 0 20px 0;
-  height: 120px;
-  .box {
-    &:nth-child(5) {
-      margin-right: 0px;
-    }
+  .n1-content::-webkit-scrollbar-thumb {
+    /*滚动条里面小方块*/
     border-radius: 10px;
+    background-color: #02adf7;
+    background-image: -webkit-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.2) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba(255, 255, 255, 0.2) 50%,
+      rgba(255, 255, 255, 0.2) 75%,
+      transparent 75%,
+      transparent
+    );
+  }
+  .n1-content::-webkit-scrollbar-track {
+    /*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background: #1b5aa9;
+  }
+  .n1-content {
+    width: 100%;
     height: 100%;
-    width: 33.3%;
-    background: #ffffff;
-    margin-right: 16px;
     display: flex;
     align-items: center;
-    padding: 0 25px;
-    .icon1.i1-2 {
-      background: #fff3e0;
-      .icon2.i1-2 {
-        background: #ffab2b;
+    white-space: nowrap;
+    overflow-x: scroll;
+    .n1-txt {
+      cursor: pointer;
+      display: inline;
+      font-size: 16px;
+      font-family: PingFang SC, PingFang SC-Medium;
+      font-weight: 500;
+      color: #e8e8e8;
+      letter-spacing: 0.18px;
+      margin: 0 40px;
+    }
+    .n1-txt.active {
+      color: #04f9db;
+      font-size: 18px;
+    }
+  }
+}
+.nav2 {
+  margin-top: 22px;
+  .n2-left {
+    .n2l-top {
+      height: 302px;
+      background: #121531;
+      border: 2px solid #1794e4;
+      box-shadow: 0px 0px 30px 0px rgba(23, 148, 228, 0.86) inset;
+      position: relative;
+      .r1 {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        border-top: 2px solid #04f9db;
+        border-left: 2px solid #04f9db;
+        top: -2px;
+        left: -2px;
+      }
+      .r2 {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        border-top: 2px solid #04f9db;
+        border-right: 2px solid #04f9db;
+        top: -2px;
+        right: -2px;
+      }
+      .r3 {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        border-bottom: 2px solid #04f9db;
+        border-left: 2px solid #04f9db;
+        bottom: -2px;
+        left: -2px;
+      }
+      .r4 {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        border-bottom: 2px solid #04f9db;
+        border-right: 2px solid #04f9db;
+        bottom: -2px;
+        right: -2px;
+      }
+      .n2lt-content {
+        .tit1 {
+          display: flex;
+          align-items: center;
+          margin-top: 30px;
+          .dian {
+            width: 8px;
+            height: 8px;
+            background: #04f9db;
+            border-radius: 50%;
+            margin: 0 8px 0 12px;
+          }
+          .txtt {
+            font-size: 20px;
+            font-family: PingFang SC, PingFang SC-Regular;
+            font-weight: 400;
+            color: #04ffe0;
+            letter-spacing: 2px;
+          }
+        }
+        .items {
+          margin: 8px 22px 10px 18px;
+          height: 220px;
+          overflow-y: scroll;
+          .item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.31);
+            font-size: 16px;
+            font-family: PingFang SC, PingFang SC-Regular;
+            font-weight: 400;
+            color: #ffffff;
+            letter-spacing: 1.6px;
+            height: 42px;
+            line-height: 42px;
+          }
+        }
       }
     }
-    .icon1.i1-3 {
-      background: #eaf9e1;
-      .icon2.i1-3 {
-        background: #6dd230;
+    .n2l-down {
+      margin-top: 18px;
+      height: 330px;
+      background: #121531;
+      border: 2px solid #1794e4;
+      box-shadow: 0px 0px 30px 0px rgba(23, 148, 228, 0.86) inset;
+      position: relative;
+      .r1 {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        border-top: 2px solid #04f9db;
+        border-left: 2px solid #04f9db;
+        top: -2px;
+        left: -2px;
+      }
+      .r2 {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        border-top: 2px solid #04f9db;
+        border-right: 2px solid #04f9db;
+        top: -2px;
+        right: -2px;
+      }
+      .r3 {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        border-bottom: 2px solid #04f9db;
+        border-left: 2px solid #04f9db;
+        bottom: -2px;
+        left: -2px;
+      }
+      .r4 {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        border-bottom: 2px solid #04f9db;
+        border-right: 2px solid #04f9db;
+        bottom: -2px;
+        right: -2px;
+      }
+      .n2ld-content {
+        .tit1 {
+          margin-top: 30px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          .t1-l {
+            display: flex;
+            align-items: center;
+            .dian {
+              width: 8px;
+              height: 8px;
+              background: #04f9db;
+              border-radius: 50%;
+              margin: 0 8px 0 12px;
+            }
+            .txtt {
+              font-size: 20px;
+              font-family: PingFang SC, PingFang SC-Regular;
+              font-weight: 400;
+              color: #04ffe0;
+              letter-spacing: 2px;
+            }
+          }
+          .t1-r {
+            cursor: pointer;
+            margin-right: 20px;
+            width: 74px;
+            height: 28px;
+            border: 1px solid #1794e4;
+            box-shadow: 0px 0px 20px 0px #1794e4 inset;
+            font-size: 12px;
+            font-family: PingFang SC, PingFang SC-Regular;
+            font-weight: 400;
+            text-align: center;
+            line-height: 28px;
+            color: #ffffff;
+            letter-spacing: 1.2px;
+            position: relative;
+            .r1-r {
+              position: absolute;
+              width: 6px;
+              height: 14px;
+              border-top: 2px solid #04f9db;
+              border-left: 2px solid #04f9db;
+              top: -2px;
+              left: -2px;
+            }
+            .r2-r {
+              position: absolute;
+              width: 6px;
+              height: 14px;
+              border-bottom: 2px solid #04f9db;
+              border-right: 2px solid #04f9db;
+              bottom: -2px;
+              right: -2px;
+            }
+          }
+        }
+        .reciyuntu {
+          height: 300px;
+        }
+        .zoushitu {
+          display: flex;
+          align-items: center;
+          #zoushi {
+            margin: 0 auto;
+          }
+        }
       }
     }
-    .icon1 {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: #e4ecff;
-      .icon2 {
+  }
+  .n2-right {
+    height: 654px;
+    background: #121531;
+    border: 2px solid #1794e4;
+    box-shadow: 0px 0px 30px 0px rgba(23, 148, 228, 0.86) inset;
+    position: relative;
+    .r1 {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-top: 2px solid #04f9db;
+      border-left: 2px solid #04f9db;
+      top: -2px;
+      left: -2px;
+    }
+    .r2 {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-top: 2px solid #04f9db;
+      border-right: 2px solid #04f9db;
+      top: -2px;
+      right: -2px;
+    }
+    .r3 {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-bottom: 2px solid #04f9db;
+      border-left: 2px solid #04f9db;
+      bottom: -2px;
+      left: -2px;
+    }
+    .r4 {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-bottom: 2px solid #04f9db;
+      border-right: 2px solid #04f9db;
+      bottom: -2px;
+      right: -2px;
+    }
+    .n2r-content {
+      .n2r-tit1 {
         display: flex;
         align-items: center;
-        justify-content: center;
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background: #4d7cfe;
-        .el-icon-s-order {
-          font-size: 26px;
-          color: #ffffff;
+        justify-content: space-between;
+        padding: 30px 28px;
+        .left {
+          display: flex;
+          align-items: center;
+          .dian {
+            width: 8px;
+            height: 8px;
+            background: #04f9db;
+            border-radius: 50%;
+          }
+          .txt {
+            cursor: pointer;
+            margin: 0 28px;
+            font-size: 22px;
+            font-family: PingFang SC, PingFang SC-Regular;
+            font-weight: 400;
+            color: #fff;
+            letter-spacing: 2.2px;
+          }
+          .txt.active {
+            color: #04ffe0;
+          }
         }
-        .el-icon-s-release {
-          font-size: 26px;
-          color: #ffffff;
+        .right {
+          display: flex;
+          align-items: center;
+          .txt1 {
+            cursor: pointer;
+            width: 62px;
+            height: 28px;
+            background: #2d8cf0;
+            border-radius: 4px;
+            font-size: 16px;
+            font-family: PingFang SC, PingFang SC-Regular;
+            font-weight: 400;
+            text-align: center;
+            line-height: 28px;
+            color: #ffffff;
+            letter-spacing: 1.6px;
+          }
+          .txt2 {
+            cursor: pointer;
+            margin-left: 18px;
+            font-size: 12px;
+            font-family: PingFang SC, PingFang SC-Regular;
+            font-weight: 400;
+            color: #ffffff;
+            letter-spacing: 1.3px;
+          }
         }
-        .el-icon-s-claim {
-          font-size: 26px;
-          color: #ffffff;
-        }
-      }
-    }
-    .tit {
-      margin-left: 30px;
-      height: 50px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      .txt1 {
-        color: rgb(37, 38, 49);
-        font-size: 24px;
-      }
-      .txt2 {
-        color: rgb(152, 169, 188);
-        font-size: 12px;
       }
     }
   }
 }
-#main1 {
-  width: 100%;
-  height: 300px;
-  background: #ffffff;
-  padding: 14px 0px;
-  border-radius: 10px;
+.dia1 {
+  .txt1 {
+    font-size: 24px;
+    font-family: PingFang SC, PingFang SC-Bold;
+    font-weight: 700;
+    text-align: center;
+    color: #0e0d0b;
+    letter-spacing: 2.4px;
+  }
+  .btns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    .btn1 {
+      cursor: pointer;
+      width: 218px;
+      height: 62px;
+      border: 2px solid #388bf4;
+      border-radius: 30px;
+      font-size: 28px;
+      font-family: PingFang SC, PingFang SC-Bold;
+      font-weight: 700;
+      text-align: center;
+      color: #388bf4;
+      letter-spacing: 2.8px;
+      line-height: 62px;
+    }
+    .btn2 {
+      cursor: pointer;
+      width: 218px;
+      height: 62px;
+      background: #388bf4;
+      border-radius: 30px;
+      width: 218px;
+      height: 62px;
+      background: #388bf4;
+      border-radius: 30px;
+      text-align: center;
+      line-height: 62px;
+      font-size: 28px;
+      color: #fff;
+      margin-left: 54px;
+    }
+  }
 }
-#main2 {
-  margin-top: 20px;
-  width: 100%;
-  height: 300px;
-  background: #ffffff;
-  padding: 14px 0px;
-  border-radius: 10px;
+/deep/ .vxe-table {
+  //  box-shadow: 0px 0px 30px 0px rgba(23, 148, 228, 0.86) inset;
+  //
+  width: calc(100% - 70px);
+  margin: 0 34px;
 }
-#main3 {
-  margin-top: 20px;
-  width: 100%;
-  height: 300px;
-  background: #ffffff;
-  padding: 14px 0px;
-  border-radius: 10px;
+/deep/ .vxe-header--column {
+  background: #121531;
+  color: #ffffff;
+}
+// /deep/ .vxe-header--column.col_10 {
+//   background: #121531;
+//   color: #04F9DB;
+// }
+/deep/ .vxe-body--column.col-active {
+  background: #121531;
+  color: #ffffff;
+}
+/deep/ .vxe-body--column.active {
+  background: #121531;
+  color: #04f9db;
+}
+/deep/ .body--wrapper {
+  background-color: #121531 !important;
+}
+/deep/ .vxe-table--header {
+  border-bottom: 2px solid rgba(23, 148, 228, 0.57);
 }
 </style>

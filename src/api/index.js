@@ -2,7 +2,7 @@ import axios from 'axios';
 import Vue from 'vue'
 import router from '../router.js';
 import urls from './url.js';
-import md5 from '../assets/md5.min.js'
+// import md5 from '../assets/md5.min.js'
 const vue = new Vue()
 axios.defaults.headers['Content-Type'] = "application/json;charset=UTF-8";
 let myPost = axios.create({
@@ -260,318 +260,108 @@ myDelete.interceptors.response.use(response => {
 })
 
 export default {
-    doLogin(account, password) {
+    login(username, userpass) {
         return myPost({
-            url: urls.doLogin,
+            url: urls.login,
             params: {
-                account,
-                password: md5(`${password}`).toUpperCase(),
-                sign: md5(`BlindBox${account}${password}`).toUpperCase(),
+                username,
+                userpass,
             }
         })
     },
-    getUserList(obj){
+    keyword_list(obj) {
         return myPost({
-            url: urls.getUserList,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
+            url: urls.keyword_list,
+            data: {
+                ...obj
             }
         })
     },
-    addMallCategory(){
+    add_keyword(obj) {
         return myPost({
-            url: urls.addMallCategory,
-            params: {
-                manage_id:sessionStorage.getItem("manage_id"),
+            url: urls.add_keyword,
+            data: {
+                ...obj
             }
         })
     },
-    updateCategory(obj){
+    del_keyword(obj) {
         return myPost({
-            url: urls.updateCategory,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
+            url: urls.del_keyword,
+            data: {
+                ...obj
             }
         })
     },
-    deleteCategory(obj){
+    site_list(obj) {
         return myPost({
-            url: urls.deleteCategory,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
+            url: urls.site_list,
+            data: {
+                ...obj
             }
         })
     },
-    getBoxList(obj){
+    news_list(obj) {
         return myPost({
-            url: urls.getBoxList,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
+            url: urls.news_list,
+            data: {
+                ...obj
             }
         })
     },
-    updateBoxPrice(obj){
+    comment_list(obj) {
         return myPost({
-            url: urls.updateBoxPrice,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
+            url: urls.comment_list,
+            data: {
+                ...obj
             }
         })
     },
-    getShopList(obj){
+    config(obj) {
         return myPost({
-            url: urls.getShopList,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
+            url: urls.config,
+            data: {
+                ...obj
             }
         })
     },
-    addShopInfo(obj){
+    adminuser_list(obj) {
         return myPost({
-            url: urls.addShopInfo,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
+            url: urls.adminuser_list,
+            data: {
+                ...obj
             }
         })
     },
-    changeShopInfo(obj){
+    add_adminuser(obj) {
         return myPost({
-            url: urls.changeShopInfo,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
+            url: urls.add_adminuser,
+            data: {
+                ...obj
             }
         })
     },
-    getCardTypeList(obj){
+    limits(obj) {
         return myPost({
-            url: urls.getCardTypeList,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
+            url: urls.limits,
+            data: {
+                ...obj
             }
         })
     },
-    getShopByCategory(obj){
+    update_adminuser(obj) {
         return myPost({
-            url: urls.getShopByCategory,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
+            url: urls.update_adminuser,
+            data: {
+                ...obj
             }
         })
     },
-    addCategoryShop(obj){
+    adminuser_del(obj) {
         return myPost({
-            url: urls.addCategoryShop,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    deleteCateGoryShop(obj){
-        return myPost({
-            url: urls.deleteCateGoryShop,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    getCategoryWithoutShopList(obj){
-        return myPost({
-            url: urls.getCategoryWithoutShopList,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    deleteBox(obj){
-        return myPost({
-            url: urls.deleteBox,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    getBoxDetail(obj){
-        return myPost({
-            url: urls.getBoxDetail,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    getOrderListByStatus(obj){
-        return myPost({
-            url: urls.getOrderListByStatus,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    exportCard(obj){
-        return myPost({
-            url: urls.exportCard,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    changeOrderToCancle(obj){
-        return myPost({
-            url: urls.changeOrderToCancle,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    changeOrderToError(obj){
-        return myPost({
-            url: urls.changeOrderToError,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    changeOrderToSended(obj){
-        return myPost({
-            url: urls.changeOrderToSended,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    getCardListByOrderid(obj){
-        return myPost({
-            url: urls.getCardListByOrderid,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    changeOrderToSendedByCard(obj){
-        return myPost({
-            url: urls.changeOrderToSendedByCard,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    getCancelOperate(obj){
-        return myPost({
-            url: urls.getCancelOperate,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    getOperate(obj){
-        return myPost({
-            url: urls.getOperate,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    getManageHistory(obj){
-        return myPost({
-            url: urls.getManageHistory,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    getManageList(obj){
-        return myPost({
-            url: urls.getManageList,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    getBoxCanAddShopList(obj){
-        return myPost({
-            url: urls.getBoxCanAddShopList,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    addBoxShop(obj){
-        return myPost({
-            url: urls.addBoxShop,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    deleteBoxShop(obj){
-        return myPost({
-            url: urls.deleteBoxShop,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    getManageMemberPower(obj){
-        return myPost({
-            url: urls.getManageMemberPower,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    addManageMemberWithPower(obj){
-        return myPost({
-            url: urls.addManageMemberWithPower,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    updateManageInfo(obj){
-        return myPost({
-            url: urls.updateManageInfo,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
-            }
-        })
-    },
-    deleteManageById(obj){
-        return myPost({
-            url: urls.deleteManageById,
-            params: {
-                ...obj,
-                manage_id:sessionStorage.getItem("manage_id"),
+            url: urls.adminuser_del,
+            data: {
+                ...obj
             }
         })
     },
