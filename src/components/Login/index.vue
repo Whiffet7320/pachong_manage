@@ -7,7 +7,7 @@
         :particlesNumber="50"
         shapeType="circle"
         :particleSize="4"
-        linesColor="#ebbfcc"
+        linesColor="#137084"
         :linesWidth="2"
         :lineLinked="true"
         :lineOpacity="0.4"
@@ -18,11 +18,14 @@
         :clickEffect="true"
         clickMode="push"
         class="lizi"
-      >
-      </vue-particles>
-      <!-- <img class="bacImage" src="../../assets/image/back.png" alt="" /> -->
+      ></vue-particles>
+      <img class="bacImage" src="../../assets/newIImg/zu1029.png" alt="" />
       <!-- <img class="leftImg" src="../../assets/image/hb.png" alt="" /> -->
-      <div class="loginBox">
+      <div class="syTop">
+        <img src="../../assets/newIImg/LoginTop.png" class="syTopImg" alt />
+        <div class="sy-txt">爬虫后台</div>
+      </div>
+      <!-- <div class="loginBox">
         <div class="tit1">后台管理系统</div>
         <div class="tit2">欢迎你回来~</div>
         <div class="loginBox2">
@@ -81,6 +84,16 @@
             icon="el-icon-arrow-right"
           ></el-button>
         </div>
+      </div>-->
+      <div class="loginBox2">
+        <div class="l-txt1">登录</div>
+        <el-input placeholder="请输入账号" v-model="loginForm.username">
+          <i slot="prefix" class="el-input__icon el-icon-user-solid"></i>
+        </el-input>
+        <el-input type="password" style="margin-top:20px" @keyup.enter.native="onLogin" placeholder="请输入密码" v-model="loginForm.password">
+          <i slot="prefix" class="el-input__icon el-icon-connection"></i>
+        </el-input>
+        <el-button @click="onLogin" style="width:100%;margin-top:30px" type="primary">登录</el-button>
       </div>
     </div>
   </div>
@@ -112,16 +125,16 @@ export default {
       loginForm: {
         username: "admin",
         checkPass: "",
-        password: "",
+        password: ""
       },
       rules: {
         username: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
+          { required: true, message: "请输入用户名", trigger: "blur" }
         ],
         password: [{ validator: validatePass, trigger: "blur" }],
-        checkPass: [{ validator: validatePass2, trigger: "blur" }],
+        checkPass: [{ validator: validatePass2, trigger: "blur" }]
       },
-      isRegister: true,
+      isRegister: true
     };
   },
   methods: {
@@ -138,18 +151,19 @@ export default {
         // sessionStorage.setItem("userInfo", JSON.stringify(res.data.info));
         this.$message({
           message: res.msg,
-          type: "success",
+          type: "success"
         });
         // sessionStorage.setItem("menu", JSON.stringify(res.data.menu_list));
         setTimeout(() => {
           this.$router.push({ path: "/" });
-          this.$router.go(0);
+          location.reload()
+          // this.$router.go(0);
         }, 500);
       } else {
         this.$message.error(res.msg);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -157,14 +171,43 @@ export default {
   width: 100%;
   height: 100vh;
   background-color: #000000;
+  overflow: hidden;
   .container {
     position: relative;
     width: 100%;
     height: 100%;
+    .syTop {
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      width: 1557px;
+      height: 160px;
+      .syTopImg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+      .sy-txt {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 50px;
+        font-size: 36px;
+        font-family: PingFang SC, PingFang SC-Medium;
+        font-weight: 500;
+        text-align: left;
+        color: #f0f7ff;
+      }
+    }
     .bacImage {
-      width: 100%;
-      height: 100%;
-      opacity: 1;
+      top: 0;
+      left: 0;
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      opacity: 0.8;
     }
     .leftImg {
       position: absolute;
@@ -203,7 +246,8 @@ export default {
         color: #c2c2c2;
       }
       .loginBox2 {
-        position: absolute;
+        position: fixed;
+        z-index: 99999;
         width: 100%;
         height: 35%;
         top: 31%;
@@ -262,6 +306,25 @@ export default {
           left: 50%;
           transform: translateX(-50%);
         }
+      }
+    }
+    .loginBox2 {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 493px;
+      height: 293px;
+      background: #3e5370;
+      border-radius: 6px;
+      padding: 20px 45px;
+      box-sizing: border-box;
+      .l-txt1 {
+        font-size: 24px;
+        font-family: PingFang SC, PingFang SC-Medium;
+        font-weight: 500;
+        color: #f0f7ff;
+        margin-bottom: 24px;
       }
     }
   }

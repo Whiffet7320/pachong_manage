@@ -1,5 +1,5 @@
 export default {
-    baseUrl: 'https://api.pc.5laoye.com/service/admin',
+    baseUrl: 'api',
     login:'/login',//登录
     keyword_list:'/keyword_list',//关键词列表
     add_keyword:"/add_keyword",//添加爬虫关键词
