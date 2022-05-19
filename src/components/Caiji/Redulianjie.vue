@@ -25,25 +25,56 @@
     </div>
     <div class="nav3">
       <div class="n3-tit1">
-        <el-input placeholder="热度链接" prefix-icon="el-icon-search" v-model="keyword"></el-input>
+        <el-input
+          placeholder="热度链接"
+          prefix-icon="el-icon-search"
+          v-model="keyword"
+        ></el-input>
       </div>
       <div class="n3-tit2">
-        <el-button type="primary" icon="el-icon-plus"></el-button>
+        <el-button
+          type="primary"
+          @click="addHotlink"
+          icon="el-icon-plus"
+        ></el-button>
       </div>
       <div class="n3-tit3">
-        <div @click="changeIndex(1)" :class="{'btn':true,'active':nowIndex == 1}">新闻</div>
-        <div @click="changeIndex(2)" :class="{'btn':true,'active':nowIndex == 2}">舆情</div>
         <div
+          v-if="have1"
+          @click="changeIndex(1)"
+          :class="{ btn: true, active: nowIndex == 1 }"
+        >
+          新闻
+        </div>
+        <div
+          v-if="have2"
+          @click="changeIndex(2)"
+          :class="{ btn: true, active: nowIndex == 2 }"
+        >
+          舆情
+        </div>
+        <div
+          v-if="have3"
           @click="changeIndex(3)"
-          style="margin-right:10px"
-          :class="{'btn':true,'active':nowIndex == 3}"
-        >视频</div>
+          style="margin-right: 10px"
+          :class="{ btn: true, active: nowIndex == 3 }"
+        >
+          视频
+        </div>
         <div class="myPopover">
-          <el-popover placement="bottom-start" :visible-arrow="false" trigger="click">
+          <el-popover
+            placement="bottom-start"
+            :visible-arrow="false"
+            trigger="click"
+          >
             <div class="myPop-box">
               <div class="navv1">
                 <div class="tit1">
-                  <el-input size="small" v-model="tagVal" placeholder="添加屏蔽关键词"></el-input>
+                  <el-input
+                    size="small"
+                    v-model="tagVal"
+                    placeholder="添加屏蔽关键词"
+                  ></el-input>
                 </div>
                 <el-button @click="addTag" size="small">添加</el-button>
               </div>
@@ -56,7 +87,8 @@
                     @close="removeTag(item)"
                     size="small"
                     closable
-                  >{{item.keyword}}</el-tag>
+                    >{{ item.title }}</el-tag
+                  >
                 </div>
               </div>
             </div>
@@ -84,45 +116,192 @@
         </div>
       </div>
       <div class="titt2">
-        <el-button size="mini" type="primary">批量发布</el-button>
-        <el-button size="mini" type="danger">批量删除</el-button>
+        <el-button size="mini" @click="piliangfabu" type="primary"
+          >批量发布</el-button
+        >
+        <el-button size="mini" @click="piliangDel" type="danger"
+          >批量删除</el-button
+        >
       </div>
     </div>
     <div class="myTable">
       <vxe-table
-        height="536"
+        v-show="nowIndex == 1"
+        height="554"
         border="none"
         ref="xTable1"
         :data="tableData"
-        @checkbox-all="selectAllChangeEvent1"
+        @checkbox-all="selectAllEvent1"
         @checkbox-change="selectChangeEvent1"
       >
         <vxe-column show-overflow type="checkbox" width="60"></vxe-column>
-        <vxe-column show-overflow field="name" title="来源"></vxe-column>
-        <vxe-column show-overflow field="sex" title="标题"></vxe-column>
+        <vxe-column
+          show-overflow
+          field="site_name"
+          width="180"
+          title="作者"
+        ></vxe-column>
+        <vxe-column show-overflow field="title" title="标题"></vxe-column>
+        <vxe-column show-overflow field="content" title="内容"></vxe-column>
         <vxe-column show-overflow field="age" title="链接">
           <template #default="{ row }">
             <a
-              style="color:#ffffff"
-              :href="`https://www.baidu.com/${row.name}`"
+              style="color: #04f9db"
+              :href="`${row.new_url}`"
               target="_black"
-            >https://www.baidu.com/{{row.name}}</a>
+              >{{ row.new_url }}</a
+            >
           </template>
         </vxe-column>
-        <vxe-column show-overflow field="address" title="采集来源">
+        <vxe-column show-overflow width="200" field="address" title="采集来源">
           <template #default="{ row }">
             <div class="cjyl">
-              <div :class="{'dian':true,'success':row.age>25,'fail':row.age<=25}"></div>
-              <div class="txt">{{row.address}}</div>
+              <div
+                :class="{
+                  dian: true,
+                  success: row.from_isuser == 0,
+                  fail: row.from_isuser == 1,
+                }"
+              ></div>
+              <div class="txt">{{ row.from_user }}</div>
             </div>
           </template>
         </vxe-column>
         <vxe-table-column width="214">
           <template slot-scope="scope">
-            <div style="display:flex">
-              <el-button size="mini" type="info" @click="yidongYuqin(scope.row)">编辑</el-button>
-              <el-button size="mini" type="primary" @click="yidongYuqin(scope.row)">发布</el-button>
-              <el-button size="mini" type="danger" @click="yidongYuqin(scope.row)">删除</el-button>
+            <div style="display: flex">
+              <el-button size="mini" type="info" @click="tabEdit(scope.row)"
+                >编辑</el-button
+              >
+              <el-button size="mini" type="primary" @click="tabFabu(scope.row)"
+                >发布</el-button
+              >
+              <el-button size="mini" type="danger" @click="tabDel(scope.row)"
+                >删除</el-button
+              >
+            </div>
+          </template>
+        </vxe-table-column>
+      </vxe-table>
+      <vxe-table
+        v-show="nowIndex == 2"
+        height="554"
+        border="none"
+        ref="xTable2"
+        :data="tableData"
+        @checkbox-all="selectAllEvent2"
+        @checkbox-change="selectChangeEvent2"
+      >
+        <vxe-column show-overflow type="checkbox" width="60"></vxe-column>
+        <vxe-column
+          field="news_name"
+          show-overflow
+          title="新闻标题"
+        ></vxe-column>
+        <vxe-column
+          show-overflow
+          field="site_name"
+          width="180"
+          title="作者"
+        ></vxe-column>
+        <vxe-column
+          show-overflow
+          field="comment_content"
+          title="评论内容"
+        ></vxe-column>
+        <vxe-column
+          field="user_name"
+          show-overflow
+          title="评论用户"
+        ></vxe-column>
+        <vxe-column show-overflow field="age" title="链接">
+          <template #default="{ row }">
+            <a
+              style="color: #04f9db"
+              :href="`${row.new_url}`"
+              target="_black"
+              >{{ row.new_url }}</a
+            >
+          </template>
+        </vxe-column>
+        <vxe-column
+          field="comment_time"
+          show-overflow
+          title="发布时间"
+        ></vxe-column>
+        <vxe-table-column width="214">
+          <template slot-scope="scope">
+            <div style="display: flex">
+              <el-button size="mini" type="info" @click="tabEdit(scope.row)"
+                >编辑</el-button
+              >
+              <el-button size="mini" type="primary" @click="tabFabu(scope.row)"
+                >发布</el-button
+              >
+              <el-button size="mini" type="danger" @click="tabDel(scope.row)"
+                >删除</el-button
+              >
+            </div>
+          </template>
+        </vxe-table-column>
+      </vxe-table>
+      <vxe-table
+        v-show="nowIndex == 3"
+        height="554"
+        border="none"
+        ref="xTable3"
+        :data="tableData"
+        @checkbox-all="selectAllEvent3"
+        @checkbox-change="selectChangeEvent3"
+      >
+        <vxe-column show-overflow type="checkbox" width="60"></vxe-column>
+        <vxe-column field="title" show-overflow title="新闻标题"></vxe-column>
+        <vxe-column
+          show-overflow
+          field="hits"
+          width="180"
+          title="浏览量"
+        ></vxe-column>
+        <vxe-column
+          show-overflow
+          field="forward_num"
+          width="180"
+          title="转发量"
+        ></vxe-column>
+        <vxe-column
+          show-overflow
+          field="video_playnum"
+          width="180"
+          title="播放量"
+        ></vxe-column>
+        <vxe-column
+          show-overflow
+          field="site_name"
+          width="180"
+          title="作者"
+        ></vxe-column>
+        <vxe-column show-overflow field="age" title="链接">
+          <template #default="{ row }">
+            <a
+              style="color: #04f9db"
+              :href="`${row.video_h5url}`"
+              target="_black"
+              >{{ row.video_h5url }}</a
+            >
+          </template>
+        </vxe-column>
+        <vxe-table-column width="214">
+          <template slot-scope="scope">
+            <div style="display: flex">
+              <el-button size="mini" type="info" @click="tabEdit(scope.row)"
+                >编辑</el-button
+              >
+              <el-button size="mini" type="primary" @click="tabFabu(scope.row)"
+                >发布</el-button
+              >
+              <el-button size="mini" type="danger" @click="tabDel(scope.row)"
+                >删除</el-button
+              >
             </div>
           </template>
         </vxe-table-column>
@@ -137,6 +316,77 @@
         :total="this.total"
       ></el-pagination>
     </div>
+    <!-- 编辑热度链接 -->
+    <el-dialog
+      title="编辑热度链接"
+      :visible.sync="addDialogVisible"
+      width="700px"
+      :before-close="addHandleClose"
+      custom-class="myZhanghaoDia"
+    >
+      <div class="myAddForm">
+        <el-form
+          :model="addForm"
+          ref="addForm"
+          label-width="100px"
+          class="demo-addForm"
+        >
+          <!-- <el-row>
+            <el-col :span="20">
+              <el-form-item label="作者：">
+                <el-input size="small" v-model="addForm.site_name"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row> -->
+          <el-row>
+            <el-col :span="20">
+              <el-form-item label="标题：">
+                <el-input
+                  size="small"
+                  type="textarea"
+                  v-model="addForm.title"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row v-if="nowIndex != 3">
+            <el-col :span="20">
+              <el-form-item label="内容：">
+                <el-input
+                  size="small"
+                  type="textarea"
+                  :rows="10"
+                  v-model="addForm.content"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <!-- <el-row>
+            <el-col :span="20">
+              <el-form-item label="链接：">
+                <el-input size="small" v-model="addForm.new_url"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row> -->
+          <!-- <el-row>
+            <el-col :span="20">
+              <el-form-item label="确认密码：">
+                <el-input size="small" v-model="addForm.reuserpass"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row> -->
+          <el-row>
+            <el-col :span="20">
+              <el-form-item>
+                <el-button size="small" type="primary" @click="AddOnSubmit"
+                  >提交</el-button
+                >
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -144,16 +394,23 @@
 import { mapState } from "vuex";
 export default {
   computed: {
-    ...mapState(["redulianjiebiaoPage"])
+    ...mapState(["redulianjiebiaoPage"]),
   },
   watch: {
-    redulianjiebiaoPage: function(page) {
+    redulianjiebiaoPage: function (page) {
       this.$store.commit("redulianjiebiaoPage", page);
-      this.getData();
-    }
+      this.arr1 = [];
+      this.arr2 = [];
+      if (this.nowIndex == 1) {
+        this.getData();
+      } else if (this.nowIndex == 2) {
+        this.getData2();
+      }
+    },
   },
   data() {
     return {
+      id: "",
       total: 150,
       keyword: "",
       time: null,
@@ -161,116 +418,452 @@ export default {
       nowIndex: 1,
       tagVal: "",
       tagList: [],
-      tableData: [
-        {
-          id: 10001,
-          name: "Test1",
-          role: "Develop",
-          sex: "Man",
-          age: 28,
-          address: "test abc"
-        },
-        {
-          id: 10002,
-          name: "Test2",
-          role: "Test",
-          sex: "Women",
-          age: 22,
-          address: "Guangzhou"
-        },
-        {
-          id: 10003,
-          name: "Test3",
-          role: "PM",
-          sex: "Man",
-          age: 32,
-          address: "Shanghai"
-        },
-        {
-          id: 10004,
-          name: "Test4",
-          role: "Designer",
-          sex: "Women",
-          age: 23,
-          address: "test abc"
-        },
-        {
-          id: 10005,
-          name: "Test5",
-          role: "Develop",
-          sex: "Women",
-          age: 30,
-          address: "Shanghai"
-        },
-        {
-          id: 10004,
-          name: "Test4",
-          role: "Designer",
-          sex: "Women",
-          age: 23,
-          address: "test abc"
-        },
-        {
-          id: 10005,
-          name: "Test5",
-          role: "Develop",
-          sex: "Women",
-          age: 30,
-          address: "Shanghai"
-        },
-        {
-          id: 10004,
-          name: "Test4",
-          role: "Designer",
-          sex: "Women",
-          age: 23,
-          address: "test abc"
-        },
-        {
-          id: 10005,
-          name: "Test5",
-          role: "Develop",
-          sex: "Women",
-          age: 30,
-          address: "Shanghai"
-        }
-      ]
+      tableData: [],
+      addDialogVisible: false,
+      addForm: {
+        site_name: "",
+        title: "",
+        new_url: "",
+        content: "",
+      },
+      isAdd: false,
+      arr1: [],
+      arr2: [],
+      arr3: [],
+      have1: false,
+      have2: false,
+      have3: false,
     };
   },
   created() {
+    const menu = JSON.parse(sessionStorage.getItem("menu"));
+    console.log(menu);
+    menu.forEach((ele) => {
+      if (ele.sub_menu.length > 0) {
+        ele.sub_menu.forEach((ele2) => {
+          if (ele2.sub_menu.length > 0) {
+            ele2.sub_menu.forEach((ele3) => {
+              if (ele3.menu_index == "80-3-1") {
+                this.have1 = true;
+              }
+              if (ele3.menu_index == "80-3-2") {
+                this.have2 = true;
+              }
+              if (ele3.menu_index == "80-3-3") {
+                this.have3 = true;
+              }
+            });
+          }
+        });
+      }
+    });
     this.getGjcData();
+    const loading = this.$loading({
+      lock: true,
+      text: "加载中...",
+      spinner: "el-icon-loading",
+      background: "rgba(0, 0, 0, 0.7)",
+    });
+    setTimeout(() => {
+      if (this.nowIndex == 1) {
+        this.getData();
+      } else if (this.nowIndex == 2) {
+        this.getData2();
+      } else if (this.nowIndex == 3) {
+        this.getData3();
+      }
+      loading.close();
+    }, 500);
   },
   mounted() {
-    var arr = this.tableData.filter(ele => {
-      return ele.sex == "Women";
-    });
-    this.$refs.xTable1.setCheckboxRow(arr, true);
+    // var arr = this.tableData.filter(ele => {
+    //   return ele.sex == "Women";
+    // });
+    // this.$refs.xTable1.setCheckboxRow(arr, true);
   },
   methods: {
     async getGjcData() {
-      const res = await this.$api.keyword_list({
+      const res = await this.$api.pubsentiment_keywordlist({
         day: this.time ? this.time : "",
         page: 1,
-        pagesize: 1000000
+        pagesize: 1000000,
       });
       this.tagList = res.list;
     },
-    changeTime() {
-      this.getGjcData();
+    async getData() {
+      const loading = this.$loading({
+        lock: true,
+        text: "加载中...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+      const res = await this.$api.news_list({
+        site_id: this.site_id,
+        start_day: this.time,
+        end_day: this.time,
+        page: this.redulianjiebiaoPage,
+        pagesize: 9,
+      });
+      if (res.list) {
+        this.tableData = res.list;
+        this.total = res.total;
+      } else if (res.total == 0) {
+        this.tableData = [];
+        this.total = res.total;
+      } else {
+        this.$message("没有更多了");
+      }
+      loading.close();
     },
-    changeIndex(i) {
-      this.nowIndex = i;
+    async getData2() {
+      const loading = this.$loading({
+        lock: true,
+        text: "加载中...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+      const res = await this.$api.comment_list({
+        site_id: this.site_id,
+        start_day: this.time,
+        end_day: this.time,
+        page: this.redulianjiebiaoPage,
+        pagesize: 9,
+      });
+      if (res.list) {
+        this.tableData = res.list;
+        this.total = res.total;
+      } else if (res.total == 0) {
+        this.tableData = [];
+        this.total = res.total;
+      } else {
+        this.$message("没有更多了");
+      }
+      loading.close();
     },
-    async addTag() {
-      if (this.tagVal) {
-        const res = await this.$api.add_keyword({
-          name: this.tagVal,
-          day: this.time2 ? this.time2 : ""
+    async getData3() {
+      const loading = this.$loading({
+        lock: true,
+        text: "加载中...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+      const res = await this.$api.video_list({
+        site_id: this.site_id,
+        end_day: this.time,
+        start_day: this.time,
+        page: this.redulianjiebiaoPage,
+        pagesize: 9,
+      });
+      if (res.list) {
+        this.tableData = res.list;
+        this.total = res.total;
+      } else if (res.total == 0) {
+        this.tableData = [];
+        this.total = res.total;
+      } else {
+        this.$message("没有更多了");
+      }
+      loading.close();
+    },
+    async piliangDel() {
+      if (this.nowIndex == 1) {
+        console.log(this.arr1.toString());
+        const res = await this.$api.news_del({ id: this.arr1.toString() });
+        if (res.result == 1) {
+          this.$message({
+            message: res.msg,
+            type: "success",
+          });
+          this.getData();
+          this.arr1 = [];
+        } else {
+          this.$message.error(res.msg);
+        }
+      } else if (this.nowIndex == 2) {
+        console.log(this.arr2.toString());
+        const res = await this.$api.pubsentiment_del({
+          id: this.arr2.toString(),
         });
         if (res.result == 1) {
           this.$message({
             message: res.msg,
-            type: "success"
+            type: "success",
+          });
+          this.getData2();
+          this.arr2 = [];
+        } else {
+          this.$message.error(res.msg);
+        }
+      } else if (this.nowIndex == 3) {
+        console.log(this.arr3.toString());
+        const res = await this.$api.video_del({ id: this.arr3.toString() });
+        if (res.result == 1) {
+          this.$message({
+            message: res.msg,
+            type: "success",
+          });
+          this.getData3();
+          this.arr3 = [];
+        } else {
+          this.$message.error(res.msg);
+        }
+      }
+    },
+    async piliangfabu() {
+      if (this.nowIndex == 1) {
+        console.log(this.arr1.toString());
+        const res = await this.$api.select_news({
+          news_id: this.arr1.toString(),
+        });
+        if (res.result == 1) {
+          this.$message({
+            message: res.msg,
+            type: "success",
+          });
+          this.getData();
+          this.arr1 = [];
+        } else {
+          this.$message.error(res.msg);
+        }
+      } else if (this.nowIndex == 2) {
+        console.log(this.arr2.toString());
+        const res = await this.$api.select_comment({
+          comment_id: this.arr2.toString(),
+        });
+        if (res.result == 1) {
+          this.$message({
+            message: res.msg,
+            type: "success",
+          });
+          this.getData2();
+          this.arr2 = [];
+        } else {
+          this.$message.error(res.msg);
+        }
+      } else if (this.nowIndex == 3) {
+        console.log(this.arr3.toString());
+        const res = await this.$api.select_video({
+          video_id: this.arr3.toString(),
+        });
+        if (res.result == 1) {
+          this.$message({
+            message: res.msg,
+            type: "success",
+          });
+          this.getData3();
+          this.arr3 = [];
+        } else {
+          this.$message.error(res.msg);
+        }
+      }
+    },
+    async tabDel(row) {
+      let res = null;
+      if (this.nowIndex == 1) {
+        res = await this.$api.news_del({ id: row.id });
+      } else if (this.nowIndex == 2) {
+        res = await this.$api.pubsentiment_del({ id: row.id });
+      } else if (this.nowIndex == 3) {
+        res = await this.$api.video_del({ id: row.id });
+      }
+      if (res.result == 1) {
+        this.$message({
+          message: res.msg,
+          type: "success",
+        });
+        this.keyword = "";
+        if (this.nowIndex == 1) {
+          this.getData();
+        } else if (this.nowIndex == 2) {
+          this.getData2();
+        } else if (this.nowIndex == 3) {
+          this.getData3();
+        }
+      } else {
+        this.$message.error(res.msg);
+      }
+    },
+    async addHotlink() {
+      const loading = this.$loading({
+        lock: true,
+        text: "请稍后...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+      const res = await this.$api.add_hotlink({
+        url: this.keyword,
+      });
+      if (res.result == 1) {
+        loading.close();
+        this.$message({
+          message: res.msg,
+          type: "success",
+        });
+        this.keyword = "";
+        this.getData();
+      } else {
+        this.$message.error(res.msg);
+      }
+      if (this.nowIndex == 1) {
+        this.getData();
+      } else if (this.nowIndex == 2) {
+        this.getData2();
+      } else if (this.nowIndex == 3) {
+        this.getData3();
+      }
+    },
+    async AddOnSubmit() {
+      let res = null;
+      if (this.nowIndex == 1) {
+        res = await this.$api.news_edit({
+          id: this.id,
+          title: this.addForm.title,
+          content: this.addForm.content,
+        });
+        console.log(res);
+      } else if (this.nowIndex == 2) {
+        res = await this.$api.pubsentiment_edit({
+          id: this.id,
+          title: this.addForm.title,
+          content: this.addForm.content,
+        });
+        console.log(res);
+      } else if (this.nowIndex == 3) {
+        res = await this.$api.video_edit({
+          id: this.id,
+          title: this.addForm.title,
+        });
+        console.log(res);
+      }
+      if (res.result == 1) {
+        this.$message({
+          message: res.msg,
+          type: "success",
+        });
+        this.addDialogVisible = false;
+        if (this.nowIndex == 1) {
+          this.getData();
+        } else if (this.nowIndex == 2) {
+          this.getData2();
+        } else if (this.nowIndex == 3) {
+          this.getData3();
+        }
+      } else {
+        this.$message.error(res.msg);
+      }
+    },
+    tabEdit(row) {
+      console.log(row);
+      if (this.nowIndex == 1) {
+        this.id = row.id;
+        this.addForm.site_name = row.site_name;
+        this.addForm.title = row.title;
+        this.addForm.new_url = row.new_url;
+        this.addForm.content = row.content;
+      } else if (this.nowIndex == 2) {
+        this.id = row.id;
+        this.addForm.title = row.text_raw;
+        this.addForm.content = row.comment_content;
+      } else if (this.nowIndex == 3) {
+        this.id = row.id;
+        this.addForm.title = row.title;
+      }
+      //  else if (this.nowIndex == 3) {
+      //   this.getData3();
+      // }
+      // this.id = row.id;
+      // this.addForm.site_name = row.site_name;
+      // this.addForm.title = row.title;
+      // this.addForm.new_url = row.new_url;
+      // this.addForm.content = row.content;
+      this.addDialogVisible = true;
+    },
+    async tabFabu(row) {
+      console.log(row);
+      if (this.nowIndex == 1) {
+        const res = await this.$api.select_news({
+          news_id: row.id,
+        });
+        if (res.result == 1) {
+          this.$message({
+            message: res.msg,
+            type: "success",
+          });
+          this.getData();
+        } else {
+          this.$message.error(res.msg);
+        }
+      } else if (this.nowIndex == 2) {
+        const res = await this.$api.select_comment({
+          comment_id: row.id,
+        });
+        if (res.result == 1) {
+          this.$message({
+            message: res.msg,
+            type: "success",
+          });
+          this.getData2();
+        } else {
+          this.$message.error(res.msg);
+        }
+      } else if (this.nowIndex == 3) {
+        const res = await this.$api.select_video({
+          video_id: row.id,
+        });
+        if (res.result == 1) {
+          this.$message({
+            message: res.msg,
+            type: "success",
+          });
+          this.getData3();
+        } else {
+          this.$message.error(res.msg);
+        }
+      }
+    },
+    addHandleClose() {
+      this.addDialogVisible = false;
+    },
+    changeTime() {
+      this.tableData = [];
+      if (this.nowIndex == 1) {
+        this.getData();
+      } else if (this.nowIndex == 2) {
+        this.getData2();
+      } else if (this.nowIndex == 3) {
+        this.getData3();
+      }
+    },
+    changeIndex(i) {
+      this.nowIndex = i;
+      const loading = this.$loading({
+        lock: true,
+        text: "加载中...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+      this.$store.commit("redulianjiebiaoPage", 1);
+      setTimeout(() => {
+        if (this.nowIndex == 1) {
+          this.getData();
+        } else if (this.nowIndex == 2) {
+          this.getData2();
+        } else if (this.nowIndex == 3) {
+          this.getData3();
+        }
+        loading.close();
+      }, 200);
+    },
+    async addTag() {
+      if (this.tagVal) {
+        const res = await this.$api.add_pubsentimentkeyword({
+          name: this.tagVal,
+          day: this.time2 ? this.time2 : "",
+        });
+        if (res.result == 1) {
+          this.$message({
+            message: res.msg,
+            type: "success",
           });
           this.tagVal = "";
           this.getGjcData();
@@ -281,13 +874,13 @@ export default {
     },
     async removeTag(tag) {
       // this.tagList.splice(this.tagList.indexOf(tag), 1);
-      const res = await this.$api.del_keyword({
-        id: tag.id
+      const res = await this.$api.del_pubsentimentkeyword({
+        id: tag.id,
       });
       if (res.result == 1) {
         this.$message({
           message: res.msg,
-          type: "success"
+          type: "success",
         });
         this.getGjcData();
       } else {
@@ -298,9 +891,50 @@ export default {
       console.log(`当前页: ${val}`);
       this.$store.commit("redulianjiebiaoPage", val);
     },
-    selectAllChangeEvent1() {},
-    selectChangeEvent1() {}
-  }
+    selectAllEvent1() {
+      const records = this.$refs.xTable1.getCheckboxRecords();
+      this.arr1 = [];
+      records.forEach((ele) => {
+        this.arr1.push(ele.id);
+      });
+    },
+    selectChangeEvent1() {
+      const records = this.$refs.xTable1.getCheckboxRecords();
+      // console.log(checked ? "勾选事件" : "取消事件", records);
+      this.arr1 = [];
+      records.forEach((ele) => {
+        this.arr1.push(ele.id);
+      });
+    },
+    selectAllEvent2() {
+      const records = this.$refs.xTable2.getCheckboxRecords();
+      this.arr2 = [];
+      records.forEach((ele) => {
+        this.arr2.push(ele.id);
+      });
+    },
+    selectChangeEvent2() {
+      const records = this.$refs.xTable2.getCheckboxRecords();
+      this.arr2 = [];
+      records.forEach((ele) => {
+        this.arr2.push(ele.id);
+      });
+    },
+    selectAllEvent3() {
+      const records = this.$refs.xTable3.getCheckboxRecords();
+      this.arr3 = [];
+      records.forEach((ele) => {
+        this.arr3.push(ele.id);
+      });
+    },
+    selectChangeEvent3() {
+      const records = this.$refs.xTable3.getCheckboxRecords();
+      this.arr3 = [];
+      records.forEach((ele) => {
+        this.arr3.push(ele.id);
+      });
+    },
+  },
 };
 </script>
 
@@ -438,6 +1072,19 @@ export default {
     align-items: center;
   }
 }
+.myAddForm {
+  /deep/ .el-form-item__label {
+    color: #ffffff;
+  }
+  /deep/ .el-input.is-disabled {
+    .el-input__inner {
+      background-color: #ddd;
+    }
+  }
+  .el-button {
+    width: 100%;
+  }
+}
 .myTable {
   margin-top: 10px;
   .cjyl {
@@ -488,7 +1135,7 @@ export default {
   }
 }
 .fenye {
-  margin-top: 30px;
+  margin-top: 20px;
   float: right;
   /deep/ .el-pagination__total {
     color: #ffffff;

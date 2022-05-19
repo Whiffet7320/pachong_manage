@@ -327,7 +327,8 @@ box-shadow: 0px 0px 30px 0px #04f9db inset;
 .calendar {
   margin: 10px 5px;
   // width: 248px;
-  width: 490px;
+  // width: 490px;
+   width: 450px;
   height: 340px;
   border: 2px solid #1794e4;
   box-shadow: 0px 0px 30px 0px rgba(23, 148, 228, 0.86) inset;

@@ -12,7 +12,7 @@
           <div class="cont">
             <img src="../../assets/newIImg/zu1324.png" class="c-pic" alt />
             <!-- <div class="c-txt">{{syStartTime}}-{{syEndTime}}</div> -->
-            <div class="c-txt2">{{syStartTime}}-{{syEndTime}}</div>
+            <div class="c-txt2">{{ syStartTime }}-{{ syEndTime }}</div>
           </div>
         </div>
         <!-- <div class="l1-dr">
@@ -20,7 +20,11 @@
         </div> -->
       </div>
       <!-- 首页（视频）-左侧 -->
-      <div class="l1-down" @click="toUrl('Shouye')" v-if="url == '/ShouyePage/Shipin'">
+      <div
+        class="l1-down"
+        @click="toUrl('Shouye')"
+        v-if="url == '/ShouyePage/Shipin'"
+      >
         <div class="l1-dl sp">
           <div class="r1"></div>
           <div class="r2"></div>
@@ -31,7 +35,11 @@
         </div>
       </div>
       <!-- 首页（舆情）-左侧 -->
-      <div class="l1-down" @click="toUrl('Shouye')" v-if="url == '/ShouyePage/Yuqing'">
+      <div
+        class="l1-down"
+        @click="toUrl('Shouye')"
+        v-if="url == '/ShouyePage/Yuqing'"
+      >
         <div class="l1-dl sp">
           <div class="r1"></div>
           <div class="r2"></div>
@@ -42,7 +50,11 @@
         </div>
       </div>
       <!-- 首页（新闻）-左侧 -->
-      <div class="l1-down" @click="toUrl('Shouye')" v-if="url == '/ShouyePage/Xinwen'">
+      <div
+        class="l1-down"
+        @click="toUrl('Shouye')"
+        v-if="url == '/ShouyePage/Xinwen'"
+      >
         <div class="l1-dl sp">
           <div class="r1"></div>
           <div class="r2"></div>
@@ -53,7 +65,11 @@
         </div>
       </div>
       <!-- 首页（走势图）-左侧 -->
-      <div class="l1-down" @click="toUrl('Shouye')" v-if="url == '/ShouyePage/Zoushitu'">
+      <div
+        class="l1-down"
+        @click="toUrl('Shouye')"
+        v-if="url == '/ShouyePage/Zoushitu'"
+      >
         <div class="l1-dl sp">
           <div class="r1"></div>
           <div class="r2"></div>
@@ -106,7 +122,7 @@
       </div>
     </div>
     <div class="left2">
-      <div class="txt">{{name}}</div>
+      <div class="txt">{{ name }}</div>
     </div>
     <div class="left3">
       <div class="l3-top">
@@ -114,48 +130,78 @@
       </div>
       <!-- 首页-右侧 -->
       <div class="l3-down" v-if="url == '/Shouye' || url == '/'">
-        <!-- <div class="l3-dl">
+        <div class="l3-dl">
           <div class="r1"></div>
           <div class="r2"></div>
           <div class="cont">
             <img src="../../assets/newIImg/lujin768.png" class="c-pic" alt />
             <div class="c-txt">排序：</div>
             <div
-              style="cursor: pointer;"
+              style="cursor: pointer"
               @click="changPaixu(1)"
-              :class="{'c-txt':true,'active':pxIndex == 1}"
-            >日期</div>
-            <div style="margin:0 2px" class="c-txt">/</div>
+              :class="{ 'c-txt': true, active: pxIndex == 1 }"
+            >
+              日期
+            </div>
+            <div style="margin: 0 2px" class="c-txt">/</div>
             <div
-              style="cursor: pointer;"
+              style="cursor: pointer"
               @click="changPaixu(2)"
-              :class="{'c-txt':true,'active':pxIndex == 2}"
-            >关注度</div>
+              :class="{ 'c-txt': true, active: pxIndex == 2 }"
+            >
+              关注度
+            </div>
           </div>
-        </div> -->
-        <!-- <div class="l3-dr" style="margin-right:20px">
+        </div>
+        <div @click="daochu" class="l3-dr" style="margin-right: 20px">
           <div class="r1"></div>
           <div class="r2"></div>
           <div class="l3-txt">导出</div>
-        </div> -->
+        </div>
       </div>
       <!-- 首页（筛选日期）-右侧 -->
       <div class="l3-down" v-if="url == '/ShouyePage/Shaixuanriqi'">
-        <div @click="startClick" :class="{'l3-dl':true,'sxrq':true,'active':sxrqIsStart}">
+        <div
+          @click="startClick"
+          :class="{ 'l3-dl': true, sxrq: true, active: sxrqIsStart }"
+        >
           <div class="r1"></div>
           <div class="r2"></div>
-          <div class="l3-txt">{{startTime}}</div>
+          <div class="l3-txt">{{ startTime }}</div>
         </div>
-        <div @click="endClick" :class="{'l3-dr':true,'sxrq':true,'active':!sxrqIsStart}">
+        <div
+          @click="endClick"
+          :class="{ 'l3-dr': true, sxrq: true, active: !sxrqIsStart }"
+        >
           <div class="r1"></div>
           <div class="r2"></div>
-          <div class="l3-txt">{{endTime}}</div>
+          <div class="l3-txt">{{ endTime }}</div>
+        </div>
+      </div>
+      <!-- 走势图-右侧 -->
+      <div class="l3-down" v-if="url == '/ShouyePage/Zoushitu'">
+        <div class="n1-tit3">
+          <div
+            :class="{ 'l3-dr': true, sxrq: true, active: !sxrqIsStart }"
+            style="margin-left: 140px"
+          >
+            <div class="r1"></div>
+            <div class="r2"></div>
+            <el-date-picker
+              value-format="yyyy-MM-dd"
+              size="mini"
+              @change="changeTime"
+              v-model="time2"
+              type="date"
+              placeholder="选择日期"
+            ></el-date-picker>
+          </div>
         </div>
       </div>
       <!-- 账号管理（账号管理）-左侧 -->
       <div
         class="l3-down"
-        style="flex-direction: row-reverse;"
+        style="flex-direction: row-reverse"
         @click="addZhanghao"
         v-if="url == '/Zhanghao/Zhanghaoguanli'"
       >
@@ -215,18 +261,18 @@ export default {
         this.$store.commit("isSmallHeader", false);
       }
     },
-    startTime: function() {
+    startTime: function () {
       var syStartTime =
         this.startTime == "开始时间" ? this.getToday() : this.startTime;
       console.log(this.startTime, this.endTime);
       this.$store.commit("syStartTime", syStartTime);
     },
-    endTime: function() {
+    endTime: function () {
       var syEndTime =
         this.endTime == "结束时间" ? this.getToday() : this.endTime;
       console.log(this.startTime, this.endTime);
       this.$store.commit("syEndTime", syEndTime);
-    }
+    },
   },
   computed: {
     // "headerTit",
@@ -235,18 +281,21 @@ export default {
       "endTime",
       "sxrqIsStart",
       "syStartTime",
-      "syEndTime"
-    ])
+      "syEndTime",
+      "zstTime",
+      "pxIndex",
+    ]),
   },
   data() {
     return {
       keyword: "",
-      pxIndex: 1,
+      // pxIndex: 1,
       name: "",
       url: "",
       // 筛选日期
       year: moment().format("YYYY"),
-      keyword2: ""
+      keyword2: "",
+      time2: "",
     };
   },
   created() {
@@ -258,6 +307,29 @@ export default {
     this.$store.commit("syEndTime", syEndTime);
   },
   methods: {
+    async daochu() {
+      const res = await this.$api.export_list({
+        day: this.syStartTime,
+      });
+      console.log(res);
+      this.$message(res.msg);
+      if (res.result == 1) {
+        window.open(res.down_url);
+      }
+    },
+    changeTime() {
+      console.log(this.time2.split("-"));
+      this.$store.commit("zstTime", this.time2.split("-"));
+      // this.getZstData();
+    },
+    // async getZstData() {
+    //   const res = await this.$api.hotwords_logs({
+    //     year: this.zstTime[0],
+    //     month: this.zstTime[1],
+    //     day: this.zstTime[2],
+    //   });
+    //   console.log(res);
+    // },
     getToday() {
       var date = new Date();
       var year = date.getFullYear();
@@ -282,28 +354,48 @@ export default {
       this.$store.commit("sxrqIsStart", false);
     },
     changPaixu(i) {
-      this.pxIndex = i;
+      // this.pxIndex = i;
+      this.$store.commit("pxIndex", i);
     },
     toUrl(url) {
       this.$router.push({ name: url });
     },
-    dateBack(){
-      this.$store.commit("startTime", '开始时间');
-      this.$store.commit("endTime", '结束时间');
-      this.toUrl('Shouye')
+    dateBack() {
+      this.$store.commit("startTime", "开始时间");
+      this.$store.commit("endTime", "结束时间");
+      this.toUrl("Shouye");
     },
     timeSubmit() {
       console.log(this.startTime, this.endTime);
-      this.toUrl('Shouye')
+      this.toUrl("Shouye");
     },
     changeYear(val) {
       this.$store.commit("changeYearSy", val);
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped lang='scss'>
+.n1-tit3 {
+  width: 130px;
+  /deep/ .el-date-editor {
+    width: 100%;
+  }
+  /deep/ .el-input__icon {
+    color: #ffffff;
+    font-size: 18px;
+    margin: 0 10px;
+  }
+  /deep/ .el-input__inner {
+    height: 54px;
+    background: transparent;
+    border: 0;
+    color: #ffffff;
+    font-size: 16px;
+    margin-left: 18px;
+  }
+}
 .header {
   display: flex;
   position: relative;

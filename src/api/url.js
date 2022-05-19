@@ -13,4 +13,33 @@ export default {
     limits:'/limits',//账号--权限列表
     update_adminuser:'/update_adminuser',//账号--修改账号
     adminuser_del:'/adminuser_del',//账号--删除账号
+    select_news:'/select_news',//筛选新闻
+    select_comment:'/select_comment',//筛选评论
+    screen_newslist:'/screen_newslist',//爬虫新闻列表（筛选后）
+    screen_commentlist:'/screen_commentlist',//评论(舆情)列表(筛选后)
+    add_pubsentimentkeyword:'/add_pubsentimentkeyword',//添加舆情关键词
+    pubsentiment_keywordlist:"/pubsentiment_keywordlist",//舆情关键词
+    del_pubsentimentkeyword:'/del_pubsentimentkeyword',//删除舆情关键词
+    hotwords_logs:'/hotwords_logs',//热词统计
+    video_list:'/video_list',//视频列表(未筛选)
+    screen_videolist:'/screen_videolist',//视频列表(筛选后)
+    select_video:"/select_video",//选中视频
+    add_hotlink:'/add_hotlink',//添加热度链接
+    newstopublicsentiment:'/newstopublicsentiment',//新闻转到舆情
+    publicsentimenttonews:"/publicsentimenttonews",//舆情转到新闻
+    news_edit:'/news_edit',//新闻修改
+    news_del:'/news_del',//新闻删除
+    pubsentiment_edit:'/pubsentiment_edit',//舆情修改
+    pubsentiment_del:'/pubsentiment_del',//舆情删除
+    video_edit:"/video_edit",//视频修改
+    video_del:'/video_del',//视频删除
+    heat_entry:'/heat_entry',//热度词条
+    screen_newsedit:'/screen_newsedit',//新闻修改(筛选后)
+    screen_pubsentimenteditL:'/screen_pubsentimentedit',//舆情修改(筛选后)
+    screen_videoedit:'/screen_videoedit',//视频修改(筛选后)
+    export_list:'/export_list',//导出新闻
+    screen_newsdel:'/screen_newsdel',//新闻删除(筛选后)
+    screen_pubsentimentdel:'/screen_pubsentimentdel',//舆情删除(筛选后)
+    screen_videodel:'/screen_videodel',//视频删除(筛选后)
+    exporthotwords_list:'/exporthotwords_list',//导出热词
 }

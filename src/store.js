@@ -10,6 +10,7 @@ export default new Vuex.Store({
     yunfeimubanliebiaoPage: 1, //运费模板
     yunfeimubanliebiaoPageSize: 10,
     // 
+    redulianjiebiaoPage:1,
     changeYearSy:null,
     startTime:'开始时间',
     endTime:'结束时间',
@@ -24,13 +25,24 @@ export default new Vuex.Store({
     syStartTime:'',
     syEndTime:'',
     syIndex:0,
+    zstTime:'',
+    pxIndex:1,
   },
   mutations: {
+    pxIndex(state, str) {
+      state.pxIndex = str;
+    },
+    zstTime(state, str) {
+      state.zstTime = str;
+    },
     syIndex(state, str) {
       state.syIndex = str;
     },
     userInfo(state, str) {
       state.userInfo = str;
+    },
+    redulianjiebiaoPage(state, str) {
+      state.redulianjiebiaoPage = str;
     },
     shangpingliebiaoPage(state, str) {
       state.shangpingliebiaoPage = str;

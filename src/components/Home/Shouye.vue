@@ -7,19 +7,26 @@
         <div class="r3"></div>
         <div class="r4"></div>
         <div class="n1-content">
-          <div @click="changeIndex(0)" :class="{'n1-txt':true,'active':syIndex == 0}">全部</div>
           <div
-            @click="changeIndex(i+1,item)"
-            v-for="(item,i) in navList"
+            @click="changeIndex(0)"
+            :class="{ 'n1-txt': true, active: syIndex == 0 }"
+          >
+            全部
+          </div>
+          <div
+            @click="changeIndex(i + 1, item)"
+            v-for="(item, i) in navList"
             :key="item.id"
-            :class="{'n1-txt':true,'active':syIndex == i+1}"
-          >{{item.title}}</div>
+            :class="{ 'n1-txt': true, active: syIndex == i + 1 }"
+          >
+            {{ item.title }}
+          </div>
         </div>
       </div>
     </el-row>
     <div class="nav2">
       <el-row :gutter="24">
-        <!-- <el-col :span="7">
+        <el-col :span="7">
           <div class="n2-left">
             <div class="n2l-top">
               <div class="r1"></div>
@@ -32,7 +39,9 @@
                   <div class="txtt">热度词条</div>
                 </div>
                 <div class="items">
-                  <div v-for="(item,i) in 10" :key="i" class="item">1、名师“领雁”助力教育“共富</div>
+                  <div v-for="item in citiaoList" :key="item.id" class="item">
+                    {{ item.title }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -48,13 +57,20 @@
                       <div class="dian"></div>
                       <div class="txtt">热词云图</div>
                     </div>
-                    <div class="t1-r" @click="isyuntu = false;myZoushi.setOption(option2);">
+                    <div
+                      class="t1-r"
+                      @click="
+                        isyuntu = false;
+                        myZoushi.setOption(option2);
+                      "
+                    >
                       <div class="r1-r"></div>
-                      <div class="r2-r"></div>走势图
+                      <div class="r2-r"></div>
+                      走势图
                     </div>
                   </div>
                   <div v-show="isyuntu" class="reciyuntu">
-                    <div style="height:260px" id="yuntu"></div>
+                    <div style="height: 260px" id="yuntu"></div>
                   </div>
                 </template>
                 <template>
@@ -65,18 +81,22 @@
                     </div>
                     <div class="t1-r" @click="isyuntu = true">
                       <div class="r1-r"></div>
-                      <div class="r2-r"></div>热词云图
+                      <div class="r2-r"></div>
+                      热词云图
                     </div>
                   </div>
                   <div v-show="!isyuntu" @click="toZoushitu" class="zoushitu">
-                    <div style="height:230px;width:380px;margin-top:6px" id="zoushi"></div>
+                    <div
+                      style="height: 230px; width: 380px; margin-top: 6px"
+                      id="zoushi"
+                    ></div>
                   </div>
                 </template>
               </div>
             </div>
           </div>
-        </el-col>-->
-        <el-col :span="24">
+        </el-col>
+        <el-col :span="17">
           <div class="n2-right">
             <div class="r1"></div>
             <div class="r2"></div>
@@ -86,9 +106,24 @@
               <div class="n2r-tit1">
                 <div class="left">
                   <div class="dian"></div>
-                  <div @click="changeTabIndex(0)" :class="{'txt':true,active:sytableIndex == 0}">新闻</div>
-                  <div @click="changeTabIndex(1)" :class="{'txt':true,active:sytableIndex == 1}">舆情</div>
-                  <!-- <div @click="changeTabIndex(2)" :class="{'txt':true,active:sytableIndex == 2}">视频</div> -->
+                  <div
+                    @click="changeTabIndex(0)"
+                    :class="{ txt: true, active: sytableIndex == 0 }"
+                  >
+                    新闻
+                  </div>
+                  <div
+                    @click="changeTabIndex(1)"
+                    :class="{ txt: true, active: sytableIndex == 1 }"
+                  >
+                    舆情
+                  </div>
+                  <div
+                    @click="changeTabIndex(2)"
+                    :class="{ txt: true, active: sytableIndex == 2 }"
+                  >
+                    视频
+                  </div>
                 </div>
                 <div class="right">
                   <div @click="shuaxin" class="txt1">刷新</div>
@@ -108,31 +143,69 @@
                 :data="tableData1"
                 @scroll="scrollEvent"
               >
-                <vxe-column field="title" show-overflow title="标题"></vxe-column>
-                <vxe-column field="site_name" show-overflow title="作者"></vxe-column>
-                <vxe-column field="content" show-overflow title="新闻内容"></vxe-column>
-                <vxe-column field="hit_type" show-overflow title="关注度"></vxe-column>
-                <vxe-column field="reptile_date" show-overflow title="发布时间"></vxe-column>
+                <vxe-column
+                  field="title"
+                  show-overflow
+                  title="标题"
+                ></vxe-column>
+                <vxe-column
+                  field="site_name"
+                  show-overflow
+                  title="作者"
+                ></vxe-column>
+                <vxe-column
+                  field="content"
+                  show-overflow
+                  title="新闻内容"
+                ></vxe-column>
+                <vxe-column
+                  field="hit_type"
+                  show-overflow
+                  title="关注度"
+                ></vxe-column>
+                <vxe-column
+                  field="reptile_date"
+                  show-overflow
+                  title="发布时间"
+                ></vxe-column>
                 <vxe-column field="lj" show-overflow title="链接">
                   <template #default="{ row }">
                     <a
-                      style="color:#04F9DB"
+                      style="color: #04f9db"
                       :href="`${row.new_url}`"
                       target="_black"
-                    >{{row.new_url}}</a>
+                      >{{ row.new_url }}</a
+                    >
                   </template>
                 </vxe-column>
-                <vxe-column field="source" show-overflow title="来源"></vxe-column>
-                <!-- <vxe-table-column title="操作状态" width="100">
+                <vxe-column
+                  field="source"
+                  show-overflow
+                  title="来源"
+                ></vxe-column>
+                <vxe-table-column title="操作状态" width="100">
                   <template slot-scope="scope">
                     <div class="flex">
-                      <el-button size="small" @click="yidongYuqin(scope.row)" type="text">移动至舆情</el-button>
+                      <el-button
+                        v-if="sytableIndex == 1"
+                        size="small"
+                        @click="yidongnews(scope.row)"
+                        type="text"
+                        >移动至新闻</el-button
+                      >
+                      <el-button
+                        v-if="sytableIndex == 0"
+                        size="small"
+                        @click="yidongYuqin(scope.row)"
+                        type="text"
+                        >移动至舆情</el-button
+                      >
                     </div>
                   </template>
-                </vxe-table-column>-->
+                </vxe-table-column>
               </vxe-table>
               <vxe-table
-                v-else
+                v-if="sytableIndex == 1"
                 class="myTab"
                 border="none"
                 align="center"
@@ -141,28 +214,112 @@
                 :data="tableData1"
                 @scroll="scrollEvent"
               >
-                <vxe-column field="news_name" show-overflow title="新闻标题"></vxe-column>
-                <vxe-column field="site_name" show-overflow title="作者"></vxe-column>
-                <vxe-column field="comment_content" show-overflow title="评论内容"></vxe-column>
-                <vxe-column field="user_name" show-overflow title="评论用户"></vxe-column>
-                <vxe-column field="comment_time" show-overflow title="发布时间"></vxe-column>
+                <vxe-column
+                  field="news_name"
+                  show-overflow
+                  title="新闻标题"
+                ></vxe-column>
+                <vxe-column
+                  field="site_name"
+                  show-overflow
+                  title="作者"
+                ></vxe-column>
+                <vxe-column
+                  field="comment_content"
+                  show-overflow
+                  title="评论内容"
+                ></vxe-column>
+                <vxe-column
+                  field="user_name"
+                  show-overflow
+                  title="评论用户"
+                ></vxe-column>
+                <vxe-column
+                  field="comment_time"
+                  show-overflow
+                  title="发布时间"
+                ></vxe-column>
                 <vxe-column field="lj" show-overflow title="链接">
                   <template #default="{ row }">
                     <a
-                      style="color:#04F9DB"
+                      style="color: #04f9db"
                       :href="`${row.new_url}`"
                       target="_black"
-                    >{{row.new_url}}</a>
+                      >{{ row.new_url }}</a
+                    >
                   </template>
                 </vxe-column>
-                <vxe-column field="source" show-overflow title="来源"></vxe-column>
-                <!-- <vxe-table-column title="操作状态" width="100">
+                <vxe-column
+                  field="source"
+                  show-overflow
+                  title="来源"
+                ></vxe-column>
+                <vxe-table-column title="操作状态" width="100">
                   <template slot-scope="scope">
                     <div class="flex">
-                      <el-button size="small" @click="yidongYuqin(scope.row)" type="text">移动至新闻</el-button>
+                      <el-button
+                        v-if="sytableIndex == 1"
+                        size="small"
+                        @click="yidongnews(scope.row)"
+                        type="text"
+                        >移动至新闻</el-button
+                      >
+                      <el-button
+                        v-if="sytableIndex == 0"
+                        size="small"
+                        @click="yidongYuqin(scope.row)"
+                        type="text"
+                        >移动至舆情</el-button
+                      >
                     </div>
                   </template>
-                </vxe-table-column>-->
+                </vxe-table-column>
+              </vxe-table>
+              <vxe-table
+                v-if="sytableIndex == 2"
+                class="myTab"
+                border="none"
+                align="center"
+                height="520"
+                :cell-class-name="cellClassName"
+                :data="tableData1"
+                @scroll="scrollEvent"
+              >
+                <vxe-column
+                  field="title"
+                  show-overflow
+                  title="新闻标题"
+                ></vxe-column>
+                <vxe-column
+                  field="hits"
+                  show-overflow
+                  title="浏览量"
+                ></vxe-column>
+                <vxe-column
+                  field="forward_num"
+                  show-overflow
+                  title="转发量"
+                ></vxe-column>
+                <vxe-column
+                  field="video_playnum"
+                  show-overflow
+                  title="播放量"
+                ></vxe-column>
+                <vxe-column
+                  field="site_name"
+                  show-overflow
+                  title="作者"
+                ></vxe-column>
+                <vxe-column field="lj" show-overflow title="链接">
+                  <template #default="{ row }">
+                    <a
+                      style="color: #04f9db"
+                      :href="`${row.video_h5url}`"
+                      target="_black"
+                      >{{ row.video_h5url }}</a
+                    >
+                  </template>
+                </vxe-column>
               </vxe-table>
             </div>
           </div>
@@ -170,12 +327,30 @@
       </el-row>
     </div>
     <!-- 移动到舆情 -->
-    <el-dialog :visible.sync="dialogVisible1" width="586px" :before-close="handleClose1">
+    <el-dialog
+      :visible.sync="dialogVisible1"
+      width="586px"
+      :before-close="handleClose1"
+    >
       <div class="dia1">
         <div class="txt1">确定将这条新闻信息移动至舆情中？</div>
         <div class="btns">
           <div @click="dialogVisible1 = false" class="btn1">取消</div>
-          <div class="btn2">确定</div>
+          <div @click="toyuqinSubmit" class="btn2">确定</div>
+        </div>
+      </div>
+    </el-dialog>
+    <!-- 移动到新闻 -->
+    <el-dialog
+      :visible.sync="dialogVisible2"
+      width="586px"
+      :before-close="handleClose2"
+    >
+      <div class="dia1">
+        <div class="txt1">确定将这条舆情信息移动至新闻中？</div>
+        <div class="btns">
+          <div @click="dialogVisible2 = false" class="btn1">取消</div>
+          <div @click="tonewsSubmit" class="btn2">确定</div>
         </div>
       </div>
     </el-dialog>
@@ -194,8 +369,26 @@ export default {
       "endTime",
       "syStartTime",
       "syEndTime",
-      "syIndex"
-    ])
+      "syIndex",
+      "zstTime",
+      "pxIndex",
+    ]),
+  },
+  watch: {
+    zstTime: function () {
+      this.getZstData();
+    },
+    pxIndex: function () {
+      this.tableData1 = []
+      this.page = 1;
+      if (this.sytableIndex == 0) {
+        this.getData();
+      } else if (this.sytableIndex == 1) {
+        this.getData2();
+      } else if (this.sytableIndex == 2) {
+        this.getData3();
+      }
+    },
   },
   data() {
     return {
@@ -208,53 +401,39 @@ export default {
       keywords: null,
       myZoushi: null,
       dialogVisible1: false,
+      dialogVisible2: false,
       navList: [],
       page: 1,
       scroll: true,
-      site_id: ""
+      site_id: "",
+      nowItem: null,
+      citiaoList: [],
     };
   },
   created() {
+    this.getCitiao();
+    this.getZstData();
     this.getxinwenData();
     const loading = this.$loading({
       lock: true,
       text: "加载中...",
       spinner: "el-icon-loading",
-      background: "rgba(0, 0, 0, 0.7)"
+      background: "rgba(0, 0, 0, 0.7)",
     });
     setTimeout(() => {
       if (this.sytableIndex == 0) {
         this.getData();
       } else if (this.sytableIndex == 1) {
         this.getData2();
+      } else if (this.sytableIndex == 2) {
+        this.getData3();
       }
       loading.close();
     }, 500);
   },
   mounted() {
     this.myYuntu = echarts.init(document.getElementById("yuntu"));
-    this.keywords = [
-      { name: "男神", value: 2.64 },
-      { name: "好身材", value: 4.03 },
-      { name: "校草", value: 4.95 },
-      { name: "酷", value: 4.04 },
-      { name: "时尚", value: 5.27 },
-      { name: "阳光活力", value: 5.8 },
-      { name: "初恋", value: 3.09 },
-      { name: "英俊潇洒", value: 2.71 },
-      { name: "霸气", value: 6.33 },
-      { name: "腼腆", value: 2.55 },
-      { name: "蠢萌", value: 1.88 },
-      { name: "青春", value: 4.04 },
-      { name: "网红", value: 2.87 },
-      { name: "萌", value: 1.97 },
-      { name: "认真", value: 2.53 },
-      { name: "古典", value: 2.49 },
-      { name: "温柔", value: 1.91 },
-      { name: "有个性", value: 1.25 },
-      { name: "可爱", value: 1.93 },
-      { name: "幽默诙谐", value: 2.65 }
-    ];
+    this.keywords = [];
     this.option1 = {
       series: [
         {
@@ -267,17 +446,17 @@ export default {
           width: "100%",
           height: "100%",
           textStyle: {
-            color: function(e) {
+            color: function (e) {
               if (e.dataIndex == 2) {
                 return "#FFBA00";
               } else {
                 return "#ffffff";
               }
-            }
+            },
           },
-          data: this.keywords
-        }
-      ]
+          data: this.keywords,
+        },
+      ],
     };
     this.myYuntu.setOption(this.option1);
     this.myZoushi = echarts.init(document.getElementById("zoushi"));
@@ -288,52 +467,52 @@ export default {
         textStyle: {
           fontSize: 12,
           color: "#ffffff",
-          fontWeight: 700
-        }
+          fontWeight: 700,
+        },
       },
       grid: {
         left: "3%",
         right: "4%",
         bottom: "3%",
         top: "14%",
-        containLabel: true
+        containLabel: true,
       },
       xAxis: {
         type: "category",
         boundaryGap: false,
-        data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        data: [],
         axisLine: {
           lineStyle: {
             // 设置x轴颜色
-            color: "#1794E4"
-          }
+            color: "#1794E4",
+          },
         },
         axisLabel: {
           textStyle: {
             fontSize: 12,
-            color: "#fff"
-          }
-        }
+            color: "#fff",
+          },
+        },
       },
       yAxis: {
         type: "value",
         axisLine: {
           lineStyle: {
             // 设置y轴颜色
-            color: "#0C9DDB"
-          }
+            color: "#0C9DDB",
+          },
         },
         axisLabel: {
           textStyle: {
             fontSize: 12,
             color: "#0c9ddb",
-            fontWeight: 700
-          }
-        }
+            fontWeight: 700,
+          },
+        },
       },
       series: [
         {
-          data: [150, 230, 224, 218, 135, 147, 260],
+          data: [],
           name: "频率",
           type: "line",
           stack: "Total",
@@ -341,22 +520,56 @@ export default {
           itemStyle: {
             normal: {
               label: {
-                show: true
+                show: true,
               },
               borderColor: "#ffaea3", // 拐点边框颜色
               symbol: "circle",
               lineStyle: {
                 width: 2, // 设置线宽
-                color: "#ffaea3"
-              }
-            }
-          }
-        }
-      ]
+                color: "#ffaea3",
+              },
+            },
+          },
+        },
+      ],
     };
     // this.myZoushi.setOption(this.option2);
   },
   methods: {
+    async getZstData() {
+      const res = await this.$api.hotwords_logs({
+        year: this.zstTime[0],
+        month: this.zstTime[1],
+        day: this.zstTime[2],
+      });
+      console.log(res.list);
+      this.list = res.list;
+      var xAxis = [];
+      var series = [];
+      var keyword = [];
+      res.list.forEach((ele) => {
+        xAxis.push(ele.title);
+        series.push(ele.num);
+        keyword.push({
+          name: ele.title,
+          value: ele.num,
+        });
+      });
+      if (this.option2) {
+        this.$set(this.option2.xAxis, "data", xAxis);
+        this.$set(this.option2.series[0], "data", series);
+        setTimeout(() => {
+          this.myZoushi.setOption(this.option2);
+        }, 500);
+      }
+      if (this.option1) {
+        this.keywords = keyword;
+        this.$set(this.option1.series[0], "data", this.keywords);
+        setTimeout(() => {
+          this.myYuntu.setOption(this.option1);
+        }, 500);
+      }
+    },
     async getxinwenData() {
       const res = await this.$api.site_list();
       this.navList = res.list;
@@ -367,19 +580,31 @@ export default {
       }
       console.log(this.site_id);
     },
+    async getCitiao() {
+      const res = await this.$api.heat_entry({
+        day: this.syStartTime,
+      });
+      console.log(res);
+      if (res.list) {
+        this.citiaoList = this.citiaoList.concat(res.list);
+      } else {
+        this.$message("没有更多了");
+      }
+    },
     async getData() {
       const loading = this.$loading({
         lock: true,
         text: "加载中...",
         spinner: "el-icon-loading",
-        background: "rgba(0, 0, 0, 0.7)"
+        background: "rgba(0, 0, 0, 0.7)",
       });
-      const res = await this.$api.news_list({
+      const res = await this.$api.screen_newslist({
         site_id: this.site_id,
         start_day: this.syStartTime,
         end_day: this.syEndTime,
         page: this.page,
-        pagesize: 15
+        pagesize: 15,
+        sort: this.pxIndex,
       });
       if (res.list) {
         this.tableData1 = this.tableData1.concat(res.list);
@@ -393,14 +618,15 @@ export default {
         lock: true,
         text: "加载中...",
         spinner: "el-icon-loading",
-        background: "rgba(0, 0, 0, 0.7)"
+        background: "rgba(0, 0, 0, 0.7)",
       });
-      const res = await this.$api.comment_list({
+      const res = await this.$api.screen_commentlist({
         site_id: this.site_id,
         start_day: this.syStartTime,
         end_day: this.syEndTime,
         page: this.page,
-        pagesize: 15
+        pagesize: 15,
+        sort: this.pxIndex,
       });
       if (res.list) {
         this.tableData1 = this.tableData1.concat(res.list);
@@ -408,6 +634,54 @@ export default {
         this.$message("没有更多了");
       }
       loading.close();
+    },
+    async getData3() {
+      const loading = this.$loading({
+        lock: true,
+        text: "加载中...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+      const res = await this.$api.screen_videolist({
+        site_id: this.site_id,
+        start_day: this.syStartTime,
+        end_day: this.syEndTime,
+        page: this.page,
+        pagesize: 15,
+        sort: this.pxIndex,
+      });
+      if (res.list) {
+        this.tableData1 = this.tableData1.concat(res.list);
+      } else {
+        this.$message("没有更多了");
+      }
+      loading.close();
+    },
+    async toyuqinSubmit() {
+      const res = await this.$api.newstopublicsentiment({
+        news_id: this.nowItem.id,
+      });
+      this.$message(res.msg);
+      this.dialogVisible1 = false;
+      this.tableData1 = [];
+      if (this.sytableIndex == 0) {
+        this.getData();
+      } else if (this.sytableIndex == 1) {
+        this.getData2();
+      }
+    },
+    async tonewsSubmit() {
+      const res = await this.$api.publicsentimenttonews({
+        publicsentiment_id: this.nowItem.id,
+      });
+      this.$message(res.msg);
+      this.dialogVisible2 = false;
+      this.tableData1 = [];
+      if (this.sytableIndex == 0) {
+        this.getData();
+      } else if (this.sytableIndex == 1) {
+        this.getData2();
+      }
     },
     scrollEvent({ scrollTop, scrollHeight }) {
       if (scrollTop + 470 >= scrollHeight) {
@@ -421,6 +695,9 @@ export default {
     },
     handleClose1() {
       this.dialogVisible1 = false;
+    },
+    handleClose2() {
+      this.dialogVisible2 = false;
     },
     changeIndex(i, item) {
       if (i == 0) {
@@ -446,11 +723,19 @@ export default {
         this.getData();
       } else if (this.sytableIndex == 1) {
         this.getData2();
+      } else if (this.sytableIndex == 2) {
+        this.getData3();
       }
     },
     yidongYuqin(row) {
       console.log(row);
+      this.nowItem = row;
       this.dialogVisible1 = true;
+    },
+    yidongnews(row) {
+      console.log(row);
+      this.nowItem = row;
+      this.dialogVisible2 = true;
     },
     shuaxin() {
       this.tableData1 = [];
@@ -465,12 +750,12 @@ export default {
       if (this.sytableIndex == 0) {
         this.$router.push({
           name: "Xinwen",
-          params: { site_id: this.site_id }
+          params: { site_id: this.site_id },
         });
       } else if (this.sytableIndex == 1) {
         this.$router.push({
           name: "Yuqing",
-          params: { site_id: this.site_id }
+          params: { site_id: this.site_id },
         });
       } else if (this.sytableIndex == 2) {
         this.$router.push({ name: "Shipin" });
@@ -493,8 +778,8 @@ export default {
       // } else if (column.property == "address" && this.nowVip == 3) {
       //   return "col-active";
       // }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -665,7 +950,7 @@ export default {
         }
         .items {
           margin: 8px 22px 10px 18px;
-          height: 220px;
+          height: 200px;
           overflow-y: scroll;
           .item {
             border-bottom: 1px solid rgba(255, 255, 255, 0.31);
@@ -674,15 +959,15 @@ export default {
             font-weight: 400;
             color: #ffffff;
             letter-spacing: 1.6px;
-            height: 42px;
-            line-height: 42px;
+            // height: 42px;
+            line-height: 36px;
           }
         }
       }
     }
     .n2l-down {
       margin-top: 18px;
-      height: 330px;
+      height: 334px;
       background: #121531;
       border: 2px solid #1794e4;
       box-shadow: 0px 0px 30px 0px rgba(23, 148, 228, 0.86) inset;

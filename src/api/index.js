@@ -365,6 +365,238 @@ export default {
             }
         })
     },
+    select_news(obj) {
+        return myPost({
+            url: urls.select_news,
+            data: {
+                ...obj
+            }
+        })
+    },
+    select_comment(obj) {
+        return myPost({
+            url: urls.select_comment,
+            data: {
+                ...obj
+            }
+        })
+    },
+    screen_newslist(obj) {
+        return myPost({
+            url: urls.screen_newslist,
+            data: {
+                ...obj
+            }
+        })
+    },
+    screen_commentlist(obj) {
+        return myPost({
+            url: urls.screen_commentlist,
+            data: {
+                ...obj
+            }
+        })
+    },
+    add_pubsentimentkeyword(obj) {
+        return myPost({
+            url: urls.add_pubsentimentkeyword,
+            data: {
+                ...obj
+            }
+        })
+    },
+    pubsentiment_keywordlist(obj) {
+        return myPost({
+            url: urls.pubsentiment_keywordlist,
+            data: {
+                ...obj
+            }
+        })
+    },
+    del_pubsentimentkeyword(obj) {
+        return myPost({
+            url: urls.del_pubsentimentkeyword,
+            data: {
+                ...obj
+            }
+        })
+    },
+    hotwords_logs(obj) {
+        return myPost({
+            url: urls.hotwords_logs,
+            data: {
+                ...obj
+            }
+        })
+    },
+    video_list(obj) {
+        return myPost({
+            url: urls.video_list,
+            data: {
+                ...obj
+            }
+        })
+    },
+    screen_videolist(obj) {
+        return myPost({
+            url: urls.screen_videolist,
+            data: {
+                ...obj
+            }
+        })
+    },
+    select_video(obj) {
+        return myPost({
+            url: urls.select_video,
+            data: {
+                ...obj
+            }
+        })
+    },
+    add_hotlink(obj) {
+        return myPost({
+            url: urls.add_hotlink,
+            data: {
+                ...obj
+            }
+        })
+    },
+    newstopublicsentiment(obj) {
+        return myPost({
+            url: urls.newstopublicsentiment,
+            data: {
+                ...obj
+            }
+        })
+    },
+    publicsentimenttonews(obj) {
+        return myPost({
+            url: urls.publicsentimenttonews,
+            data: {
+                ...obj
+            }
+        })
+    },
+    news_edit(obj) {
+        return myPost({
+            url: urls.news_edit,
+            data: {
+                ...obj
+            }
+        })
+    },
+    news_del(obj) {
+        return myPost({
+            url: urls.news_del,
+            data: {
+                ...obj
+            }
+        })
+    },
+    pubsentiment_edit(obj) {
+        return myPost({
+            url: urls.pubsentiment_edit,
+            data: {
+                ...obj
+            }
+        })
+    },
+    pubsentiment_del(obj) {
+        return myPost({
+            url: urls.pubsentiment_del,
+            data: {
+                ...obj
+            }
+        })
+    },
+    video_edit(obj) {
+        return myPost({
+            url: urls.video_edit,
+            data: {
+                ...obj
+            }
+        })
+    },
+    video_del(obj) {
+        return myPost({
+            url: urls.video_del,
+            data: {
+                ...obj
+            }
+        })
+    },
+    heat_entry(obj) {
+        return myPost({
+            url: urls.heat_entry,
+            data: {
+                ...obj
+            }
+        })
+    },
+    screen_newsedit(obj) {
+        return myPost({
+            url: urls.screen_newsedit,
+            data: {
+                ...obj
+            }
+        })
+    },
+    screen_pubsentimenteditL(obj) {
+        return myPost({
+            url: urls.screen_pubsentimenteditL,
+            data: {
+                ...obj
+            }
+        })
+    },
+    screen_videoedit(obj) {
+        return myPost({
+            url: urls.screen_videoedit,
+            data: {
+                ...obj
+            }
+        })
+    },
+    export_list(obj) {
+        return myPost({
+            url: urls.export_list,
+            data: {
+                ...obj
+            }
+        })
+    },
+    screen_newsdel(obj) {
+        return myPost({
+            url: urls.screen_newsdel,
+            data: {
+                ...obj
+            }
+        })
+    },
+    screen_pubsentimentdel(obj) {
+        return myPost({
+            url: urls.screen_pubsentimentdel,
+            data: {
+                ...obj
+            }
+        })
+    },
+    screen_videodel(obj) {
+        return myPost({
+            url: urls.screen_videodel,
+            data: {
+                ...obj
+            }
+        })
+    },
+    exporthotwords_list(obj) {
+        return myPost({
+            url: urls.exporthotwords_list,
+            data: {
+                ...obj
+            }
+        })
+    },
     async importCardListFromExcel(file) {
         var configs = {
             headers: {

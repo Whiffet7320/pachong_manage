@@ -14,15 +14,37 @@
           :data="tableData1"
           height="550"
         >
-          <vxe-column width="140" field="user_name" show-overflow title="账号"></vxe-column>
-          <vxe-column width="200" field="mobile" show-overflow title="手机号"></vxe-column>
-          <vxe-column width="200" field="realname" show-overflow title="姓名"></vxe-column>
+          <vxe-column
+            width="140"
+            field="user_name"
+            show-overflow
+            title="账号"
+          ></vxe-column>
+          <vxe-column
+            width="200"
+            field="mobile"
+            show-overflow
+            title="手机号"
+          ></vxe-column>
+          <vxe-column
+            width="200"
+            field="realname"
+            show-overflow
+            title="姓名"
+          ></vxe-column>
           <vxe-column field="qx" show-overflow title="权限"></vxe-column>
           <vxe-table-column title="操作状态" width="180">
             <template slot-scope="scope">
               <div class="flex">
-                <el-button size="mini" type="primary" @click="tabEdit(scope.row)">修改信息</el-button>
-                <el-button size="mini" type="danger" @click="tabDel(scope.row)">删除</el-button>
+                <el-button
+                  size="mini"
+                  type="primary"
+                  @click="tabEdit(scope.row)"
+                  >修改信息</el-button
+                >
+                <el-button size="mini" type="danger" @click="tabDel(scope.row)"
+                  >删除</el-button
+                >
               </div>
             </template>
           </vxe-table-column>
@@ -38,12 +60,28 @@
       custom-class="myZhanghaoDia"
     >
       <div class="myAddForm">
-        <el-form :model="addForm" ref="addForm" label-width="100px" class="demo-addForm">
-          <el-row>
+        <el-form
+          :model="addForm"
+          ref="addForm"
+          label-width="100px"
+          class="demo-addForm"
+        >
+          <el-row v-if="isAdd">
             <el-col :span="20">
               <el-form-item label="用户名：">
                 <el-input
-                  :disabled="!isAdd"
+                  size="small"
+                  placeholder="请输入用户名"
+                  v-model="addForm.username1"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row v-else>
+            <el-col :span="20">
+              <el-form-item label="用户名：">
+                <el-input
+                  disabled
                   size="small"
                   placeholder="请输入用户名"
                   v-model="addForm.username"
@@ -96,7 +134,9 @@
           <el-row>
             <el-col :span="20">
               <el-form-item>
-                <el-button size="small" type="primary" @click="AddOnSubmit">提交</el-button>
+                <el-button size="small" type="primary" @click="AddOnSubmit"
+                  >提交</el-button
+                >
               </el-form-item>
             </el-col>
           </el-row>
@@ -110,45 +150,60 @@
 import { mapState } from "vuex";
 export default {
   computed: {
-    ...mapState(["redulianjiebiaoPage", "addDialogVisible", "isAdd"])
+    ...mapState(["redulianjiebiaoPage", "addDialogVisible", "isAdd"]),
   },
   watch: {
-    redulianjiebiaoPage: function(page) {
+    redulianjiebiaoPage: function (page) {
       this.$store.commit("redulianjiebiaoPage", page);
       this.getData();
     },
-    isAdd: function() {
+    isAdd: function () {
       if (this.isAdd) {
         for (const key in this.addForm) {
           this.addForm[key] = "";
+          this.addForm.username = "";
           this.$refs.tree.setCheckedKeys([]);
         }
       }
-    }
+    },
   },
   data() {
     return {
       tableData1: [],
       defaultProps: {
         children: "children",
-        label: "label"
+        label: "label",
       },
       addForm: {
+        username1: "",
         username: "",
         userpass: "",
         realname: "",
         mobile: "",
-        reuserpass: ""
+        reuserpass: "",
       },
       // isAdd: false,
-      quanxianList: []
+      quanxianList: [],
       // addDialogVisible: true
     };
   },
   created() {
+    Array.prototype.remove = function (val) {
+      var index = this.indexOf(val);
+      if (index > -1) {
+        this.splice(index, 1);
+      }
+    };
     this.getQXdata();
+    const loading = this.$loading({
+      lock: true,
+      text: "加载中...",
+      spinner: "el-icon-loading",
+      background: "rgba(0, 0, 0, 0.7)",
+    });
     setTimeout(() => {
       this.getData();
+      loading.close();
     }, 500);
   },
   methods: {
@@ -167,18 +222,44 @@ export default {
       const res = await this.$api.adminuser_list({
         is_status: 0,
         page: 1,
-        pagesize: 10000
+        pagesize: 10000,
       });
       // this.tableData1 = res.list
-      res.list.forEach(async ele => {
+      res.list.forEach(async (ele) => {
         console.log(ele);
         ele.qx = "";
         ele.qxArr = ele.limits.split(",");
+        ele.newQxArr = ele.limits.split(",");
+        if (ele.newQxArr.indexOf("2") != -1) {
+          if (
+            ele.newQxArr.indexOf("6") != -1 &&
+            ele.newQxArr.indexOf("7") != -1 &&
+            ele.newQxArr.indexOf("9") != -1 &&
+            ele.newQxArr.indexOf("8") != -1 &&
+            ele.newQxArr.indexOf("10") != -1 &&
+            ele.newQxArr.indexOf("3") != -1
+          ) {
+            console.log("have 2");
+          } else {
+            ele.newQxArr.remove("2");
+          }
+          if (ele.newQxArr.indexOf("6") != -1) {
+            if (
+              ele.newQxArr.indexOf("7") != -1 &&
+              ele.newQxArr.indexOf("9") != -1 &&
+              ele.newQxArr.indexOf("8") != -1
+            ) {
+              console.log("have 6");
+            } else {
+              ele.newQxArr.remove("6");
+            }
+          }
+        }
         var arr = [];
-        this.quanxianList.forEach(ele2 => {
+        this.quanxianList.forEach((ele2) => {
           if (ele.qxArr.indexOf(ele2.id.toString()) != -1) {
             if (ele2.children.length > 0) {
-              ele2.children.forEach(ele3 => {
+              ele2.children.forEach((ele3) => {
                 if (ele.qxArr.indexOf(ele3.id.toString()) != -1) {
                   arr.push(`${ele2.label}-${ele3.label}`);
                 }
@@ -193,15 +274,15 @@ export default {
       setTimeout(() => {
         this.tableData1 = res.list;
         // this.loading = false;
+        console.log(this.tableData1);
       }, 500);
-      console.log(this.tableData1);
     },
     async tabDel(row) {
       const res = await this.$api.adminuser_del({ user_id: row.id });
       if (res.result == 1) {
         this.$message({
           message: res.msg,
-          type: "success"
+          type: "success",
         });
         this.getData();
         this.$store.commit("addDialogVisible", false);
@@ -212,10 +293,11 @@ export default {
     tabEdit(row) {
       this.id = row.id;
       this.addForm = { ...row };
+      this.addForm.username = row.user_name;
       this.$store.commit("isAdd", false);
       this.$store.commit("addDialogVisible", true);
       var arr = [];
-      row.qxArr.forEach(ele => {
+      row.newQxArr.forEach((ele) => {
         arr.push(Number(ele));
       });
       setTimeout(() => {
@@ -227,20 +309,21 @@ export default {
       var arr = [];
       arr = [
         ...this.$refs.tree.getCheckedKeys(false),
-        ...this.$refs.tree.getHalfCheckedKeys(true)
+        ...this.$refs.tree.getHalfCheckedKeys(true),
       ];
       console.log(arr.toString());
       if (this.isAdd) {
         // 添加
         const res = await this.$api.add_adminuser({
           ...this.addForm,
-          limit: [...new Set(arr)].toString()
+          username: this.addForm.username1,
+          limit: [...new Set(arr)].toString(),
         });
         console.log(res);
         if (res.result == 1) {
           this.$message({
             message: "添加成功",
-            type: "success"
+            type: "success",
           });
           this.getData();
           this.$store.commit("addDialogVisible", false);
@@ -251,13 +334,13 @@ export default {
         const res = await this.$api.update_adminuser({
           ...this.addForm,
           limit: [...new Set(arr)].toString(),
-          user_id: this.id
+          user_id: this.id,
         });
         console.log(res);
         if (res.result == 1) {
           this.$message({
             message: "修改成功",
-            type: "success"
+            type: "success",
           });
           this.getData();
           this.$store.commit("addDialogVisible", false);
@@ -284,8 +367,8 @@ export default {
       // } else if (column.property == "address" && this.nowVip == 3) {
       //   return "col-active";
       // }
-    }
-  }
+    },
+  },
 };
 </script>
 

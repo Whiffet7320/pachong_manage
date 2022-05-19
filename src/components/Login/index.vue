@@ -153,7 +153,7 @@ export default {
           message: res.msg,
           type: "success"
         });
-        // sessionStorage.setItem("menu", JSON.stringify(res.data.menu_list));
+        sessionStorage.setItem("menu", JSON.stringify(res.menu_list));
         setTimeout(() => {
           this.$router.push({ path: "/" });
           location.reload()

@@ -17,6 +17,71 @@
         router
       >
         <template v-if="true">
+          <el-menu-item v-if="isHaveSY" :route="{ name: 'Shouye' }" index="1-1">
+            <i class="el-icon-s-home"></i>
+            <span slot="title">首页</span>
+          </el-menu-item>
+          <el-submenu
+            :index="item.menu_index"
+            v-for="item in menu"
+            :key="item.id"
+          >
+            <template slot="title">
+              <i :class="item.icon"></i>
+              <span>{{ item.name }}</span>
+            </template>
+            <!-- <template v-if="item.sub_menu.length == 0">
+              <el-menu-item
+                v-for="item2 in item.sub_menu"
+                :key="item2.id"
+                :route="{ name: item2.url }"
+                :index="item2.menu_index"
+                >{{ item2.name }}</el-menu-item
+              >
+            </template>
+            <template v-else>
+              <el-submenu
+                v-for="item3 in item2.sub_menu"
+                :key="item3.id"
+                :index="item3.menu_index"
+              >
+                <template slot="title">{{ item3.name }}</template>
+                <el-menu-item
+                  v-for="item3 in item2.sub_menu"
+                  :key="item3.id"
+                  @click="clickFabu(item3.name, item3.menu_index)"
+                  :route="{ name: item3.url }"
+                  :index="item3.menu_index"
+                  >{{ item3.name }}</el-menu-item
+                > 
+              </el-submenu>
+            </template> -->
+            <el-menu-item
+              v-for="item2 in item.sub_menu"
+              :key="item2.id"
+              :route="{ name: item2.url }"
+              :index="item2.menu_index"
+            >
+              <template v-if="item2.sub_menu.length == 0">{{
+                item2.name
+              }}</template>
+            </el-menu-item>
+            <template v-if="item.newSub_menuNameindex">
+              <el-submenu :index="item.newSub_menuNameindex">
+                <template slot="title">{{ item.newSub_menuName }}</template>
+                <el-menu-item
+                  v-for="item3 in item.newSub_menu"
+                  :key="item3.id"
+                  @click="clickFabu(item3.name, item3.menu_index)"
+                  :route="{ name: item3.url }"
+                  :index="item3.menu_index"
+                  >{{ item3.name }}</el-menu-item
+                >
+              </el-submenu>
+            </template>
+          </el-submenu>
+        </template>
+        <template v-if="false">
           <el-menu-item :route="{ name: 'Shouye' }" index="1-1">
             <i class="el-icon-s-home"></i>
             <span slot="title">首页</span>
@@ -26,26 +91,33 @@
               <i class="el-icon-s-opportunity"></i>
               <span>采集</span>
             </template>
-            <!-- <el-menu-item :route="{ name: 'Redulianjie' }" index="80-1">热度链接</el-menu-item> -->
-            <el-menu-item :route="{ name: 'Yuntureci' }" index="80-2">云图热词</el-menu-item>
-            <!-- <el-submenu index="80-3">
+            <el-menu-item :route="{ name: 'Redulianjie' }" index="80-1"
+              >热度链接</el-menu-item
+            >
+            <el-menu-item :route="{ name: 'Yuntureci' }" index="80-2"
+              >云图热词</el-menu-item
+            >
+            <el-submenu index="80-3">
               <template slot="title">历史发布</template>
               <el-menu-item
-                @click="clickFabu('新闻','80-3-1')"
+                @click="clickFabu('新闻', '80-3-1')"
                 :route="{ name: 'FabuXinwen' }"
                 index="80-3-1"
-              >新闻</el-menu-item>
+                >新闻</el-menu-item
+              >
               <el-menu-item
-                @click="clickFabu('舆情','80-3-2')"
+                @click="clickFabu('舆情', '80-3-2')"
                 :route="{ name: 'FabuXinwen' }"
                 index="80-3-2"
-              >舆情</el-menu-item>
+                >舆情</el-menu-item
+              >
               <el-menu-item
-                @click="clickFabu('视频','80-3-3')"
+                @click="clickFabu('视频', '80-3-3')"
                 :route="{ name: 'FabuXinwen' }"
                 index="80-3-3"
-              >视频</el-menu-item>
-            </el-submenu> -->
+                >视频</el-menu-item
+              >
+            </el-submenu>
           </el-submenu>
           <el-submenu index="81">
             <template slot="title">
@@ -53,7 +125,9 @@
               <span>账号</span>
             </template>
             <!-- <el-menu-item :route="{ name: 'Quanxianguanli' }" index="81-1">权限管理</el-menu-item> -->
-            <el-menu-item :route="{ name: 'Zhanghaoguanli' }" index="81-2">账号管理</el-menu-item>
+            <el-menu-item :route="{ name: 'Zhanghaoguanli' }" index="81-2"
+              >账号管理</el-menu-item
+            >
           </el-submenu>
           <!-- <el-submenu index="8">
             <template slot="title">
@@ -72,10 +146,10 @@
 import { mapState } from "vuex";
 export default {
   computed: {
-    ...mapState(["caijiFabuName",'caijiFabuIndex'])
+    ...mapState(["caijiFabuName", "caijiFabuIndex"]),
   },
   watch: {
-    caijiFabuName: function() {
+    caijiFabuName: function () {
       if (this.caijiFabuName == "新闻") {
         this.menuActiveIndex = "80-3-1";
       } else if (this.caijiFabuName == "舆情") {
@@ -86,6 +160,16 @@ export default {
     },
     $route(to) {
       console.log(to.path); //到哪去
+      if (to.path == "/NotFound/NotFound404") {
+        // this.menuActiveIndex = "1-1";
+        // this.$store.commit("headerTit", "首页");
+        this.menuActiveIndex = "";
+        this.$store.commit(
+          "headerTit",
+          `无访问权限 / <span style="color: #515a61;
+        font-weight: 700;">暂无权限/404</span>`
+        );
+      }
       if (to.path == "/Shouye") {
         this.menuActiveIndex = "1-1";
         this.$store.commit("headerTit", "首页");
@@ -392,7 +476,7 @@ export default {
       } else if (to.path == "/Zhanghao/Zhanghaoguanli") {
         this.menuActiveIndex = "81-2";
       }
-    }
+    },
   },
   data() {
     return {
@@ -400,15 +484,34 @@ export default {
       menuActiveIndex: "",
       userInfo: null,
       isCollapse: false,
-      menu: []
+      menu: [],
+      isHaveSY: false,
     };
   },
   created() {
     this.menu = JSON.parse(sessionStorage.getItem("menu"));
     console.log(this.menu);
+    if (this.menu[0].name == "首页") {
+      this.isHaveSY = true;
+      this.menu.shift();
+    } else {
+      this.isHaveSY = false;
+    }
+    this.menu.forEach((ele) => {
+      ele.sub_menu.forEach((ele2) => {
+        if (ele2.sub_menu.length > 0) {
+          ele.sub_menu.pop()
+          ele.newSub_menu = ele2.sub_menu;
+          ele2.sub_menu = [];
+          ele.newSub_menuName = ele2.name;
+          ele.newSub_menuNameindex = ele2.menu_index;
+        }
+      });
+    });
+    console.log(this.menu);
   },
   methods: {
-    clickFabu(val,i) {
+    clickFabu(val, i) {
       this.$store.commit("caijiFabuName", val);
       this.$store.commit("caijiFabuIndex", i);
       this.menuActiveIndex = this.caijiFabuIndex;
@@ -421,8 +524,8 @@ export default {
       sessionStorage.setItem("isLogin", null);
       this.$router.go(0);
       this.$router.push({ path: "/login" });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -1,13 +1,20 @@
 <template>
   <div class="index">
     <div class="nav1">
-      <div class="n1-tit1">{{titleName}}</div>
+      <div class="n1-tit1">{{ titleName }}</div>
       <div class="titt">
         <div class="n1-tit2">
           <div class="txt2-1">选择日期：</div>
         </div>
         <div class="n1-tit3">
-          <el-date-picker size="mini" v-model="time" type="date" placeholder="选择日期"></el-date-picker>
+          <el-date-picker
+            size="mini"
+            @change="changeTime"
+            value-format="yyyy-MM-dd"
+            v-model="time"
+            type="date"
+            placeholder="选择日期"
+          ></el-date-picker>
         </div>
       </div>
     </div>
@@ -16,74 +23,232 @@
       <i class="el-icon-arrow-right"></i>
       <div class="n2-tit1">历史发布</div>
       <i class="el-icon-arrow-right"></i>
-      <div class="n2-tit2">{{titleName}}</div>
+      <div class="n2-tit2">{{ titleName }}</div>
     </div>
     <div class="nav3">
-      <div class="n3-tit1">
-        <el-input placeholder="热度链接" prefix-icon="el-icon-search" v-model="keyword"></el-input>
+      <!-- <div class="n3-tit1">
+        <el-input
+          placeholder="热度链接"
+          prefix-icon="el-icon-search"
+          v-model="keyword"
+        ></el-input>
       </div>
       <div class="n3-tit2">
         <el-button type="primary" icon="el-icon-plus"></el-button>
-      </div>
+      </div> -->
       <div class="n3-tit3">
-        <div @click="changeIndex(1)" :class="{'btn':true,'active':nowIndex == 1}">新闻</div>
-        <div @click="changeIndex(2)" :class="{'btn':true,'active':nowIndex == 2}">舆情</div>
         <div
+          v-if="have1"
+          @click="changeIndex(1)"
+          :class="{ btn: true, btn1: true, active: nowIndex == 1 }"
+        >
+          新闻
+        </div>
+        <div
+          v-if="have2"
+          @click="changeIndex(2)"
+          :class="{ btn: true, active: nowIndex == 2 }"
+        >
+          舆情
+        </div>
+        <div
+          v-if="have3"
           @click="changeIndex(3)"
-          style="margin-right:10px"
-          :class="{'btn':true,'active':nowIndex == 3}"
-        >视频</div>
+          style="margin-right: 10px"
+          :class="{ btn: true, active: nowIndex == 3 }"
+        >
+          视频
+        </div>
       </div>
     </div>
     <div class="nav4 nav1">
       <div class="titt1 titt">
-        <div class="n1-tit2">
+        <!-- <div class="n1-tit2">
           <div class="txt2-1">发布日期：</div>
         </div>
         <div class="n1-tit3">
-          <el-date-picker size="mini" v-model="time2" type="date" placeholder="选择日期"></el-date-picker>
-        </div>
+          <el-date-picker
+            size="mini"
+            v-model="time2"
+            type="date"
+            placeholder="选择日期"
+          ></el-date-picker>
+        </div> -->
       </div>
       <div class="titt2">
-        <el-button size="mini" type="primary">批量发布</el-button>
-        <el-button size="mini" type="danger">批量删除</el-button>
+        <!-- <el-button size="mini" type="primary">批量发布</el-button> -->
+        <el-button size="mini" @click="piliangDel" type="danger"
+          >批量删除</el-button
+        >
       </div>
     </div>
     <div class="myTable">
       <vxe-table
-        height="536"
+        v-show="nowIndex == 1"
+        height="554"
         border="none"
         ref="xTable1"
         :data="tableData"
-        @checkbox-all="selectAllChangeEvent1"
+        @checkbox-all="selectAllEvent1"
         @checkbox-change="selectChangeEvent1"
       >
         <vxe-column show-overflow type="checkbox" width="60"></vxe-column>
-        <vxe-column show-overflow field="name" title="来源"></vxe-column>
-        <vxe-column show-overflow field="sex" title="标题"></vxe-column>
+        <vxe-column
+          show-overflow
+          field="site_name"
+          width="180"
+          title="作者"
+        ></vxe-column>
+        <vxe-column show-overflow field="title" title="标题"></vxe-column>
         <vxe-column show-overflow field="age" title="链接">
           <template #default="{ row }">
             <a
-              style="color:#ffffff"
-              :href="`https://www.baidu.com/${row.name}`"
+              style="color: #04f9db"
+              :href="`${row.new_url}`"
               target="_black"
-            >https://www.baidu.com/{{row.name}}</a>
+              >{{ row.new_url }}</a
+            >
           </template>
         </vxe-column>
-        <vxe-column show-overflow field="address" title="采集来源">
-          <template #default="{ row }">
+        <vxe-column show-overflow width="180" field="address" title="采集来源">
+          <template>
             <div class="cjyl">
-              <div :class="{'dian':true,'success':row.age>25,'fail':row.age<=25}"></div>
-              <div class="txt">{{row.address}}</div>
+              <div :class="{ dian: true, success: true, fail: false }"></div>
+              <div class="txt">自动获取</div>
             </div>
           </template>
         </vxe-column>
-        <vxe-table-column width="214">
+        <vxe-table-column width="150">
           <template slot-scope="scope">
-            <div style="display:flex">
-              <el-button size="mini" type="info" @click="yidongYuqin(scope.row)">编辑</el-button>
-              <el-button size="mini" type="primary" @click="yidongYuqin(scope.row)">发布</el-button>
-              <el-button size="mini" type="danger" @click="yidongYuqin(scope.row)">删除</el-button>
+            <div style="display: flex">
+              <el-button size="mini" type="info" @click="tabEdit(scope.row)"
+                >编辑</el-button
+              >
+              <el-button size="mini" type="danger" @click="tabDel(scope.row)"
+                >删除</el-button
+              >
+            </div>
+          </template>
+        </vxe-table-column>
+      </vxe-table>
+      <vxe-table
+        v-show="nowIndex == 2"
+        height="554"
+        border="none"
+        ref="xTable2"
+        :data="tableData"
+        @checkbox-all="selectAllEvent2"
+        @checkbox-change="selectChangeEvent2"
+      >
+        <vxe-column show-overflow type="checkbox" width="60"></vxe-column>
+        <vxe-column
+          field="news_name"
+          show-overflow
+          title="新闻标题"
+        ></vxe-column>
+        <vxe-column
+          show-overflow
+          field="site_name"
+          width="180"
+          title="作者"
+        ></vxe-column>
+        <vxe-column
+          show-overflow
+          field="comment_content"
+          title="评论内容"
+        ></vxe-column>
+        <vxe-column
+          field="user_name"
+          show-overflow
+          title="评论用户"
+        ></vxe-column>
+        <vxe-column show-overflow field="age" title="链接">
+          <template #default="{ row }">
+            <a
+              style="color: #04f9db"
+              :href="`${row.new_url}`"
+              target="_black"
+              >{{ row.new_url }}</a
+            >
+          </template>
+        </vxe-column>
+        <vxe-column
+          field="comment_time"
+          show-overflow
+          title="发布时间"
+        ></vxe-column>
+        <vxe-table-column width="150">
+          <template slot-scope="scope">
+            <div style="display: flex">
+              <el-button size="mini" type="info" @click="tabEdit(scope.row)"
+                >编辑</el-button
+              >
+              <el-button size="mini" type="danger" @click="tabDel(scope.row)"
+                >删除</el-button
+              >
+            </div>
+          </template>
+        </vxe-table-column>
+      </vxe-table>
+      <vxe-table
+        v-show="nowIndex == 3"
+        height="554"
+        border="none"
+        ref="xTable3"
+        :data="tableData"
+        @checkbox-all="selectAllEvent3"
+        @checkbox-change="selectChangeEvent3"
+      >
+        <vxe-column show-overflow type="checkbox" width="60"></vxe-column>
+        <vxe-column field="title" show-overflow title="新闻标题"></vxe-column>
+        <vxe-column
+          show-overflow
+          field="hits"
+          width="180"
+          title="浏览量"
+        ></vxe-column>
+        <vxe-column
+          show-overflow
+          field="forward_num"
+          width="180"
+          title="转发量"
+        ></vxe-column>
+        <vxe-column
+          show-overflow
+          field="video_playnum"
+          width="180"
+          title="播放量"
+        ></vxe-column>
+        <vxe-column
+          show-overflow
+          field="site_name"
+          width="180"
+          title="作者"
+        ></vxe-column>
+        <vxe-column show-overflow field="age" title="链接">
+          <template #default="{ row }">
+            <a
+              style="color: #04f9db"
+              :href="`${row.video_h5url}`"
+              target="_black"
+              >{{ row.video_h5url }}</a
+            >
+          </template>
+        </vxe-column>
+        <!-- <vxe-column
+          field="comment_time"
+          show-overflow
+          title="发布时间"
+        ></vxe-column> -->
+        <vxe-table-column width="150">
+          <template slot-scope="scope">
+            <div style="display: flex">
+              <el-button size="mini" type="info" @click="tabEdit(scope.row)"
+                >编辑</el-button
+              >
+              <el-button size="mini" type="danger" @click="tabDel(scope.row)"
+                >删除</el-button
+              >
             </div>
           </template>
         </vxe-table-column>
@@ -98,6 +263,77 @@
         :total="this.total"
       ></el-pagination>
     </div>
+    <!-- 编辑热度链接 -->
+    <el-dialog
+      title="编辑热度链接"
+      :visible.sync="addDialogVisible"
+      width="700px"
+      :before-close="addHandleClose"
+      custom-class="myZhanghaoDia"
+    >
+      <div class="myAddForm">
+        <el-form
+          :model="addForm"
+          ref="addForm"
+          label-width="100px"
+          class="demo-addForm"
+        >
+          <!-- <el-row>
+            <el-col :span="20">
+              <el-form-item label="作者：">
+                <el-input size="small" v-model="addForm.site_name"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row> -->
+          <el-row>
+            <el-col :span="20">
+              <el-form-item label="标题：">
+                <el-input
+                  size="small"
+                  type="textarea"
+                  v-model="addForm.title"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row v-if="nowIndex != 3">
+            <el-col :span="20">
+              <el-form-item label="内容：">
+                <el-input
+                  size="small"
+                  type="textarea"
+                  :rows="10"
+                  v-model="addForm.content"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <!-- <el-row>
+            <el-col :span="20">
+              <el-form-item label="链接：">
+                <el-input size="small" v-model="addForm.new_url"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row> -->
+          <!-- <el-row>
+            <el-col :span="20">
+              <el-form-item label="确认密码：">
+                <el-input size="small" v-model="addForm.reuserpass"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row> -->
+          <el-row>
+            <el-col :span="20">
+              <el-form-item>
+                <el-button size="small" type="primary" @click="AddOnSubmit"
+                  >提交</el-button
+                >
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -105,14 +341,21 @@
 import { mapState } from "vuex";
 export default {
   computed: {
-    ...mapState(["fabuXinwenPage", "caijiFabuName"])
+    ...mapState(["fabuXinwenPage", "caijiFabuName"]),
   },
   watch: {
-    fabuXinwenPage: function(page) {
+    fabuXinwenPage: function (page) {
       this.$store.commit("fabuXinwenPage", page);
-      this.getData();
+      if (this.nowIndex == 1) {
+        this.getData();
+      } else if (this.nowIndex == 2) {
+        this.getData2();
+      } else if (this.nowIndex == 3) {
+        this.titleName = "视频";
+        this.getData3();
+      }
     },
-    caijiFabuName: function() {
+    caijiFabuName: function () {
       if (this.caijiFabuName == "新闻") {
         this.nowIndex = 1;
       } else if (this.caijiFabuName == "舆情") {
@@ -121,19 +364,24 @@ export default {
         this.nowIndex = 3;
       }
     },
-    nowIndex: function() {
+    nowIndex: function () {
+      this.$store.commit("fabuXinwenPage", 1);
       if (this.nowIndex == 1) {
         this.titleName = "新闻";
+        this.getData();
       } else if (this.nowIndex == 2) {
         this.titleName = "舆情";
+        this.getData2();
       } else if (this.nowIndex == 3) {
         this.titleName = "视频";
+        this.getData3();
       }
       this.$store.commit("caijiFabuName", this.titleName);
-    }
+    },
   },
   data() {
     return {
+      addDialogVisible: false,
       titleName: "新闻",
       total: 150,
       keyword: "",
@@ -142,98 +390,240 @@ export default {
       nowIndex: 1,
       tagVal: "",
       tagList: [],
-      tableData: [
-        {
-          id: 10001,
-          name: "Test1",
-          role: "Develop",
-          sex: "Man",
-          age: 28,
-          address: "test abc"
-        },
-        {
-          id: 10002,
-          name: "Test2",
-          role: "Test",
-          sex: "Women",
-          age: 22,
-          address: "Guangzhou"
-        },
-        {
-          id: 10003,
-          name: "Test3",
-          role: "PM",
-          sex: "Man",
-          age: 32,
-          address: "Shanghai"
-        },
-        {
-          id: 10004,
-          name: "Test4",
-          role: "Designer",
-          sex: "Women",
-          age: 23,
-          address: "test abc"
-        },
-        {
-          id: 10005,
-          name: "Test5",
-          role: "Develop",
-          sex: "Women",
-          age: 30,
-          address: "Shanghai"
-        },
-        {
-          id: 10004,
-          name: "Test4",
-          role: "Designer",
-          sex: "Women",
-          age: 23,
-          address: "test abc"
-        },
-        {
-          id: 10005,
-          name: "Test5",
-          role: "Develop",
-          sex: "Women",
-          age: 30,
-          address: "Shanghai"
-        },
-        {
-          id: 10004,
-          name: "Test4",
-          role: "Designer",
-          sex: "Women",
-          age: 23,
-          address: "test abc"
-        },
-        {
-          id: 10005,
-          name: "Test5",
-          role: "Develop",
-          sex: "Women",
-          age: 30,
-          address: "Shanghai"
-        }
-      ]
+      tableData: [],
+      addForm: {
+        site_name: "",
+        title: "",
+        new_url: "",
+        content: "",
+      },
+      arr1: [],
+      arr2: [],
+      arr3: [],
+      have1: false,
+      have2: false,
+      have3: false,
     };
   },
-  created() {},
+  created() {
+    const menu = JSON.parse(sessionStorage.getItem("menu"));
+    console.log(menu);
+    menu.forEach((ele) => {
+      if (ele.sub_menu.length > 0) {
+        ele.sub_menu.forEach((ele2) => {
+          if (ele2.sub_menu.length > 0) {
+            ele2.sub_menu.forEach((ele3) => {
+              if (ele3.menu_index == "80-3-1") {
+                this.have1 = true;
+              }
+              if (ele3.menu_index == "80-3-2") {
+                this.have2 = true;
+              }
+              if (ele3.menu_index == "80-3-3") {
+                this.have3 = true;
+              }
+            });
+          }
+        });
+      }
+    });
+    if (this.nowIndex == 1) {
+      this.getData();
+    } else if (this.nowIndex == 2) {
+      this.getData2();
+    } else if (this.nowIndex == 3) {
+      this.titleName = "视频";
+      this.getData3();
+    }
+  },
   mounted() {
-    var arr = this.tableData.filter(ele => {
+    var arr = this.tableData.filter((ele) => {
       return ele.sex == "Women";
     });
     this.$refs.xTable1.setCheckboxRow(arr, true);
   },
   methods: {
+    addHandleClose() {
+      this.addDialogVisible = false;
+    },
+    async getData() {
+      const loading = this.$loading({
+        lock: true,
+        text: "加载中...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+      const res = await this.$api.screen_newslist({
+        site_id: this.site_id,
+        start_day: this.time,
+        end_day: this.time,
+        page: this.fabuXinwenPage,
+        pagesize: 9,
+      });
+      if (res.list) {
+        this.tableData = res.list;
+        this.total = res.total;
+      } else if (res.total == 0) {
+        this.tableData = [];
+      } else {
+        this.$message("没有更多了");
+      }
+      loading.close();
+    },
+    async getData2() {
+      const loading = this.$loading({
+        lock: true,
+        text: "加载中...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+      const res = await this.$api.screen_commentlist({
+        site_id: this.site_id,
+        start_day: this.time,
+        end_day: this.time,
+        page: this.fabuXinwenPage,
+        pagesize: 9,
+      });
+      if (res.list) {
+        this.tableData = res.list;
+        this.total = res.total;
+      } else if (res.total == 0) {
+        this.tableData = [];
+      } else {
+        this.$message("没有更多了");
+      }
+      loading.close();
+    },
+    async getData3() {
+      const loading = this.$loading({
+        lock: true,
+        text: "加载中...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+      const res = await this.$api.screen_videolist({
+        site_id: this.site_id,
+        start_day: this.time,
+        end_day: this.time,
+        page: this.fabuXinwenPage,
+        pagesize: 9,
+      });
+      if (res.list) {
+        this.tableData = res.list;
+        this.total = res.total;
+      } else if (res.total == 0) {
+        this.tableData = [];
+      } else {
+        this.$message("没有更多了");
+      }
+      loading.close();
+    },
+    changeTime() {
+      this.tableData = [];
+      if (this.nowIndex == 1) {
+        this.getData();
+      } else if (this.nowIndex == 2) {
+        this.getData2();
+      } else if (this.nowIndex == 3) {
+        this.getData3();
+      }
+    },
+    async piliangDel() {
+      if (this.nowIndex == 1) {
+        console.log(this.arr1.toString());
+        const res = await this.$api.screen_newsdel({
+          id: this.arr1.toString(),
+        });
+        if (res.result == 1) {
+          this.$message({
+            message: res.msg,
+            type: "success",
+          });
+          this.getData();
+          this.arr1 = [];
+        } else {
+          this.$message.error(res.msg);
+        }
+      } else if (this.nowIndex == 2) {
+        console.log(this.arr2.toString());
+        const res = await this.$api.screen_pubsentimentdel({
+          id: this.arr2.toString(),
+        });
+        if (res.result == 1) {
+          this.$message({
+            message: res.msg,
+            type: "success",
+          });
+          this.getData2();
+          this.arr2 = [];
+        } else {
+          this.$message.error(res.msg);
+        }
+      } else if (this.nowIndex == 3) {
+        console.log(this.arr3.toString());
+        const res = await this.$api.screen_videodel({
+          id: this.arr3.toString(),
+        });
+        if (res.result == 1) {
+          this.$message({
+            message: res.msg,
+            type: "success",
+          });
+          this.getData3();
+          this.arr3 = [];
+        } else {
+          this.$message.error(res.msg);
+        }
+      }
+    },
     changeIndex(i) {
       this.nowIndex = i;
       this.$store.commit("fabuXinwenPage", 1);
     },
+    async AddOnSubmit() {
+      let res = null;
+      if (this.nowIndex == 1) {
+        res = await this.$api.screen_newsedit({
+          id: this.id,
+          title: this.addForm.title,
+          content: this.addForm.content,
+        });
+        console.log(res);
+      } else if (this.nowIndex == 2) {
+        res = await this.$api.screen_pubsentimenteditL({
+          id: this.id,
+          title: this.addForm.title,
+          content: this.addForm.content,
+        });
+        console.log(res);
+      } else if (this.nowIndex == 3) {
+        res = await this.$api.screen_videoedit({
+          id: this.id,
+          title: this.addForm.title,
+        });
+        console.log(res);
+      }
+      if (res.result == 1) {
+        this.$message({
+          message: res.msg,
+          type: "success",
+        });
+        this.addDialogVisible = false;
+        if (this.nowIndex == 1) {
+          this.getData();
+        } else if (this.nowIndex == 2) {
+          this.getData2();
+        } else if (this.nowIndex == 3) {
+          this.getData3();
+        }
+      } else {
+        this.$message.error(res.msg);
+      }
+    },
     addTag() {
       if (this.tagVal) {
         this.tagList.push({
-          name: this.tagVal
+          name: this.tagVal,
         });
         this.tagVal = "";
       }
@@ -241,13 +631,99 @@ export default {
     removeTag(tag) {
       this.tagList.splice(this.tagList.indexOf(tag), 1);
     },
-    selectAllChangeEvent1() {},
-    selectChangeEvent1() {},
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
       this.$store.commit("fabuXinwenPage", val);
-    }
-  }
+    },
+    async tabDel(row) {
+      let res = null;
+      if (this.nowIndex == 1) {
+        res = await this.$api.screen_newsdel({ id: row.id });
+      } else if (this.nowIndex == 2) {
+        res = await this.$api.screen_pubsentimentdel({ id: row.id });
+      } else if (this.nowIndex == 3) {
+        res = await this.$api.screen_videodel({ id: row.id });
+      }
+      if (res.result == 1) {
+        this.$message({
+          message: res.msg,
+          type: "success",
+        });
+        this.keyword = "";
+        if (this.nowIndex == 1) {
+          this.getData();
+        } else if (this.nowIndex == 2) {
+          this.getData2();
+        } else if (this.nowIndex == 3) {
+          this.getData3();
+        }
+      } else {
+        this.$message.error(res.msg);
+      }
+    },
+    selectAllEvent1() {
+      const records = this.$refs.xTable1.getCheckboxRecords();
+      this.arr1 = [];
+      records.forEach((ele) => {
+        this.arr1.push(ele.id);
+      });
+    },
+    selectChangeEvent1() {
+      const records = this.$refs.xTable1.getCheckboxRecords();
+      // console.log(checked ? "勾选事件" : "取消事件", records);
+      this.arr1 = [];
+      records.forEach((ele) => {
+        this.arr1.push(ele.id);
+      });
+    },
+    selectAllEvent2() {
+      const records = this.$refs.xTable2.getCheckboxRecords();
+      this.arr2 = [];
+      records.forEach((ele) => {
+        this.arr2.push(ele.id);
+      });
+    },
+    selectChangeEvent2() {
+      const records = this.$refs.xTable2.getCheckboxRecords();
+      console.log(records);
+      this.arr2 = [];
+      records.forEach((ele) => {
+        this.arr2.push(ele.id);
+      });
+    },
+    selectAllEvent3() {
+      const records = this.$refs.xTable3.getCheckboxRecords();
+      this.arr3 = [];
+      records.forEach((ele) => {
+        this.arr3.push(ele.id);
+      });
+    },
+    selectChangeEvent3() {
+      const records = this.$refs.xTable3.getCheckboxRecords();
+      this.arr3 = [];
+      records.forEach((ele) => {
+        this.arr3.push(ele.id);
+      });
+    },
+    tabEdit(row) {
+      console.log(row);
+      if (this.nowIndex == 1) {
+        this.id = row.id;
+        this.addForm.site_name = row.site_name;
+        this.addForm.title = row.title;
+        this.addForm.new_url = row.new_url;
+        this.addForm.content = row.content;
+      } else if (this.nowIndex == 2) {
+        this.id = row.id;
+        this.addForm.title = row.text_raw;
+        this.addForm.content = row.comment_content;
+      } else if (this.nowIndex == 3) {
+        this.id = row.id;
+        this.addForm.title = row.title;
+      }
+      this.addDialogVisible = true;
+    },
+  },
 };
 </script>
 
@@ -337,12 +813,15 @@ export default {
   .n3-tit3 {
     display: flex;
     align-items: flex-end;
-    margin-left: 10px;
+    // margin-left: 10px;
     .btn.active {
       background: #122549;
       border: 1px solid #388bf4;
       color: #388bf4;
       line-height: 38px;
+    }
+    .btn1.btn {
+      margin-left: 0;
     }
     .btn {
       cursor: pointer;
@@ -373,7 +852,7 @@ export default {
   }
 }
 .nav4 {
-  margin-top: 30px;
+  // margin-top: 30px;
   display: flex;
   justify-content: space-between;
   .titt1 {

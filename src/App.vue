@@ -21,9 +21,6 @@ export default {
 }
 </style>
 <style lang="scss">
-/deep/ .vxe-body--column.col-active{
-  line-height: 48px;
-}
 .el-picker-panel {
   background: #388bf4;
   border: 0px solid #388bf4;

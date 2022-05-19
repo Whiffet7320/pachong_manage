@@ -5,7 +5,7 @@
       <div class="r2"></div>
       <div class="r3"></div>
       <div class="r4"></div>
-      <div style="height:540px;width:92%" id="zoushi"></div>
+      <div style="height: 540px; width: 92%" id="zoushi"></div>
     </div>
     <div class="btn">
       <div class="r1"></div>
@@ -13,12 +13,17 @@
       <div @click="dialogVisible1 = true" class="txx">导出</div>
     </div>
     <!-- 导出 -->
-    <el-dialog :visible.sync="dialogVisible1" custom-class='myDaochuDia' width="586px" :before-close="handleClose1">
+    <el-dialog
+      :visible.sync="dialogVisible1"
+      custom-class="myDaochuDia"
+      width="586px"
+      :before-close="handleClose1"
+    >
       <div class="dia1">
         <div class="txt1">是否确认导出相关内容？</div>
         <div class="btns">
           <div @click="dialogVisible1 = false" class="btn1">取消</div>
-          <div class="btn2">确定</div>
+          <div @click="daochu" class="btn2">确定</div>
         </div>
       </div>
     </el-dialog>
@@ -27,7 +32,16 @@
 
 <script>
 import * as echarts from "echarts";
+import { mapState } from "vuex";
 export default {
+  computed: {
+    ...mapState(["zstTime"]),
+  },
+  watch: {
+    zstTime: function () {
+      this.getZstData();
+    },
+  },
   data() {
     return {
       tableData1: [
@@ -38,7 +52,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -47,7 +61,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -56,7 +70,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -65,7 +79,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -74,7 +88,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -83,7 +97,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -92,7 +106,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -101,7 +115,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -110,7 +124,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -119,7 +133,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -128,7 +142,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -137,7 +151,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -146,7 +160,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -155,7 +169,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -164,7 +178,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -173,7 +187,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -182,7 +196,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -191,7 +205,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -200,7 +214,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -209,7 +223,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -218,7 +232,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -227,7 +241,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -236,7 +250,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -245,7 +259,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -254,7 +268,7 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
+          lj: "http://baidu.com",
         },
         {
           id: 10001,
@@ -263,22 +277,25 @@ export default {
           sex: "Man",
           age: 28,
           address: "test abc",
-          lj: "http://baidu.com"
-        }
+          lj: "http://baidu.com",
+        },
       ],
-      dialogVisible1:false,
+      list: [],
+      option2: null,
+      dialogVisible1: false,
+      myZoushi:null,
     };
   },
   mounted() {
-    var myZoushi = echarts.init(document.getElementById("zoushi"));
-    var option2 = {
+    this.myZoushi = echarts.init(document.getElementById("zoushi"));
+    this.option2 = {
       title: {
         text: "· 走势图",
         textStyle: {
           color: "#04FFE0",
           fontSize: "30px",
-          letterSpacing: "3px"
-        }
+          letterSpacing: "3px",
+        },
       },
       legend: {
         data: ["频率"],
@@ -286,52 +303,54 @@ export default {
         textStyle: {
           fontSize: 18,
           color: "#ffffff",
-          fontWeight: 700
-        }
+          fontWeight: 700,
+        },
       },
       grid: {
         left: "3%",
         right: "4%",
         bottom: "3%",
         top: "14%",
-        containLabel: true
+        containLabel: true,
       },
       xAxis: {
         type: "category",
         boundaryGap: false,
-        data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        // data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        data: [],
         axisLine: {
           lineStyle: {
             // 设置x轴颜色
-            color: "#1794E4"
-          }
+            color: "#1794E4",
+          },
         },
         axisLabel: {
           textStyle: {
             fontSize: 16,
-            color: "#fff"
-          }
-        }
+            color: "#fff",
+          },
+        },
       },
       yAxis: {
         type: "value",
         axisLine: {
           lineStyle: {
             // 设置y轴颜色
-            color: "#0C9DDB"
-          }
+            color: "#0C9DDB",
+          },
         },
         axisLabel: {
           textStyle: {
             fontSize: 16,
             color: "#0c9ddb",
-            fontWeight: 700
-          }
-        }
+            fontWeight: 700,
+          },
+        },
       },
       series: [
         {
-          data: [150, 230, 224, 218, 135, 147, 260],
+          // data: [150, 230, 224, 218, 135, 147, 260],
+          data: [],
           name: "频率",
           type: "line",
           stack: "Total",
@@ -339,22 +358,60 @@ export default {
           itemStyle: {
             normal: {
               label: {
-                show: true
+                show: true,
               },
               borderColor: "#ffaea3", // 拐点边框颜色
               symbol: "circle",
               lineStyle: {
                 width: 3, // 设置线宽
-                color: "#ffaea3"
-              }
-            }
-          }
-        }
-      ]
+                color: "#ffaea3",
+              },
+            },
+          },
+        },
+      ],
     };
-    myZoushi.setOption(option2);
+    this.myZoushi.setOption(this.option2);
+  },
+  created() {
+    this.getZstData();
   },
   methods: {
+    async getZstData() {
+      const res = await this.$api.hotwords_logs({
+        year: this.zstTime[0],
+        month: this.zstTime[1],
+        day: this.zstTime[2],
+      });
+      console.log(res.list);
+      this.list = res.list;
+      var xAxis = [];
+      var series = [];
+      // if(res)
+      res.list.forEach((ele) => {
+        xAxis.push(ele.title);
+        series.push(ele.num);
+      });
+      if (this.option2) {
+        this.$set(this.option2.xAxis, "data", xAxis);
+        this.$set(this.option2.series[0], "data", series);
+        setTimeout(() => {
+          this.myZoushi.setOption(this.option2);
+        }, 500);
+      }
+    },
+    async daochu(){
+      const res = await this.$api.exporthotwords_list({
+        year: this.zstTime[0],
+        month: this.zstTime[1],
+        day: this.zstTime[2],
+      })
+      this.$message(res.msg)
+      if(res.result == 1){
+        window.open(res.down_url)
+        this.dialogVisible1 = false;
+      }
+    },
     handleClose1() {
       this.dialogVisible1 = false;
     },
@@ -364,8 +421,8 @@ export default {
       } else {
         return "col-active";
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

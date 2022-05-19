@@ -7,7 +7,7 @@
           <div class="txt2-1">选择日期：</div>
         </div>
         <div class="n1-tit3">
-          <el-date-picker size="mini" v-model="time" type="date" placeholder="选择日期"></el-date-picker>
+          <el-date-picker @change="changeTime" value-format="yyyy-MM-dd" size="mini" v-model="time" type="date" placeholder="选择日期"></el-date-picker>
         </div>
       </div>
     </div>
@@ -67,7 +67,7 @@
           <div class="txt2-1">发布日期：</div>
         </div>
         <div class="n1-tit3">
-          <el-date-picker size="mini" v-model="time2" type="date" placeholder="选择日期"></el-date-picker>
+          <el-date-picker size="mini"  value-format="yyyy-MM-dd" v-model="time2" type="date" placeholder="选择日期"></el-date-picker>
         </div>
       </div>
       <!-- <div class="titt2">
