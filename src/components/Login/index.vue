@@ -23,7 +23,7 @@
       <!-- <img class="leftImg" src="../../assets/image/hb.png" alt="" /> -->
       <div class="syTop">
         <img src="../../assets/newIImg/LoginTop.png" class="syTopImg" alt />
-        <div class="sy-txt">爬虫后台</div>
+        <div class="sy-txt">今日教育</div>
       </div>
       <!-- <div class="loginBox">
         <div class="tit1">后台管理系统</div>
@@ -90,10 +90,21 @@
         <el-input placeholder="请输入账号" v-model="loginForm.username">
           <i slot="prefix" class="el-input__icon el-icon-user-solid"></i>
         </el-input>
-        <el-input type="password" style="margin-top:20px" @keyup.enter.native="onLogin" placeholder="请输入密码" v-model="loginForm.password">
+        <el-input
+          type="password"
+          style="margin-top: 20px"
+          @keyup.enter.native="onLogin"
+          placeholder="请输入密码"
+          v-model="loginForm.password"
+        >
           <i slot="prefix" class="el-input__icon el-icon-connection"></i>
         </el-input>
-        <el-button @click="onLogin" style="width:100%;margin-top:30px" type="primary">登录</el-button>
+        <el-button
+          @click="onLogin"
+          style="width: 100%; margin-top: 30px"
+          type="primary"
+          >登录</el-button
+        >
       </div>
     </div>
   </div>
@@ -123,18 +134,18 @@ export default {
     return {
       smdl: true,
       loginForm: {
-        username: "admin",
+        username: "",
         checkPass: "",
-        password: ""
+        password: "",
       },
       rules: {
         username: [
-          { required: true, message: "请输入用户名", trigger: "blur" }
+          { required: true, message: "请输入用户名", trigger: "blur" },
         ],
         password: [{ validator: validatePass, trigger: "blur" }],
-        checkPass: [{ validator: validatePass2, trigger: "blur" }]
+        checkPass: [{ validator: validatePass2, trigger: "blur" }],
       },
-      isRegister: true
+      isRegister: true,
     };
   },
   methods: {
@@ -148,22 +159,29 @@ export default {
       if (res.result == 1) {
         sessionStorage.setItem("token", res.token);
         sessionStorage.setItem("isLogin", true);
+        sessionStorage.setItem("user_level", res.user_level);
+        sessionStorage.setItem("menu_wzedu", res.menu_wzedu);
         // sessionStorage.setItem("userInfo", JSON.stringify(res.data.info));
         this.$message({
           message: res.msg,
-          type: "success"
+          type: "success",
         });
         sessionStorage.setItem("menu", JSON.stringify(res.menu_list));
+        this.$router.push({ name: "Shouye" });
+        // if (res.user_level == 1 || res.user_level == 3) {
+        //   this.$router.push({ name: "Shouye" });
+        // } else {
+        //   this.$router.push({ path: "Shouye_u" });
+        // }
         setTimeout(() => {
-          this.$router.push({ path: "/" });
-          location.reload()
+          location.reload();
           // this.$router.go(0);
         }, 500);
       } else {
         this.$message.error(res.msg);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -240,8 +258,8 @@ export default {
         top: 24%;
         opacity: 1;
         font-size: 18px;
-        font-family: PingFang SC, PingFang SC-Regular;
-        font-weight: 400;
+        font-family: PingFang SC, PingFang SC-Medium; //aaa
+        font-weight: 500; //aa
         text-align: center;
         color: #c2c2c2;
       }
@@ -267,15 +285,15 @@ export default {
           .userInp {
             opacity: 1;
             font-size: 20px;
-            font-family: PingFang SC, PingFang SC-Regular;
-            font-weight: 400;
+            font-family: PingFang SC, PingFang SC-Medium; //aaa
+            font-weight: 500; //aa
             color: #ebbfcc;
           }
           .pasInp {
             opacity: 1;
             font-size: 20px;
-            font-family: PingFang SC, PingFang SC-Regular;
-            font-weight: 400;
+            font-family: PingFang SC, PingFang SC-Medium; //aaa
+            font-weight: 500; //aa
             color: #c2c2c2;
           }
           .footer {
@@ -286,16 +304,16 @@ export default {
           .wjmm {
             opacity: 1;
             font-size: 16px;
-            font-family: PingFang SC, PingFang SC-Regular;
-            font-weight: 400;
+            font-family: PingFang SC, PingFang SC-Medium; //aaa
+            font-weight: 500; //aa
             text-align: center;
             color: #ebbfcc;
           }
           .zczh {
             opacity: 1;
             font-size: 16px;
-            font-family: PingFang SC, PingFang SC-Regular;
-            font-weight: 400;
+            font-family: PingFang SC, PingFang SC-Medium; //aaa
+            font-weight: 500; //aa
             text-align: center;
             color: #808080;
           }

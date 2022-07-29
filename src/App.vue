@@ -1,16 +1,33 @@
 <template>
   <div id="app">
+    <template v-if="false">
+      <Layout v-if="user_level == 1 || user_level == 3" />
+      <LayoutU v-else />
+    </template>
+
     <Layout />
   </div>
 </template>
 
 <script>
 import Layout from "./components/Layout";
+import LayoutU from "./components/Layout_u";
 export default {
   name: "App",
   components: {
-    Layout
-  }
+    Layout,
+    LayoutU,
+  },
+  data() {
+    return {
+      user_level: null,
+    };
+  },
+  created() {
+    this.user_level = sessionStorage.getItem("user_level");
+    console.log(this.user_level);
+    document.title = "今日教育";
+  },
 };
 </script>
 
@@ -24,6 +41,10 @@ export default {
 .el-picker-panel {
   background: #388bf4;
   border: 0px solid #388bf4;
+  .el-date-table td.in-range div,
+  .el-date-table td.in-range div:hover {
+    background-color: #4e6b97 !important;
+  }
   td.prev-month {
     color: #606266;
   }
@@ -43,7 +64,7 @@ export default {
     .today {
       span {
         color: #ffffff;
-        font-weight: 400;
+        font-weight: 500; //aa
       }
     }
     .el-date-table td span {
@@ -82,12 +103,15 @@ export default {
     }
   }
 }
-.el-dialog.myZhanghaoDia{
+.el-dialog.myZhanghaoDia {
   background: #122549;
-  .el-dialog__title{
+  .el-dialog__title {
     color: #ffffff;
   }
-  .el-dialog__close{
+  .el-dialog__close {
+    color: #ffffff;
+  }
+  .el-form-item__label {
     color: #ffffff;
   }
 }
@@ -118,8 +142,9 @@ export default {
     .tit1 {
       margin-top: 20px;
       font-size: 12px;
-      font-family: PingFang SC, PingFang SC-Regular;
-      font-weight: 400;
+      font-family: PingFang SC, PingFang SC-Medium; //aaa
+      // font-family: PingFang SC, PingFang SC-Medium;
+      font-weight: 500; //aa
       color: #ffffff;
     }
     .tit2 {
@@ -129,7 +154,7 @@ export default {
       background: #10183c;
       border-radius: 8px;
       padding: 12px 8px;
-      .el-tag{
+      .el-tag {
         margin: 0 6px 12px 6px;
       }
     }

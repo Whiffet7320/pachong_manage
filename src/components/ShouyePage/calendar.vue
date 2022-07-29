@@ -328,7 +328,8 @@ box-shadow: 0px 0px 30px 0px #04f9db inset;
   margin: 10px 5px;
   // width: 248px;
   // width: 490px;
-   width: 450px;
+  //  width: 450px;
+  width: 30%;
   height: 340px;
   border: 2px solid #1794e4;
   box-shadow: 0px 0px 30px 0px rgba(23, 148, 228, 0.86) inset;
@@ -384,8 +385,8 @@ box-shadow: 0px 0px 30px 0px #04f9db inset;
     margin-bottom: 6px;
     margin-top: 16px;
     font-size: 24px;
-    font-family: PingFang SC, PingFang SC-Regular;
-    font-weight: 400;
+    font-family: PingFang SC, PingFang SC-Medium; //aaa
+    font-weight: 500; //aa
     text-align: center;
     color: #04f9db;
     letter-spacing: 2.4px;
@@ -412,8 +413,8 @@ box-shadow: 0px 0px 30px 0px #04f9db inset;
       height: 32px;
       line-height: 32px;
       font-size: 16px;
-      font-family: PingFang SC, PingFang SC-Regular;
-      font-weight: 400;
+      font-family: PingFang SC, PingFang SC-Medium; //aaa
+      font-weight: 500; //aa
       text-align: center;
       color: #ffffff;
       letter-spacing: 1.6px;

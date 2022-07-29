@@ -20,6 +20,8 @@ export default new Vuex.Store({
     caijiFabuIndex:'',
     addDialogVisible:false,
     isAdd:false,
+    syaddDialogVisible:false,
+    syisAdd:false,
     sytableIndex:0,
     fabuXinwenPage: 1,
     syStartTime:'',
@@ -27,8 +29,12 @@ export default new Vuex.Store({
     syIndex:0,
     zstTime:'',
     pxIndex:1,
+    sySearch:'',
   },
   mutations: {
+    sySearch(state, str) {
+      state.sySearch = str;
+    },
     pxIndex(state, str) {
       state.pxIndex = str;
     },
@@ -82,6 +88,12 @@ export default new Vuex.Store({
     },
     isAdd(state, str){
       state.isAdd = str;
+    },
+    syaddDialogVisible(state, str){
+      state.syaddDialogVisible = str;
+    },
+    syisAdd(state, str){
+      state.syisAdd = str;
     },
     sytableIndex(state, str){
       state.sytableIndex = str;

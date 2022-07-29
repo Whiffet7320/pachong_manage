@@ -42,4 +42,19 @@ export default {
     screen_pubsentimentdel:'/screen_pubsentimentdel',//舆情删除(筛选后)
     screen_videodel:'/screen_videodel',//视频删除(筛选后)
     exporthotwords_list:'/exporthotwords_list',//导出热词
+    hotwords_list:'/hotwords_list',//关键词设定列表
+    del_hotwords:"/del_hotwords",//删除关键词设定
+    user_release:'/user_release',//发布新闻/舆情/视频
+    check_hotlink:"/check_hotlink",//添加热度链接(根据链接获取内容)
+    info_list:'/info_list',//温州教育列表
+    add_info:'/add_info',//添加温州教育
+    update_info:'/update_info',//修改温州教育
+    del_info:'/del_info',//删除温州教育
+    admingroups_list:'/admingroups_list',//账号组别列表
+    update_admingroup:'/update_admingroup',//修改账号组别
+    update_hotwords:'/update_hotwords',//修改关键词设定
+    manual_reptile:'/manual_reptile',//手动一键采集
+    list_hotwordskeyword:'/list_hotwordskeyword',//热词列表(手动)
+    add_hotwordskeyword:'/add_hotwordskeyword',//添加热词(手动)
+    del_hotwordskeyword:'/del_hotwordskeyword',//删除热词(手动)
 }

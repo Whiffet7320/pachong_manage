@@ -12,8 +12,12 @@ export default {
     $route(to) {
       console.log(to.path); //到哪去
       this.url = to.path;
+      this.isLogin = sessionStorage.getItem("isLogin");
       if (to.path == "/Shouye") {
-        this.name = "爬虫后台";
+        this.name = "今日教育";
+        if (this.isLogin == "false" || this.isLogin == "null") {
+        this.name = "游客";
+      }
         this.$store.commit("isSmallHeader", false);
       } else if (to.path == "/ShouyePage/Shipin") {
         this.name = "视频";
@@ -28,28 +32,49 @@ export default {
         this.name = "走势图";
         this.$store.commit("isSmallHeader", false);
       } else if (to.path == "/ShouyePage/Shaixuanriqi") {
-        this.name = "爬虫后台";
+        this.name = "今日教育";
+        if (this.isLogin == "false" || this.isLogin == "null") {
+        this.name = "游客";
+      }
         this.$store.commit("isSmallHeader", false);
       } else if (to.path == "/Caiji/Redulianjie") {
         this.$store.commit("isSmallHeader", true);
       } else if (to.path == "/Caiji/Yuntureci") {
         this.$store.commit("isSmallHeader", true);
       } else if (to.path == "/Caiji/FabuXinwen") {
+        this.$store.commit("caijiFabuName", "新闻");
         this.$store.commit("isSmallHeader", true);
       } else if (to.path == "/Zhanghao/Quanxianguanli") {
-        this.name = "爬虫后台";
-        this.$store.commit("isSmallHeader", false);
-      }  else if (to.path == "/Zhanghao/Zhanghaoguanli") {
-        this.name = "爬虫后台";
-        this.$store.commit("isSmallHeader", false);
-      }  else if (to.path == "/") {
-        this.name = "爬虫后台";
-        this.$store.commit("isSmallHeader", false);
+        this.name = "今日教育";
+        if (this.isLogin == "false" || this.isLogin == "null") {
+        this.name = "游客";
       }
+        this.$store.commit("isSmallHeader", false);
+      } else if (to.path == "/Zhanghao/Zhanghaoguanli") {
+        this.name = "今日教育";
+        if (this.isLogin == "false" || this.isLogin == "null") {
+        this.name = "游客";
+      }
+        this.$store.commit("isSmallHeader", false);
+      } else if (to.path == "/") {
+        this.name = "今日教育";
+        if (this.isLogin == "false" || this.isLogin == "null") {
+        this.name = "游客";
+      }
+        this.$store.commit("isSmallHeader", false);
+      } else if (to.path == "/Wenzhoujiaoyu/Fabuliebiao") {
+        this.$store.commit("isSmallHeader", true);
+      } else if (to.path == "/Wenzhoujiaoyu/Lishifabu") {
+        this.$store.commit("isSmallHeader", true);
+      } else if (to.path == "/Wenzhoujiaoyu/Fabuliebiao_s") {
+        this.$store.commit("isSmallHeader", true);
+      } else if (this.$route.path == "/Caiji/Guanjiancifenxi") {
+      this.$store.commit("isSmallHeader", true);
     }
+    },
   },
   computed: {
-    ...mapState(["headerTit", "startTime", "endTime", "sxrqIsStart"])
+    ...mapState(["headerTit", "startTime", "endTime", "sxrqIsStart"]),
   },
   data() {
     return {
@@ -58,7 +83,8 @@ export default {
       name: "",
       url: "",
       // 筛选日期
-      year: moment().format("YYYY")
+      year: moment().format("YYYY"),
+      isLogin:'',
     };
   },
   created() {},
@@ -80,8 +106,8 @@ export default {
     },
     changeYear(val) {
       this.$store.commit("changeYearSy", val);
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -379,9 +379,8 @@ export default {
   methods: {
     async getZstData() {
       const res = await this.$api.hotwords_logs({
-        year: this.zstTime[0],
-        month: this.zstTime[1],
-        day: this.zstTime[2],
+        start_day: this.zstTime[0],
+        end_day: this.zstTime[1],
       });
       console.log(res.list);
       this.list = res.list;

@@ -39,15 +39,23 @@ function formatDate(now) {
   return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second; 
 } 
 Vue.prototype.$formatDate = formatDate
-router.beforeEach((to, from, next) => {
+router.beforeEach((to,from,next) => {
   console.log(to)
   // 如果有token 说明该用户已登陆
-  if (sessionStorage.getItem("isLogin")=='true') {
-    // 在已登陆的情况下访问登陆页会重定向到首页
-    next()
-  } else {
-    // 没有登陆则访问任何页面都重定向到登陆页
+  if(to.path == "/Login"){
+    store.commit("isSmallHeader", 'nono');
+  }else{
+    store.commit("isSmallHeader", false);
+    // router.go(0)
   }
+  next()
+  // if (sessionStorage.getItem("isLogin")=='true') {
+  //   // 在已登陆的情况下访问登陆页会重定向到首页
+  //   next()
+  // } else {
+  //   // 没有登陆则访问任何页面都重定向到登陆页
+
+  // }
 });
 
 Vue.config.productionTip = false

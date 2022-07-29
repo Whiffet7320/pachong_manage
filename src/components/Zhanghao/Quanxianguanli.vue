@@ -137,8 +137,8 @@ export default {
       .txt {
         margin-left: 24px;
         font-size: 32px;
-        font-family: PingFang SC, PingFang SC-Regular;
-        font-weight: 400;
+        font-family: PingFang SC, PingFang SC-Medium; //aaa
+        font-weight: 500; //aa
         text-align: left;
         color: #ffffff;
         letter-spacing: 3.2px;
@@ -157,8 +157,8 @@ export default {
       }
       /deep/ .el-checkbox__label {
         font-size: 22px;
-        font-family: PingFang SC, PingFang SC-Regular;
-        font-weight: 400;
+        font-family: PingFang SC, PingFang SC-Medium; //aaa
+        font-weight: 500; //aa
         color: #ffffff;
         letter-spacing: 2.6px;
       }

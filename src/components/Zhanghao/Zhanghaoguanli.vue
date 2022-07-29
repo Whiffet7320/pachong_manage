@@ -6,7 +6,15 @@
       <div class="r3"></div>
       <div class="r4"></div>
       <div class="cont">
-        <div class="c-nav1">账号管理</div>
+        <div class="flex-n">
+          <div class="c-nav1">账号管理</div>
+          <el-button
+            @click="zbListDialogVisible = true"
+            size="small"
+            type="primary"
+            >组别管理</el-button
+          >
+        </div>
         <vxe-table
           class="myTab"
           border="none"
@@ -32,7 +40,12 @@
             show-overflow
             title="姓名"
           ></vxe-column>
-          <vxe-column field="qx" show-overflow title="权限"></vxe-column>
+          <!-- <vxe-column field="qx" show-overflow title="权限"></vxe-column> -->
+          <vxe-column
+            field="groups_name"
+            show-overflow
+            title="权限"
+          ></vxe-column>
           <vxe-table-column title="操作状态" width="180">
             <template slot-scope="scope">
               <div class="flex">
@@ -119,6 +132,98 @@
           </el-row>
           <el-row>
             <el-col :span="20">
+              <el-form-item label="组别：">
+                <el-select v-model="addForm.groups_id" placeholder="请选择">
+                  <el-option
+                    v-for="item in zbList"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="20">
+              <el-form-item>
+                <el-button size="small" type="primary" @click="AddOnSubmit"
+                  >提交</el-button
+                >
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
+    </el-dialog>
+    <!-- 组别管理 -->
+    <el-dialog
+      title="组别管理"
+      :visible.sync="zbListDialogVisible"
+      width="1300px"
+      :before-close="zbListHandleClose"
+      custom-class="myZhanghaoDia"
+    >
+      <vxe-table
+        class="myTab"
+        border="none"
+        :cell-class-name="cellClassName"
+        :data="zbList"
+        height="550"
+      >
+        <vxe-column
+          field="name"
+          width="100"
+          show-overflow
+          title="组别名称"
+        ></vxe-column>
+        <vxe-column field="qx" show-overflow title="权限"></vxe-column>
+        <vxe-table-column title="操作状态" width="120">
+          <template slot-scope="scope">
+            <div class="flex">
+              <el-button
+                size="mini"
+                type="primary"
+                @click="zbtabEdit(scope.row)"
+                >修改信息</el-button
+              >
+              <!-- <el-button size="mini" type="danger" @click="tabDel(scope.row)"
+                >删除</el-button
+              > -->
+            </div>
+          </template>
+        </vxe-table-column>
+      </vxe-table>
+    </el-dialog>
+    <!-- 添加/编辑账号 -->
+    <el-dialog
+      title="添加/编辑账号"
+      :visible.sync="addzbDialogVisible"
+      width="700px"
+      :before-close="addzbHandleClose"
+      custom-class="myZhanghaoDia"
+    >
+      <div class="myAddForm">
+        <el-form
+          :model="addzbForm"
+          ref="addzbForm"
+          label-width="100px"
+          class="demo-addForm"
+        >
+          <el-row>
+            <el-col :span="20">
+              <el-form-item label="组别名称：">
+                <el-input
+                  size="small"
+                  placeholder="请输入用户名"
+                  v-model="addzbForm.name"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="20">
               <el-form-item label="权限：">
                 <el-tree
                   default-expand-all
@@ -134,7 +239,7 @@
           <el-row>
             <el-col :span="20">
               <el-form-item>
-                <el-button size="small" type="primary" @click="AddOnSubmit"
+                <el-button size="small" type="primary" @click="AddzbOnSubmit"
                   >提交</el-button
                 >
               </el-form-item>
@@ -162,7 +267,7 @@ export default {
         for (const key in this.addForm) {
           this.addForm[key] = "";
           this.addForm.username = "";
-          this.$refs.tree.setCheckedKeys([]);
+          // this.$refs.tree.setCheckedKeys([]);
         }
       }
     },
@@ -181,10 +286,18 @@ export default {
         realname: "",
         mobile: "",
         reuserpass: "",
+        groups_id:'',
       },
       // isAdd: false,
       quanxianList: [],
       // addDialogVisible: true
+      zbList: [],
+      zbListDialogVisible: false,
+      addzbDialogVisible: false,
+      addzbForm: {
+        name: "",
+      },
+      zbId: "",
     };
   },
   created() {
@@ -205,8 +318,37 @@ export default {
       this.getData();
       loading.close();
     }, 500);
+    this.getData2();
   },
   methods: {
+    async AddzbOnSubmit() {
+      var arr = [];
+      arr = [
+        ...this.$refs.tree.getCheckedKeys(false),
+        ...this.$refs.tree.getHalfCheckedKeys(true),
+      ];
+      const res = await this.$api.update_admingroup({
+        limit: [...new Set(arr)].toString(),
+        name: this.addzbForm.name,
+        id: this.zbId,
+      });
+      if (res.result == 1) {
+        this.$message({
+          message: "修改成功",
+          type: "success",
+        });
+        this.getData2();
+        this.addzbDialogVisible = false;
+      } else {
+        this.$message.error(res.msg);
+      }
+    },
+    zbListHandleClose() {
+      this.zbListDialogVisible = false;
+    },
+    addzbHandleClose() {
+      this.addzbDialogVisible = false;
+    },
     async getQXdata() {
       const res = await this.$api.limits();
       console.log(res);
@@ -225,11 +367,69 @@ export default {
         pagesize: 10000,
       });
       // this.tableData1 = res.list
+      // res.list.forEach(async (ele) => {
+      //   console.log(ele);
+      //   ele.qx = "";
+      //   ele.qxArr = ele.limits.split(",");
+      //   ele.newQxArr = ele.limits.split(",");
+      //   if (ele.newQxArr.indexOf("2") != -1) {
+      //     if (
+      //       ele.newQxArr.indexOf("6") != -1 &&
+      //       ele.newQxArr.indexOf("7") != -1 &&
+      //       ele.newQxArr.indexOf("9") != -1 &&
+      //       ele.newQxArr.indexOf("8") != -1 &&
+      //       ele.newQxArr.indexOf("10") != -1 &&
+      //       ele.newQxArr.indexOf("3") != -1
+      //     ) {
+      //       console.log("have 2");
+      //     } else {
+      //       ele.newQxArr.remove("2");
+      //     }
+      //     if (ele.newQxArr.indexOf("6") != -1) {
+      //       if (
+      //         ele.newQxArr.indexOf("7") != -1 &&
+      //         ele.newQxArr.indexOf("9") != -1 &&
+      //         ele.newQxArr.indexOf("8") != -1
+      //       ) {
+      //         console.log("have 6");
+      //       } else {
+      //         ele.newQxArr.remove("6");
+      //       }
+      //     }
+      //   }
+      //   var arr = [];
+      //   this.quanxianList.forEach((ele2) => {
+      //     if (ele.qxArr.indexOf(ele2.id.toString()) != -1) {
+      //       if (ele2.children.length > 0) {
+      //         ele2.children.forEach((ele3) => {
+      //           if (ele.qxArr.indexOf(ele3.id.toString()) != -1) {
+      //             arr.push(`${ele2.label}-${ele3.label}`);
+      //           }
+      //         });
+      //       } else {
+      //         arr.push(ele2.label);
+      //       }
+      //     }
+      //   });
+      //   this.$set(ele, "qx", arr.toString());
+      // });
+      setTimeout(() => {
+        this.tableData1 = res.list;
+        // this.loading = false;
+        console.log(this.tableData1);
+      }, 500);
+    },
+    async getData2() {
+      const res = await this.$api.admingroups_list({
+        page: 1,
+        pagesize: 1000,
+      });
+      // this.zbList = res.list;
       res.list.forEach(async (ele) => {
         console.log(ele);
         ele.qx = "";
-        ele.qxArr = ele.limits.split(",");
-        ele.newQxArr = ele.limits.split(",");
+        ele.qxArr = ele.limit.split(",");
+        ele.newQxArr = ele.limit.split(",");
         if (ele.newQxArr.indexOf("2") != -1) {
           if (
             ele.newQxArr.indexOf("6") != -1 &&
@@ -254,6 +454,16 @@ export default {
               ele.newQxArr.remove("6");
             }
           }
+          if (ele.newQxArr.indexOf("12") != -1) {
+            if (
+              ele.newQxArr.indexOf("13") != -1 &&
+              ele.newQxArr.indexOf("14") != -1
+            ) {
+              console.log("have 12");
+            } else {
+              ele.newQxArr.remove("12");
+            }
+          }
         }
         var arr = [];
         this.quanxianList.forEach((ele2) => {
@@ -272,9 +482,9 @@ export default {
         this.$set(ele, "qx", arr.toString());
       });
       setTimeout(() => {
-        this.tableData1 = res.list;
+        this.zbList = res.list;
         // this.loading = false;
-        console.log(this.tableData1);
+        console.log(this.zbList);
       }, 500);
     },
     async tabDel(row) {
@@ -296,6 +506,19 @@ export default {
       this.addForm.username = row.user_name;
       this.$store.commit("isAdd", false);
       this.$store.commit("addDialogVisible", true);
+      // var arr = [];
+      // row.newQxArr.forEach((ele) => {
+      //   arr.push(Number(ele));
+      // });
+      // setTimeout(() => {
+      //   console.log(arr, this.$refs);
+      //   this.$refs.tree.setCheckedKeys(arr);
+      // }, 300);
+    },
+    zbtabEdit(row) {
+      this.zbId = row.id;
+      this.addzbForm = { ...row };
+      this.addzbDialogVisible = true;
       var arr = [];
       row.newQxArr.forEach((ele) => {
         arr.push(Number(ele));
@@ -304,20 +527,14 @@ export default {
         console.log(arr, this.$refs);
         this.$refs.tree.setCheckedKeys(arr);
       }, 300);
+      console.log(arr)
     },
     async AddOnSubmit() {
-      var arr = [];
-      arr = [
-        ...this.$refs.tree.getCheckedKeys(false),
-        ...this.$refs.tree.getHalfCheckedKeys(true),
-      ];
-      console.log(arr.toString());
       if (this.isAdd) {
         // 添加
         const res = await this.$api.add_adminuser({
           ...this.addForm,
           username: this.addForm.username1,
-          limit: [...new Set(arr)].toString(),
         });
         console.log(res);
         if (res.result == 1) {
@@ -333,7 +550,6 @@ export default {
       } else {
         const res = await this.$api.update_adminuser({
           ...this.addForm,
-          limit: [...new Set(arr)].toString(),
           user_id: this.id,
         });
         console.log(res);
@@ -420,13 +636,18 @@ export default {
     right: -2px;
   }
   .cont {
-    .c-nav1 {
+    .flex-n {
+      display: flex;
+      align-items: center;
       margin-top: 44px;
-      margin-left: 54px;
       margin-bottom: 20px;
+    }
+    .c-nav1 {
+      margin-left: 54px;
+      margin-right: 20px;
       font-size: 32px;
-      font-family: PingFang SC, PingFang SC-Regular;
-      font-weight: 400;
+      font-family: PingFang SC, PingFang SC-Medium; //aaa
+      font-weight: 500; //aa
       color: #04f9db;
       letter-spacing: 3.2px;
     }
@@ -470,6 +691,29 @@ export default {
   }
   .el-button {
     width: 100%;
+  }
+}
+.myTab {
+  /deep/ .el-button--text {
+    color: #fff;
+  }
+  /deep/ .vxe-header--column {
+    background: #121531;
+    color: #ffffff;
+  }
+  /deep/ .vxe-body--column.col-active {
+    background: #121531;
+    color: #ffffff;
+  }
+  /deep/ .vxe-body--column.active {
+    background: #121531;
+    color: #04f9db;
+  }
+  /deep/ .body--wrapper {
+    background-color: #121531 !important;
+  }
+  /deep/ .vxe-table--header {
+    border-bottom: 2px solid rgba(23, 148, 228, 0.57);
   }
 }
 </style>

@@ -5,7 +5,7 @@
       <div class="tit1">切换账号</div>
     </div>-->
     <div class="menu">
-      <div class="myisCollBtn">爬虫后台</div>
+      <div class="myisCollBtn">今日教育</div>
 
       <el-menu
         :default-active="menuActiveIndex"
@@ -16,7 +16,7 @@
         active-text-color="#fff"
         router
       >
-        <template v-if="true">
+        <template v-if="false">
           <el-menu-item v-if="isHaveSY" :route="{ name: 'Shouye' }" index="1-1">
             <i class="el-icon-s-home"></i>
             <span slot="title">首页</span>
@@ -30,32 +30,6 @@
               <i :class="item.icon"></i>
               <span>{{ item.name }}</span>
             </template>
-            <!-- <template v-if="item.sub_menu.length == 0">
-              <el-menu-item
-                v-for="item2 in item.sub_menu"
-                :key="item2.id"
-                :route="{ name: item2.url }"
-                :index="item2.menu_index"
-                >{{ item2.name }}</el-menu-item
-              >
-            </template>
-            <template v-else>
-              <el-submenu
-                v-for="item3 in item2.sub_menu"
-                :key="item3.id"
-                :index="item3.menu_index"
-              >
-                <template slot="title">{{ item3.name }}</template>
-                <el-menu-item
-                  v-for="item3 in item2.sub_menu"
-                  :key="item3.id"
-                  @click="clickFabu(item3.name, item3.menu_index)"
-                  :route="{ name: item3.url }"
-                  :index="item3.menu_index"
-                  >{{ item3.name }}</el-menu-item
-                > 
-              </el-submenu>
-            </template> -->
             <el-menu-item
               v-for="item2 in item.sub_menu"
               :key="item2.id"
@@ -80,8 +54,14 @@
               </el-submenu>
             </template>
           </el-submenu>
+          <template v-if="user_level == 3 && menu_wzedu == 1">
+            <el-menu-item :route="{ name: 'Fabuliebiao_s' }" index="82-1">
+              <i class="el-icon-s-opportunity"></i>
+              <span slot="title">温州教育</span>
+            </el-menu-item>
+          </template>
         </template>
-        <template v-if="false">
+        <template v-if="true && (user_level == 1 || user_level == 3)">
           <el-menu-item :route="{ name: 'Shouye' }" index="1-1">
             <i class="el-icon-s-home"></i>
             <span slot="title">首页</span>
@@ -92,10 +72,13 @@
               <span>采集</span>
             </template>
             <el-menu-item :route="{ name: 'Redulianjie' }" index="80-1"
-              >热度链接</el-menu-item
+              >添加热度链接</el-menu-item
             >
             <el-menu-item :route="{ name: 'Yuntureci' }" index="80-2"
-              >云图热词</el-menu-item
+              >关键词设定</el-menu-item
+            >
+            <el-menu-item :route="{ name: 'Guanjiancifenxi' }" index="80-4"
+              >热度关键词分析</el-menu-item
             >
             <el-submenu index="80-3">
               <template slot="title">历史发布</template>
@@ -118,6 +101,94 @@
                 >视频</el-menu-item
               >
             </el-submenu>
+          </el-submenu>
+          <el-submenu index="82" v-if="false && user_level == 1">
+            <template slot="title">
+              <i class="el-icon-s-opportunity"></i>
+              <span>温州教育</span>
+            </template>
+            <el-menu-item :route="{ name: 'Fabuliebiao' }" index="82-1"
+              >发布列表</el-menu-item
+            >
+            <el-menu-item :route="{ name: 'Lishifabu' }" index="82-2"
+              >历史发布</el-menu-item
+            >
+          </el-submenu>
+          <el-menu-item
+            v-if="false && user_level == 3"
+            :route="{ name: 's' }"
+            index="82-1"
+          >
+            <i class="el-icon-s-opportunity"></i>
+            <span slot="title">温州教育</span>
+          </el-menu-item>
+          <el-submenu index="81">
+            <template slot="title">
+              <i class="el-icon-s-custom"></i>
+              <span>账号</span>
+            </template>
+            <!-- <el-menu-item :route="{ name: 'Quanxianguanli' }" index="81-1">权限管理</el-menu-item> -->
+            <el-menu-item :route="{ name: 'Zhanghaoguanli' }" index="81-2"
+              >账号管理</el-menu-item
+            >
+          </el-submenu>
+          <!-- <el-submenu index="8">
+            <template slot="title">
+              <i class="el-icon-s-tools"></i>
+              <span>设置</span>
+            </template>
+            <el-menu-item :route="{ name: 'Zhanghaoguanli' }" index="8-11">权限账号管理</el-menu-item>
+          </el-submenu>-->
+        </template>
+        <template v-if="false && user_level == 2">
+          <el-menu-item :route="{ name: 'Shouye_u' }" index="1-1">
+            <i class="el-icon-s-home"></i>
+            <span slot="title">首页</span>
+          </el-menu-item>
+          <el-submenu index="80">
+            <template slot="title">
+              <i class="el-icon-s-opportunity"></i>
+              <span>采集</span>
+            </template>
+            <el-menu-item :route="{ name: 'Redulianjie_u' }" index="80-1"
+              >添加热度链接</el-menu-item
+            >
+            <el-menu-item :route="{ name: 'Yuntureci_u' }" index="80-2"
+              >关键词设定</el-menu-item
+            >
+            <el-submenu index="80-3">
+              <template slot="title">历史发布</template>
+              <el-menu-item
+                @click="clickFabu('新闻', '80-3-1')"
+                :route="{ name: 'FabuXinwen_u' }"
+                index="80-3-1"
+                >新闻</el-menu-item
+              >
+              <el-menu-item
+                @click="clickFabu('舆情', '80-3-2')"
+                :route="{ name: 'FabuXinwen_u' }"
+                index="80-3-2"
+                >舆情</el-menu-item
+              >
+              <el-menu-item
+                @click="clickFabu('视频', '80-3-3')"
+                :route="{ name: 'FabuXinwen_u' }"
+                index="80-3-3"
+                >视频</el-menu-item
+              >
+            </el-submenu>
+          </el-submenu>
+          <el-submenu index="82">
+            <template slot="title">
+              <i class="el-icon-s-opportunity"></i>
+              <span>温州教育</span>
+            </template>
+            <el-menu-item :route="{ name: 'Fabuliebiao' }" index="82-1"
+              >发布列表</el-menu-item
+            >
+            <el-menu-item :route="{ name: 'Lishifabu' }" index="82-2"
+              >历史发布</el-menu-item
+            >
           </el-submenu>
           <el-submenu index="81">
             <template slot="title">
@@ -469,28 +540,38 @@ export default {
         this.menuActiveIndex = "80-1";
       } else if (to.path == "/Caiji/Yuntureci") {
         this.menuActiveIndex = "80-2";
+      }  else if (to.path == "/Caiji/Guanjiancifenxi") {
+        this.menuActiveIndex = "80-4";
       } else if (to.path == "/Caiji/FabuXinwen") {
         this.menuActiveIndex = "80-3-1";
       } else if (to.path == "/Zhanghao/Quanxianguanli") {
         this.menuActiveIndex = "81-1";
       } else if (to.path == "/Zhanghao/Zhanghaoguanli") {
         this.menuActiveIndex = "81-2";
+      } else if (to.path == "/Wenzhoujiaoyu/Fabuliebiao") {
+        this.menuActiveIndex = "82-1";
+      } else if (to.path == "/Wenzhoujiaoyu/Lishifabu") {
+        this.menuActiveIndex = "82-2";
       }
     },
   },
   data() {
     return {
+      menu_wzedu:null,
       activeIndex: 0,
       menuActiveIndex: "",
       userInfo: null,
       isCollapse: false,
       menu: [],
       isHaveSY: false,
+      user_level: null,
     };
   },
   created() {
     this.menu = JSON.parse(sessionStorage.getItem("menu"));
-    console.log(this.menu);
+    this.user_level = sessionStorage.getItem("user_level");
+    this.menu_wzedu = sessionStorage.getItem("menu_wzedu");
+    console.log(this.menu, this.user_level);
     if (this.menu[0].name == "首页") {
       this.isHaveSY = true;
       this.menu.shift();
@@ -498,9 +579,12 @@ export default {
       this.isHaveSY = false;
     }
     this.menu.forEach((ele) => {
+      if(ele.name == "温州教育"){
+        this.haveWZJY = true;
+      }
       ele.sub_menu.forEach((ele2) => {
         if (ele2.sub_menu.length > 0) {
-          ele.sub_menu.pop()
+          ele.sub_menu.pop();
           ele.newSub_menu = ele2.sub_menu;
           ele2.sub_menu = [];
           ele.newSub_menuName = ele2.name;
@@ -522,14 +606,20 @@ export default {
     loginOut() {
       sessionStorage.setItem("token", null);
       sessionStorage.setItem("isLogin", null);
+      this.$router.push({ path: "/Shouye" });
       this.$router.go(0);
-      this.$router.push({ path: "/login" });
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+/deep/ .el-menu-item i{
+  color: #fff;
+}
+/deep/ .el-submenu i{
+  color: #fff;
+}
 .aside {
   .menu {
     /deep/ .el-menu {

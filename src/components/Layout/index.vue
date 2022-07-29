@@ -1,15 +1,15 @@
 <template>
   <div class="layout">
-    <el-container v-if="this.isLogin == 'true'">
-      <el-aside width="null">
+    <el-container v-if="isSmallHeader != 'nono'">
+      <el-aside v-if="this.isLogin == 'true' && user_level !=2" style="background: #10183c !important;" width="null">
         <Aside />
       </el-aside>
       <el-container>
-        <el-header :class="{'isSmall':isSmallHeader}">
+        <el-header style="background: #10183c !important;width:100%" :class="{'isSmall':isSmallHeader}">
           <Header v-show="!isSmallHeader"/>
           <HeaderSmall v-show="isSmallHeader" />
         </el-header>
-        <el-main>
+        <el-main style="background: #10183c !important;">
           <RouterView></RouterView>
         </el-main>
       </el-container>
@@ -27,7 +27,8 @@ import Aside from "../Aside";
 export default {
   data() {
     return {
-      isLogin: "false"
+      isLogin: "true",
+      user_level:"",
     };
   },
   watch: {
@@ -39,7 +40,9 @@ export default {
     ...mapState(["isSmallHeader"])
   },
   created() {
+    console.log(this.isSmallHeader)
     this.isLogin = sessionStorage.getItem("isLogin");
+    this.user_level = sessionStorage.getItem("user_level");
   },
   components: {
     Login,
@@ -72,14 +75,14 @@ export default {
   color: #333;
   /* width: 200px !important; */
   min-width: 40px;
-  background: #10183c;
+  background: #10183c !important;
   box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16),
     0px 0px 20px 0px rgba(23, 148, 228, 0.58) inset;
 }
 
 .el-main {
   /* padding: 0 0 0 24px !important; */
-  background: #10183c;
+  background: #10183c !important;;
   color: #333;
 }
 ::-webkit-scrollbar {
@@ -89,7 +92,7 @@ export default {
 ::-webkit-scrollbar-thumb {
   /*滚动条里面小方块*/
   border-radius: 10px;
-  background-color: #388bf4;
+  background-color: #006DD0;
   /* background-image: -webkit-linear-gradient(
     45deg,
     rgba(255, 255, 255, 0.2) 25%,
@@ -104,6 +107,6 @@ export default {
 ::-webkit-scrollbar-track {
   /*滚动条里面轨道*/
   -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-  background: #1b2154;
+  background: #EBEBEB;
 }
 </style>

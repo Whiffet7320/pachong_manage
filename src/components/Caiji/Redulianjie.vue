@@ -1,21 +1,89 @@
 <template>
   <div class="index">
-    <div class="nav1">
-      <div class="n1-tit1">添加热度链接</div>
-      <div class="titt">
-        <div class="n1-tit2">
-          <div class="txt2-1">选择日期：</div>
+    <div class="nav1 bt">
+      <div class="flex">
+        <div class="n1-tit1">添加热度链接</div>
+        <div class="n3-tit3">
+          <div
+            v-if="have1"
+            @click="changeIndex(1)"
+            :class="{ btn: true, active: nowIndex == 1 }"
+          >
+            新闻
+          </div>
+          <div
+            v-if="have2"
+            @click="changeIndex(2)"
+            :class="{ btn: true, active: nowIndex == 2 }"
+          >
+            舆情
+          </div>
+          <div
+            v-if="have3"
+            @click="changeIndex(3)"
+            style="margin-right: 10px"
+            :class="{ btn: true, active: nowIndex == 3 }"
+          >
+            视频
+          </div>
+          <!-- <div class="myPopover">
+          <el-popover
+            placement="bottom-start"
+            :visible-arrow="false"
+            trigger="click"
+          >
+            <div class="myPop-box">
+              <div class="navv1">
+                <div class="tit1">
+                  <el-input
+                    size="small"
+                    v-model="tagVal"
+                    placeholder="添加屏蔽关键词"
+                  ></el-input>
+                </div>
+                <el-button @click="addTag" size="small">添加</el-button>
+              </div>
+              <div class="navv2">
+                <div class="tit1">已屏蔽关键词</div>
+                <div class="tit2">
+                  <el-tag
+                    v-for="item in tagList"
+                    :key="item.id"
+                    @close="removeTag(item)"
+                    size="small"
+                    closable
+                    >{{ item.title }}</el-tag
+                  >
+                </div>
+              </div>
+            </div>
+            <el-button size="mini" slot="reference">
+              屏蔽关键词
+              <i class="el-icon-plus"></i>
+            </el-button>
+          </el-popover>
+        </div> -->
         </div>
-        <div class="n1-tit3">
-          <el-date-picker
-            size="mini"
-            @change="changeTime"
-            value-format="yyyy-MM-dd"
-            v-model="time"
-            type="date"
-            placeholder="选择日期"
-          ></el-date-picker>
+        <div class="titt" style="margin-left: 20px">
+          <div class="n1-tit2">
+            <div class="txt2-1">选择日期：</div>
+          </div>
+          <div class="n1-tit3">
+            <el-date-picker
+              size="mini"
+              @change="changeTime"
+              value-format="yyyy-MM-dd"
+              v-model="time"
+              type="date"
+              placeholder="选择日期"
+            ></el-date-picker>
+          </div>
         </div>
+      </div>
+      <div class="n3-tit2">
+        <el-button @click="tuichu" type="primary" icon="el-icon-switch-button"
+          >退出</el-button
+        >
       </div>
     </div>
     <div class="nav2">
@@ -25,20 +93,44 @@
     </div>
     <div class="nav3">
       <div class="n3-tit1">
-        <el-input
+        <!-- <el-input
           placeholder="热度链接"
           prefix-icon="el-icon-search"
           v-model="keyword"
-        ></el-input>
+        ></el-input> -->
+        <el-input
+          placeholder="搜索"
+          prefix-icon="el-icon-search"
+          v-model="keyword"
+        >
+          <el-button @click="searchKey" slot="append">搜索</el-button>
+        </el-input>
+      </div>
+      <div class="n3-tit2 tj">
+        <el-button @click="addClick" type="primary" icon="el-icon-plus"
+          >添加</el-button
+        >
       </div>
       <div class="n3-tit2">
+        <el-button
+          @click="zqDialogVisible = true"
+          type="primary"
+          icon="el-icon-plus"
+          >摘取关键词</el-button
+        >
+        <el-button style="width:90px" @click="yijiancaiji" type="primary"
+          >一键采集</el-button
+        >
+      </div>
+      
+      <!-- <div class="n3-tit2">
         <el-button
           type="primary"
           @click="addHotlink"
           icon="el-icon-plus"
         ></el-button>
-      </div>
-      <div class="n3-tit3">
+      </div> -->
+      <!-- <div class="n3-tit3">
         <div
           v-if="have1"
           @click="changeIndex(1)"
@@ -98,10 +190,10 @@
             </el-button>
           </el-popover>
         </div>
-      </div>
+      </div> -->
     </div>
     <div class="nav4 nav1">
-      <div class="titt1 titt">
+      <!-- <div class="titt1 titt">
         <div class="n1-tit2">
           <div class="txt2-1">发布日期：</div>
         </div>
@@ -114,7 +206,7 @@
             placeholder="选择日期"
           ></el-date-picker>
         </div>
-      </div>
+      </div> -->
       <div class="titt2">
         <el-button size="mini" @click="piliangfabu" type="primary"
           >批量发布</el-button
@@ -167,7 +259,8 @@
             </div>
           </template>
         </vxe-column>
-        <vxe-table-column width="214">
+        <!-- <vxe-column show-overflow field="source" title="来源"></vxe-column> -->
+        <vxe-table-column width="210">
           <template slot-scope="scope">
             <div style="display: flex">
               <el-button size="mini" type="info" @click="tabEdit(scope.row)"
@@ -224,12 +317,13 @@
             >
           </template>
         </vxe-column>
+        <!-- <vxe-column show-overflow field="source" title="来源"></vxe-column> -->
         <vxe-column
           field="comment_time"
           show-overflow
           title="发布时间"
         ></vxe-column>
-        <vxe-table-column width="214">
+        <vxe-table-column width="210">
           <template slot-scope="scope">
             <div style="display: flex">
               <el-button size="mini" type="info" @click="tabEdit(scope.row)"
@@ -290,7 +384,8 @@
             >
           </template>
         </vxe-column>
-        <vxe-table-column width="214">
+        <!-- <vxe-column show-overflow field="source" title="来源"></vxe-column> -->
+        <vxe-table-column width="210">
           <template slot-scope="scope">
             <div style="display: flex">
               <el-button size="mini" type="info" @click="tabEdit(scope.row)"
@@ -318,7 +413,7 @@
     </div>
     <!-- 编辑热度链接 -->
     <el-dialog
-      title="编辑热度链接"
+      title="添加/编辑热度链接"
       :visible.sync="addDialogVisible"
       width="700px"
       :before-close="addHandleClose"
@@ -340,6 +435,20 @@
           </el-row> -->
           <el-row>
             <el-col :span="20">
+              <el-form-item label="链接：">
+                <el-input size="small" v-model="addForm.new_url"></el-input>
+                <el-button
+                  v-if="isAdd"
+                  size="small"
+                  type="primary"
+                  @click="huoqu"
+                  >获取</el-button
+                >
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="20">
               <el-form-item label="标题：">
                 <el-input
                   size="small"
@@ -349,25 +458,43 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row v-if="nowIndex != 3">
+          <!-- <el-row>
+            <el-col :span="20">
+              <el-form-item label="来源：">
+                <el-input
+                  size="small"
+                  v-model="addForm.source"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row> -->
+          <el-row v-if="this.nowIndex == 1 && this.isAdd">
             <el-col :span="20">
               <el-form-item label="内容：">
                 <el-input
                   size="small"
                   type="textarea"
-                  :rows="10"
+                  :rows="8"
                   v-model="addForm.content"
                 ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-          <!-- <el-row>
+          <el-row>
             <el-col :span="20">
-              <el-form-item label="链接：">
-                <el-input size="small" v-model="addForm.new_url"></el-input>
+              <el-form-item label="时间：">
+                <!-- <el-input size="small" v-model="addForm.time"></el-input> -->
+                <el-date-picker
+                  size="mini"
+                  value-format="yyyy-MM-dd"
+                  v-model="addForm.news_day"
+                  type="date"
+                  @change="changeshijian"
+                  placeholder="选择日期"
+                ></el-date-picker>
               </el-form-item>
             </el-col>
-          </el-row> -->
+          </el-row>
           <!-- <el-row>
             <el-col :span="20">
               <el-form-item label="确认密码：">
@@ -385,6 +512,42 @@
             </el-col>
           </el-row>
         </el-form>
+      </div>
+    </el-dialog>
+    <!-- 摘取关键词 -->
+    <el-dialog
+      title="摘取关键词"
+      :visible.sync="zqDialogVisible"
+      width="555px"
+      :before-close="zqHandleClose"
+      custom-class="myZhanghaoDia"
+    >
+      <div class="myPopover">
+        <div class="myPop-box">
+          <div class="navv1">
+            <div class="tit1">
+              <el-input
+                size="small"
+                v-model="tagVal"
+                placeholder="输入需要摘取的关键词"
+              ></el-input>
+            </div>
+            <el-button @click="addTag" size="small">摘取</el-button>
+          </div>
+          <div class="navv2">
+            <div class="tit1">已摘取关键词</div>
+            <div class="tit2">
+              <el-tag
+                v-for="item in tagList"
+                :key="item.id"
+                @close="removeTag(item)"
+                size="small"
+                closable
+                >{{ item.keyword }}</el-tag
+              >
+            </div>
+          </div>
+        </div>
       </div>
     </el-dialog>
   </div>
@@ -410,6 +573,7 @@ export default {
   },
   data() {
     return {
+      zqDialogVisible: false,
       id: "",
       total: 150,
       keyword: "",
@@ -424,7 +588,19 @@ export default {
         site_name: "",
         title: "",
         new_url: "",
+        source: "",
+        urls: "",
+        news_day: "",
+        add_userid: "",
+        comment: null,
         content: "",
+        day: "",
+        forward_num: "",
+        is_add: "",
+        news_hit: "",
+        news_id: "",
+        site_id: "",
+        video: null,
       },
       isAdd: false,
       arr1: [],
@@ -436,6 +612,7 @@ export default {
     };
   },
   created() {
+    this.$store.commit('redulianjiebiaoPage',1)
     const menu = JSON.parse(sessionStorage.getItem("menu"));
     console.log(menu);
     menu.forEach((ele) => {
@@ -482,13 +659,39 @@ export default {
     // this.$refs.xTable1.setCheckboxRow(arr, true);
   },
   methods: {
+    addClick() {
+      for (const key in this.addForm) {
+        this.addForm[key] = "";
+      }
+      this.isAdd = true;
+      this.addDialogVisible = true;
+    },
     async getGjcData() {
-      const res = await this.$api.pubsentiment_keywordlist({
+      const res = await this.$api.keyword_list({
         day: this.time ? this.time : "",
         page: 1,
+        types: this.nowIndex,
         pagesize: 1000000,
       });
       this.tagList = res.list;
+    },
+    searchKey() {
+      if (this.nowIndex == 1) {
+        this.getData();
+      } else if (this.nowIndex == 2) {
+        this.getData2();
+      } else if (this.nowIndex == 3) {
+        this.getData3();
+      }
+    },
+    tuichu() {
+      sessionStorage.setItem("token", null);
+      sessionStorage.setItem("isLogin", null);
+      sessionStorage.setItem("user_level", '');
+      // this.$router.push({ path: "/login" });
+      // this.$router.go(0);
+      this.$router.push({ path: "/Shouye" });
+      this.$router.go(0);
     },
     async getData() {
       const loading = this.$loading({
@@ -498,6 +701,7 @@ export default {
         background: "rgba(0, 0, 0, 0.7)",
       });
       const res = await this.$api.news_list({
+        keyword: this.keyword,
         site_id: this.site_id,
         start_day: this.time,
         end_day: this.time,
@@ -523,6 +727,7 @@ export default {
         background: "rgba(0, 0, 0, 0.7)",
       });
       const res = await this.$api.comment_list({
+        keyword: this.keyword,
         site_id: this.site_id,
         start_day: this.time,
         end_day: this.time,
@@ -548,6 +753,7 @@ export default {
         background: "rgba(0, 0, 0, 0.7)",
       });
       const res = await this.$api.video_list({
+        keyword: this.keyword,
         site_id: this.site_id,
         end_day: this.time,
         start_day: this.time,
@@ -564,6 +770,20 @@ export default {
         this.$message("没有更多了");
       }
       loading.close();
+    },
+    zqHandleClose() {
+      this.zqDialogVisible = false;
+    },
+    async yijiancaiji(){
+      const res = await this.$api.manual_reptile()
+      if (res.result == 1) {
+          this.$message({
+            message: res.msg,
+            type: "success",
+          });
+        } else {
+          this.$message.error(res.msg);
+        }
     },
     async piliangDel() {
       if (this.nowIndex == 1) {
@@ -609,11 +829,54 @@ export default {
         }
       }
     },
+    async huoqu() {
+      const res = await this.$api.check_hotlink({
+        url: this.addForm.new_url,
+      });
+      if (res.result == 1) {
+        this.$message({
+          message: res.msg,
+          type: "success",
+        });
+        // this.addForm = {...res.reptile}
+        this.addForm.news_day = res.reptile.day;
+        this.addForm.comment = res.reptile.comment;
+        this.addForm.title = res.reptile.title;
+        this.addForm.is_add = res.reptile.is_add;
+        this.addForm.news_id = res.reptile.news_id;
+        this.addForm.source = res.reptile.source;
+        this.addForm.news_hit = res.reptile.news_hit;
+        this.addForm.author = res.reptile.author;
+        this.addForm.add_userid = res.reptile.add_userid;
+        this.addForm.forward_num = res.reptile.forward_num;
+        this.addForm.video = res.reptile.video;
+        this.addForm.comment = res.reptile.comment;
+        this.addForm.content = res.reptile.content;
+        this.addForm.site_id = res.reptile.site_id;
+      } else {
+        this.$message.error(res.msg);
+      }
+    },
     async piliangfabu() {
+      // console.log(this.arr3.toString());
+      //   const res = await this.$api.select_video({
+      //     video_id: this.arr3.toString(),
+      //   });
+      //   if (res.result == 1) {
+      //     this.$message({
+      //       message: res.msg,
+      //       type: "success",
+      //     });
+      //     this.getData3();
+      //     this.arr3 = [];
+      //   } else {
+      //     this.$message.error(res.msg);
+      //   }
       if (this.nowIndex == 1) {
         console.log(this.arr1.toString());
-        const res = await this.$api.select_news({
-          news_id: this.arr1.toString(),
+        const res = await this.$api.user_release({
+          release_id: this.arr1.toString(),
+          types: this.nowIndex,
         });
         if (res.result == 1) {
           this.$message({
@@ -627,8 +890,9 @@ export default {
         }
       } else if (this.nowIndex == 2) {
         console.log(this.arr2.toString());
-        const res = await this.$api.select_comment({
-          comment_id: this.arr2.toString(),
+        const res = await this.$api.user_release({
+          release_id: this.arr2.toString(),
+          types: this.nowIndex,
         });
         if (res.result == 1) {
           this.$message({
@@ -642,8 +906,9 @@ export default {
         }
       } else if (this.nowIndex == 3) {
         console.log(this.arr3.toString());
-        const res = await this.$api.select_video({
-          video_id: this.arr3.toString(),
+        const res = await this.$api.user_release({
+          release_id: this.arr3.toString(),
+          types: this.nowIndex,
         });
         if (res.result == 1) {
           this.$message({
@@ -683,6 +948,9 @@ export default {
         this.$message.error(res.msg);
       }
     },
+    changeshijian(e) {
+      console.log(e);
+    },
     async addHotlink() {
       const loading = this.$loading({
         lock: true,
@@ -714,27 +982,58 @@ export default {
     },
     async AddOnSubmit() {
       let res = null;
-      if (this.nowIndex == 1) {
-        res = await this.$api.news_edit({
+      if (this.isAdd) {
+        res = await this.$api.add_hotlink({
           id: this.id,
           title: this.addForm.title,
+          source: this.addForm.source,
+          day: this.addForm.news_day,
+          url: this.addForm.new_url,
+          site_id: this.addForm.site_id,
           content: this.addForm.content,
+          is_add: this.addForm.is_add,
+          news_id: this.addForm.news_id,
+          news_hit: this.addForm.news_hit,
+          author: this.addForm.author,
+          add_userid: this.addForm.add_userid,
+          forward_num: this.addForm.forward_num,
+          video: this.addForm.video,
+          comment: this.addForm.comment,
+          types:this.nowIndex == 1 ? 0 : 1, 
         });
         console.log(res);
-      } else if (this.nowIndex == 2) {
-        res = await this.$api.pubsentiment_edit({
-          id: this.id,
-          title: this.addForm.title,
-          content: this.addForm.content,
-        });
-        console.log(res);
-      } else if (this.nowIndex == 3) {
-        res = await this.$api.video_edit({
-          id: this.id,
-          title: this.addForm.title,
-        });
-        console.log(res);
+      } else {
+        if (this.nowIndex == 1) {
+          res = await this.$api.news_edit({
+            id: this.id,
+            title: this.addForm.title,
+            source: this.addForm.source,
+            news_day: this.addForm.news_day,
+            urls: this.addForm.new_url,
+            content:this.addForm.content
+          });
+          console.log(res);
+        } else if (this.nowIndex == 2) {
+          res = await this.$api.pubsentiment_edit({
+            id: this.id,
+            title: this.addForm.title,
+            source: this.addForm.source,
+            news_day: this.addForm.news_day,
+            urls: this.addForm.new_url,
+          });
+          console.log(res);
+        } else if (this.nowIndex == 3) {
+          res = await this.$api.video_edit({
+            id: this.id,
+            title: this.addForm.title,
+            source: this.addForm.source,
+            news_day: this.addForm.news_day,
+            urls: this.addForm.new_url,
+          });
+          console.log(res);
+        }
       }
+
       if (res.result == 1) {
         this.$message({
           message: res.msg,
@@ -753,20 +1052,29 @@ export default {
       }
     },
     tabEdit(row) {
+      this.isAdd = false;
       console.log(row);
       if (this.nowIndex == 1) {
+        this.addForm.news_day = row.news_day;
         this.id = row.id;
         this.addForm.site_name = row.site_name;
         this.addForm.title = row.title;
         this.addForm.new_url = row.new_url;
+        this.addForm.source = row.source;
         this.addForm.content = row.content;
       } else if (this.nowIndex == 2) {
         this.id = row.id;
+        this.addForm.news_day = row.news_day;
         this.addForm.title = row.text_raw;
+        this.addForm.source = row.source;
+        this.addForm.new_url = row.new_url;
         this.addForm.content = row.comment_content;
       } else if (this.nowIndex == 3) {
         this.id = row.id;
+        this.addForm.news_day = row.news_day;
         this.addForm.title = row.title;
+        this.addForm.source = row.source;
+        this.addForm.new_url = row.video_h5url;
       }
       //  else if (this.nowIndex == 3) {
       //   this.getData3();
@@ -780,45 +1088,24 @@ export default {
     },
     async tabFabu(row) {
       console.log(row);
-      if (this.nowIndex == 1) {
-        const res = await this.$api.select_news({
-          news_id: row.id,
+      const res = await this.$api.user_release({
+        release_id: row.id,
+        types: this.nowIndex,
+      });
+      if (res.result == 1) {
+        this.$message({
+          message: res.msg,
+          type: "success",
         });
-        if (res.result == 1) {
-          this.$message({
-            message: res.msg,
-            type: "success",
-          });
+        if (this.nowIndex == 1) {
           this.getData();
-        } else {
-          this.$message.error(res.msg);
-        }
-      } else if (this.nowIndex == 2) {
-        const res = await this.$api.select_comment({
-          comment_id: row.id,
-        });
-        if (res.result == 1) {
-          this.$message({
-            message: res.msg,
-            type: "success",
-          });
+        } else if (this.nowIndex == 2) {
           this.getData2();
-        } else {
-          this.$message.error(res.msg);
-        }
-      } else if (this.nowIndex == 3) {
-        const res = await this.$api.select_video({
-          video_id: row.id,
-        });
-        if (res.result == 1) {
-          this.$message({
-            message: res.msg,
-            type: "success",
-          });
+        } else if (this.nowIndex == 3) {
           this.getData3();
-        } else {
-          this.$message.error(res.msg);
         }
+      } else {
+        this.$message.error(res.msg);
       }
     },
     addHandleClose() {
@@ -856,9 +1143,10 @@ export default {
     },
     async addTag() {
       if (this.tagVal) {
-        const res = await this.$api.add_pubsentimentkeyword({
+        const res = await this.$api.add_keyword({
           name: this.tagVal,
-          day: this.time2 ? this.time2 : "",
+          day: this.time ? this.time : "",
+          types: this.nowIndex,
         });
         if (res.result == 1) {
           this.$message({
@@ -874,7 +1162,7 @@ export default {
     },
     async removeTag(tag) {
       // this.tagList.splice(this.tagList.indexOf(tag), 1);
-      const res = await this.$api.del_pubsentimentkeyword({
+      const res = await this.$api.del_keyword({
         id: tag.id,
       });
       if (res.result == 1) {
@@ -942,14 +1230,69 @@ export default {
 .index {
   padding: 0 10px;
 }
+.nav1.bt {
+  justify-content: space-between;
+}
 .nav1 {
+  .flex {
+    display: flex;
+    align-items: flex-end;
+  }
   display: flex;
   align-items: flex-end;
   // align-content: center;
+  .n3-tit2 {
+    /deep/ .el-button {
+      padding: 0;
+      height: 40px;
+      width: 80px;
+      background: transparent;
+    }
+  }
+  .n3-tit3 {
+    display: flex;
+    align-items: flex-end;
+    margin-left: 10px;
+    .btn.active {
+      background: #122549;
+      border: 1px solid #388bf4;
+      color: #388bf4;
+      line-height: 38px;
+    }
+    .btn {
+      cursor: pointer;
+      margin-left: 8px;
+      width: 60px;
+      height: 40px;
+      background: #fff;
+      // background:transparent;
+      // border: 1px solid #388bf4;
+      border-radius: 5px;
+      line-height: 40px;
+      text-align: center;
+      font-size: 16px;
+      font-family: PingFang SC, PingFang SC-Medium; //aaa
+      font-weight: 500; //aa
+      // color: #ffffff;
+      color: #388bf4;
+      letter-spacing: 0.18px;
+    }
+    .myPopover {
+      .el-icon-plus {
+        margin-left: 4px;
+      }
+      .el-button {
+        background: #122549;
+        border: 0;
+        padding: 9px 15px 7px 15px;
+        color: #ffffff;
+      }
+    }
+  }
   .n1-tit1 {
     font-size: 30px;
-    font-family: PingFang SC, PingFang SC-Regular;
-    font-weight: 400;
+    font-family: PingFang SC, PingFang SC-Medium; //aaa
+    font-weight: 500; //aa
     color: #ffffff;
     margin-right: 20px;
   }
@@ -961,8 +1304,8 @@ export default {
       align-content: center;
       .txt2-1 {
         font-size: 16px;
-        font-family: PingFang SC, PingFang SC-Regular;
-        font-weight: 400;
+        font-family: PingFang SC, PingFang SC-Medium; //aaa
+        font-weight: 500; //aa
         color: #ffffff;
       }
     }
@@ -985,8 +1328,8 @@ export default {
   align-items: center;
   .n2-tit1 {
     font-size: 12px;
-    font-family: PingFang SC, PingFang SC-Regular;
-    font-weight: 400;
+    font-family: PingFang SC, PingFang SC-Medium; //aaa
+    font-weight: 500; //aa
     color: #8291a9;
   }
   .el-icon-arrow-right {
@@ -996,8 +1339,8 @@ export default {
   }
   .n2-tit2 {
     font-size: 12px;
-    font-family: PingFang SC, PingFang SC-Regular;
-    font-weight: 400;
+    font-family: PingFang SC, PingFang SC-Medium; //aaa
+    font-weight: 500; //aa
     color: #ffffff;
   }
 }
@@ -1012,13 +1355,34 @@ export default {
       background-color: #1f2935 !important;
       border: 0;
       padding: 0 20px 0 36px;
+      color: #fff;
+    }
+    /deep/ .el-input-group__append {
+      background: transparent;
+      border: 1px solid #1f2935 !important;
+      button.el-button {
+        background-color: #409eff !important;
+        color: #ffffff;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
     }
   }
   .n3-tit2 {
     /deep/ .el-button {
       padding: 0;
       height: 40px;
-      width: 40px;
+      width: 120px;
+      background: transparent;
+    }
+  }
+  .n3-tit2.tj {
+    margin-right: 10px;
+    /deep/ .el-button {
+      padding: 0;
+      height: 40px;
+      width: 80px;
+      background: transparent;
     }
   }
   .n3-tit3 {
@@ -1041,8 +1405,8 @@ export default {
       line-height: 40px;
       text-align: center;
       font-size: 16px;
-      font-family: PingFang SC, PingFang SC-Regular;
-      font-weight: 400;
+      font-family: PingFang SC, PingFang SC-Medium; //aaa
+      font-weight: 500; //aa
       color: #ffffff;
       letter-spacing: 0.18px;
     }
@@ -1168,5 +1532,28 @@ export default {
       color: #409eff;
     }
   }
+}
+/deep/ .el-dialog__body {
+  padding: 0 !important;
+}
+.myPopover {
+  // transform: translateY(-30px);
+  .el-icon-plus {
+    margin-left: 4px;
+  }
+  /deep/ .el-input__inner {
+    background-color: transparent;
+    color: #ffffff;
+  }
+  /deep/ .el-tag {
+    background-color: transparent;
+    color: #ffffff;
+  }
+  // .el-button {
+  //   background: #122549;
+  //   border: 0;
+  //   padding: 9px 15px 7px 15px;
+  //   color: #ffffff;
+  // }
 }
 </style>

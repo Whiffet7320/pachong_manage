@@ -156,16 +156,16 @@ export default {
         margin-top: 6px;
         .txt2-1 {
           font-size: 18px;
-          font-family: PingFang SC, PingFang SC-Regular;
-          font-weight: 400;
+          font-family: PingFang SC, PingFang SC-Medium; //aaa
+          font-weight: 500; //aa
           color: rgba(255, 255, 255, 0.78);
           letter-spacing: 1.8px;
         }
         .txt2-2 {
           cursor: pointer;
           font-size: 18px;
-          font-family: PingFang SC, PingFang SC-Regular;
-          font-weight: 400;
+          font-family: PingFang SC, PingFang SC-Medium; //aaa
+          font-weight: 500; //aa
           color: #04f9db;
           margin-left: 30px;
           letter-spacing: 1.8px;
@@ -181,8 +181,8 @@ export default {
           align-items: center;
           .txx1 {
             font-size: 18px;
-            font-family: PingFang SC, PingFang SC-Regular;
-            font-weight: 400;
+            font-family: PingFang SC, PingFang SC-Medium; //aaa
+            font-weight: 500; //aa
             color: #ffffff;
             letter-spacing: 1.8px;
           }
@@ -192,8 +192,8 @@ export default {
           align-items: center;
           .txx1 {
             font-size: 18px;
-            font-family: PingFang SC, PingFang SC-Regular;
-            font-weight: 400;
+            font-family: PingFang SC, PingFang SC-Medium; //aaa
+            font-weight: 500; //aa
             color: #ffffff;
             letter-spacing: 1.8px;
           }

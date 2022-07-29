@@ -1,7 +1,65 @@
 <template>
   <div class="index">
-    <div class="nav1">
-      <div class="n1-tit1">{{ titleName }}</div>
+    <div class="nav1 bt">
+      <div class="flex">
+        <div class="n1-tit1">{{ titleName }}</div>
+        <div class="n3-tit3">
+          <div
+            v-if="have1"
+            @click="changeIndex(1)"
+            :class="{ btn: true, active: nowIndex == 1 }"
+          >
+            新闻
+          </div>
+          <div
+            v-if="have2"
+            @click="changeIndex(2)"
+            :class="{ btn: true, active: nowIndex == 2 }"
+          >
+            舆情
+          </div>
+          <div
+            v-if="have3"
+            @click="changeIndex(3)"
+            style="margin-right: 10px"
+            :class="{ btn: true, active: nowIndex == 3 }"
+          >
+            视频
+          </div>
+        </div>
+        <div class="titt" style="margin-left: 20px">
+          <div class="n1-tit2">
+            <div class="txt2-1">选择日期：</div>
+          </div>
+          <div class="n1-tit3">
+            <!-- <el-date-picker
+              size="mini"
+              @change="changeTime"
+              value-format="yyyy-MM-dd"
+              v-model="time"
+              type="date"
+              placeholder="选择日期"
+            ></el-date-picker> -->
+            <el-date-picker
+              size="mini"
+              @change="changeTime"
+              value-format="yyyy-MM-dd"
+              v-model="time"
+              type="daterange"
+              range-separator="—"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            >
+            </el-date-picker>
+          </div>
+        </div>
+      </div>
+      <div class="n3-tit2">
+        <el-button @click="tuichu" type="primary" icon="el-icon-switch-button"
+          >退出</el-button
+        >
+      </div>
+      <!-- <div class="n1-tit1">{{ titleName }}</div>
       <div class="titt">
         <div class="n1-tit2">
           <div class="txt2-1">选择日期：</div>
@@ -16,7 +74,7 @@
             placeholder="选择日期"
           ></el-date-picker>
         </div>
-      </div>
+      </div> -->
     </div>
     <div class="nav2">
       <div class="n2-tit1">采集</div>
@@ -26,21 +84,48 @@
       <div class="n2-tit2">{{ titleName }}</div>
     </div>
     <div class="nav3">
-      <!-- <div class="n3-tit1">
-        <el-input
+      <div class="n3-tit1">
+        <!-- <el-input
           placeholder="热度链接"
           prefix-icon="el-icon-search"
           v-model="keyword"
-        ></el-input>
+        ></el-input> -->
+        <el-input
+          placeholder="搜索"
+          prefix-icon="el-icon-search"
+          v-model="keyword"
+        >
+          <el-button @click="searchKey" slot="append">搜索</el-button>
+        </el-input>
       </div>
-      <div class="n3-tit2">
-        <el-button type="primary" icon="el-icon-plus"></el-button>
+      <!-- <div class="n3-tit2 tj">
+        <el-button
+          @click="addClick"
+          type="primary"
+          icon="el-icon-plus"
+          >添加</el-button
+        >
       </div> -->
-      <div class="n3-tit3">
+      <!-- <div class="n3-tit2">
+        <el-button
+          @click="zqDialogVisible = true"
+          type="primary"
+          icon="el-icon-plus"
+          >摘取关键词</el-button
+        >
+      </div> -->
+      <!-- <div class="n3-tit2">
+        <el-button
+          type="primary"
+          @click="addHotlink"
+          icon="el-icon-plus"
+        ></el-button>
+      </div> -->
+      <!-- <div class="n3-tit3">
         <div
           v-if="have1"
           @click="changeIndex(1)"
-          :class="{ btn: true, btn1: true, active: nowIndex == 1 }"
+          :class="{ btn: true, active: nowIndex == 1 }"
         >
           新闻
         </div>
@@ -59,7 +144,44 @@
         >
           视频
         </div>
-      </div>
+        <div class="myPopover">
+          <el-popover
+            placement="bottom-start"
+            :visible-arrow="false"
+            trigger="click"
+          >
+            <div class="myPop-box">
+              <div class="navv1">
+                <div class="tit1">
+                  <el-input
+                    size="small"
+                    v-model="tagVal"
+                    placeholder="添加屏蔽关键词"
+                  ></el-input>
+                </div>
+                <el-button @click="addTag" size="small">添加</el-button>
+              </div>
+              <div class="navv2">
+                <div class="tit1">已屏蔽关键词</div>
+                <div class="tit2">
+                  <el-tag
+                    v-for="item in tagList"
+                    :key="item.id"
+                    @close="removeTag(item)"
+                    size="small"
+                    closable
+                    >{{ item.title }}</el-tag
+                  >
+                </div>
+              </div>
+            </div>
+            <el-button size="mini" slot="reference">
+              屏蔽关键词
+              <i class="el-icon-plus"></i>
+            </el-button>
+          </el-popover>
+        </div>
+      </div> -->
     </div>
     <div class="nav4 nav1">
       <div class="titt1 titt">
@@ -118,12 +240,12 @@
             </div>
           </template>
         </vxe-column>
-        <vxe-table-column width="150">
+        <vxe-table-column width="80">
           <template slot-scope="scope">
             <div style="display: flex">
-              <el-button size="mini" type="info" @click="tabEdit(scope.row)"
+              <!-- <el-button size="mini" type="info" @click="tabEdit(scope.row)"
                 >编辑</el-button
-              >
+              > -->
               <el-button size="mini" type="danger" @click="tabDel(scope.row)"
                 >删除</el-button
               >
@@ -177,12 +299,12 @@
           show-overflow
           title="发布时间"
         ></vxe-column>
-        <vxe-table-column width="150">
+        <vxe-table-column width="80">
           <template slot-scope="scope">
             <div style="display: flex">
-              <el-button size="mini" type="info" @click="tabEdit(scope.row)"
+              <!-- <el-button size="mini" type="info" @click="tabEdit(scope.row)"
                 >编辑</el-button
-              >
+              > -->
               <el-button size="mini" type="danger" @click="tabDel(scope.row)"
                 >删除</el-button
               >
@@ -240,12 +362,12 @@
           show-overflow
           title="发布时间"
         ></vxe-column> -->
-        <vxe-table-column width="150">
+        <vxe-table-column width="80">
           <template slot-scope="scope">
             <div style="display: flex">
-              <el-button size="mini" type="info" @click="tabEdit(scope.row)"
+              <!-- <el-button size="mini" type="info" @click="tabEdit(scope.row)"
                 >编辑</el-button
-              >
+              > -->
               <el-button size="mini" type="danger" @click="tabDel(scope.row)"
                 >删除</el-button
               >
@@ -265,7 +387,7 @@
     </div>
     <!-- 编辑热度链接 -->
     <el-dialog
-      title="编辑热度链接"
+      title="添加/编辑热度链接"
       :visible.sync="addDialogVisible"
       width="700px"
       :before-close="addHandleClose"
@@ -308,13 +430,20 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <!-- <el-row>
+          <el-row>
             <el-col :span="20">
               <el-form-item label="链接：">
                 <el-input size="small" v-model="addForm.new_url"></el-input>
               </el-form-item>
             </el-col>
-          </el-row> -->
+          </el-row>
+          <el-row>
+            <el-col :span="20">
+              <el-form-item label="时间：">
+                <el-input size="small" v-model="addForm.time"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <!-- <el-row>
             <el-col :span="20">
               <el-form-item label="确认密码：">
@@ -446,6 +575,12 @@ export default {
     addHandleClose() {
       this.addDialogVisible = false;
     },
+    addClick(){
+      for (const key in this.addForm) {
+        this.addForm[key] = ''
+      }
+      this.addDialogVisible = true;
+    },
     async getData() {
       const loading = this.$loading({
         lock: true,
@@ -453,10 +588,11 @@ export default {
         spinner: "el-icon-loading",
         background: "rgba(0, 0, 0, 0.7)",
       });
-      const res = await this.$api.screen_newslist({
+      const res = await this.$api.news_list({
+        keyword: this.keyword,
         site_id: this.site_id,
-        start_day: this.time,
-        end_day: this.time,
+        start_day: this.time && this.time.length > 1 ? this.time[0] : "",
+        end_day: this.time && this.time.length > 1 ? this.time[1] : "",
         page: this.fabuXinwenPage,
         pagesize: 9,
       });
@@ -477,10 +613,11 @@ export default {
         spinner: "el-icon-loading",
         background: "rgba(0, 0, 0, 0.7)",
       });
-      const res = await this.$api.screen_commentlist({
+      const res = await this.$api.comment_list({
+        keyword: this.keyword,
         site_id: this.site_id,
-        start_day: this.time,
-        end_day: this.time,
+        start_day: this.time && this.time.length > 1 ? this.time[0] : "",
+        end_day: this.time && this.time.length > 1 ? this.time[1] : "",
         page: this.fabuXinwenPage,
         pagesize: 9,
       });
@@ -501,10 +638,11 @@ export default {
         spinner: "el-icon-loading",
         background: "rgba(0, 0, 0, 0.7)",
       });
-      const res = await this.$api.screen_videolist({
+      const res = await this.$api.video_list({
+        keyword: this.keyword,
         site_id: this.site_id,
-        start_day: this.time,
-        end_day: this.time,
+        start_day: this.time && this.time.length > 1 ? this.time[0] : "",
+        end_day: this.time && this.time.length > 1 ? this.time[1] : "",
         page: this.fabuXinwenPage,
         pagesize: 9,
       });
@@ -518,7 +656,20 @@ export default {
       }
       loading.close();
     },
-    changeTime() {
+    searchKey() {
+      if (this.nowIndex == 1) {
+        this.getData();
+      } else if (this.nowIndex == 2) {
+        this.getData2();
+      } else if (this.nowIndex == 3) {
+        this.getData3();
+      }
+    },
+    changeTime(e) {
+      console.log(e);
+      if(!e){
+        this.time = []
+      }
       this.tableData = [];
       if (this.nowIndex == 1) {
         this.getData();
@@ -531,7 +682,7 @@ export default {
     async piliangDel() {
       if (this.nowIndex == 1) {
         console.log(this.arr1.toString());
-        const res = await this.$api.screen_newsdel({
+        const res = await this.$api.news_del({
           id: this.arr1.toString(),
         });
         if (res.result == 1) {
@@ -546,7 +697,7 @@ export default {
         }
       } else if (this.nowIndex == 2) {
         console.log(this.arr2.toString());
-        const res = await this.$api.screen_pubsentimentdel({
+        const res = await this.$api.pubsentiment_del({
           id: this.arr2.toString(),
         });
         if (res.result == 1) {
@@ -561,7 +712,7 @@ export default {
         }
       } else if (this.nowIndex == 3) {
         console.log(this.arr3.toString());
-        const res = await this.$api.screen_videodel({
+        const res = await this.$api.video_del({
           id: this.arr3.toString(),
         });
         if (res.result == 1) {
@@ -638,11 +789,11 @@ export default {
     async tabDel(row) {
       let res = null;
       if (this.nowIndex == 1) {
-        res = await this.$api.screen_newsdel({ id: row.id });
+        res = await this.$api.news_del({ id: row.id });
       } else if (this.nowIndex == 2) {
-        res = await this.$api.screen_pubsentimentdel({ id: row.id });
+        res = await this.$api.pubsentiment_del({ id: row.id });
       } else if (this.nowIndex == 3) {
-        res = await this.$api.screen_videodel({ id: row.id });
+        res = await this.$api.video_del({ id: row.id });
       }
       if (res.result == 1) {
         this.$message({
@@ -705,6 +856,13 @@ export default {
         this.arr3.push(ele.id);
       });
     },
+    tuichu() {
+      sessionStorage.setItem("token", null);
+      sessionStorage.setItem("isLogin", null);
+      sessionStorage.setItem("user_level", '');
+      this.$router.push({ path: "/Shouye" });
+      this.$router.go(0);
+    },
     tabEdit(row) {
       console.log(row);
       if (this.nowIndex == 1) {
@@ -731,16 +889,70 @@ export default {
 .index {
   padding: 0 10px;
 }
+.nav1.bt {
+  justify-content: space-between;
+}
 .nav1 {
   display: flex;
   align-items: flex-end;
   // align-content: center;
+  .n3-tit2 {
+    /deep/ .el-button {
+      padding: 0;
+      height: 40px;
+      width: 80px;
+      background: transparent;
+    }
+  }
+  .flex {
+    display: flex;
+    align-items: flex-end;
+  }
   .n1-tit1 {
     font-size: 30px;
-    font-family: PingFang SC, PingFang SC-Regular;
-    font-weight: 400;
+    font-family: PingFang SC, PingFang SC-Medium; //aaa
+    font-weight: 500; //aa
     color: #ffffff;
     margin-right: 20px;
+  }
+  .n3-tit3 {
+    display: flex;
+    align-items: flex-end;
+    margin-left: 10px;
+    .btn.active {
+      background: #122549;
+      border: 1px solid #388bf4;
+      color: #388bf4;
+      line-height: 38px;
+    }
+    .btn {
+      cursor: pointer;
+      margin-left: 8px;
+      width: 60px;
+      height: 40px;
+      // background: #808080;
+      background: #ffffff;
+      border-radius: 5px;
+      line-height: 40px;
+      text-align: center;
+      font-size: 16px;
+      font-family: PingFang SC, PingFang SC-Medium; //aaa
+      font-weight: 500; //aa
+      // color: #ffffff;
+      color: #388bf4;
+      letter-spacing: 0.18px;
+    }
+    .myPopover {
+      .el-icon-plus {
+        margin-left: 4px;
+      }
+      .el-button {
+        background: #122549;
+        border: 0;
+        padding: 9px 15px 7px 15px;
+        color: #ffffff;
+      }
+    }
   }
   .titt {
     display: flex;
@@ -750,13 +962,20 @@ export default {
       align-content: center;
       .txt2-1 {
         font-size: 16px;
-        font-family: PingFang SC, PingFang SC-Regular;
-        font-weight: 400;
+        font-family: PingFang SC, PingFang SC-Medium; //aaa
+        font-weight: 500; //aa
         color: #ffffff;
       }
     }
     .n1-tit3 {
-      width: 130px;
+      width: 282px;
+      /deep/ .el-range-input{
+        background-color: transparent;
+        color: #ffffff;
+      }
+      /deep/ .el-range-separator{
+        color: #ffffff;
+      }
       /deep/ .el-date-editor {
         width: 100%;
       }
@@ -774,8 +993,8 @@ export default {
   align-items: center;
   .n2-tit1 {
     font-size: 12px;
-    font-family: PingFang SC, PingFang SC-Regular;
-    font-weight: 400;
+    font-family: PingFang SC, PingFang SC-Medium; //aaa
+    font-weight: 500; //aa
     color: #8291a9;
   }
   .el-icon-arrow-right {
@@ -785,11 +1004,12 @@ export default {
   }
   .n2-tit2 {
     font-size: 12px;
-    font-family: PingFang SC, PingFang SC-Regular;
-    font-weight: 400;
+    font-family: PingFang SC, PingFang SC-Medium; //aaa
+    font-weight: 500; //aa
     color: #ffffff;
   }
 }
+
 .nav3 {
   margin-top: 22px;
   display: flex;
@@ -801,27 +1021,45 @@ export default {
       background-color: #1f2935 !important;
       border: 0;
       padding: 0 20px 0 36px;
+      color: #ffffff;
+    }
+    /deep/ .el-input-group__append {
+      background: transparent;
+      border: 1px solid #1f2935 !important;
+      button.el-button {
+        background-color: #409eff !important;
+        color: #ffffff;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
     }
   }
   .n3-tit2 {
     /deep/ .el-button {
       padding: 0;
       height: 40px;
-      width: 40px;
+      width: 120px;
+      background: transparent;
+    }
+  }
+  .n3-tit2.tj {
+    margin-right: 10px;
+    /deep/ .el-button {
+      padding: 0;
+      height: 40px;
+      width: 80px;
+      background: transparent;
     }
   }
   .n3-tit3 {
     display: flex;
     align-items: flex-end;
-    // margin-left: 10px;
+    margin-left: 10px;
     .btn.active {
       background: #122549;
       border: 1px solid #388bf4;
       color: #388bf4;
       line-height: 38px;
-    }
-    .btn1.btn {
-      margin-left: 0;
     }
     .btn {
       cursor: pointer;
@@ -833,8 +1071,8 @@ export default {
       line-height: 40px;
       text-align: center;
       font-size: 16px;
-      font-family: PingFang SC, PingFang SC-Regular;
-      font-weight: 400;
+      font-family: PingFang SC, PingFang SC-Medium; //aaa
+      font-weight: 500; //aa
       color: #ffffff;
       letter-spacing: 0.18px;
     }
@@ -947,5 +1185,8 @@ export default {
       color: #409eff;
     }
   }
+}
+/deep/ .el-date-table td.in-range div, .el-date-table td.in-range div:hover{
+  background-color: #4e6b97 !important;
 }
 </style>

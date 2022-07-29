@@ -97,12 +97,12 @@ myPost.interceptors.response.use(response => {
             vue.$message.error(error.response.data.info);
         }
     } else if (error.response.status === 401) {
-        sessionStorage.setItem("isLogin", false);
-        console.log(sessionStorage.getItem("isLogin"));
-        router.push({
-            path: "/"
-        })
-        router.go(0)
+        // sessionStorage.setItem("isLogin", false);
+        // console.log(sessionStorage.getItem("isLogin"));
+        // router.push({
+        //     path: "/"
+        // })
+        // router.go(0)
         return Promise.reject();
     } else if (error.response.status === 404) {
         vue.$alert('页面不存在', '404错误', {
@@ -592,6 +592,126 @@ export default {
     exporthotwords_list(obj) {
         return myPost({
             url: urls.exporthotwords_list,
+            data: {
+                ...obj
+            }
+        })
+    },
+    hotwords_list(obj) {
+        return myPost({
+            url: urls.hotwords_list,
+            data: {
+                ...obj
+            }
+        })
+    },
+    del_hotwords(obj) {
+        return myPost({
+            url: urls.del_hotwords,
+            data: {
+                ...obj
+            }
+        })
+    },
+    user_release(obj) {
+        return myPost({
+            url: urls.user_release,
+            data: {
+                ...obj
+            }
+        })
+    },
+    check_hotlink(obj) {
+        return myPost({
+            url: urls.check_hotlink,
+            data: {
+                ...obj
+            }
+        })
+    },
+    info_list(obj) {
+        return myPost({
+            url: urls.info_list,
+            data: {
+                ...obj
+            }
+        })
+    },
+    add_info(obj) {
+        return myPost({
+            url: urls.add_info,
+            data: {
+                ...obj
+            }
+        })
+    },
+    update_info(obj) {
+        return myPost({
+            url: urls.update_info,
+            data: {
+                ...obj
+            }
+        })
+    },
+    del_info(obj) {
+        return myPost({
+            url: urls.del_info,
+            data: {
+                ...obj
+            }
+        })
+    },
+    admingroups_list(obj) {
+        return myPost({
+            url: urls.admingroups_list,
+            data: {
+                ...obj
+            }
+        })
+    },
+    update_admingroup(obj) {
+        return myPost({
+            url: urls.update_admingroup,
+            data: {
+                ...obj
+            }
+        })
+    },
+    update_hotwords(obj) {
+        return myPost({
+            url: urls.update_hotwords,
+            data: {
+                ...obj
+            }
+        })
+    },
+    manual_reptile(obj) {
+        return myPost({
+            url: urls.manual_reptile,
+            data: {
+                ...obj
+            }
+        })
+    },
+    list_hotwordskeyword(obj) {
+        return myPost({
+            url: urls.list_hotwordskeyword,
+            data: {
+                ...obj
+            }
+        })
+    },
+    add_hotwordskeyword(obj) {
+        return myPost({
+            url: urls.add_hotwordskeyword,
+            data: {
+                ...obj
+            }
+        })
+    },
+    del_hotwordskeyword(obj) {
+        return myPost({
+            url: urls.del_hotwordskeyword,
             data: {
                 ...obj
             }
