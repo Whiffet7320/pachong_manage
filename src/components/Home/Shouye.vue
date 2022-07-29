@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <el-row v-if="isLogin != 'false' && user_level != 2">
+    <el-row v-if="isLogin != 'false' && user_level != 2 && isLogin != 'null' && isLogin != null">
       <div class="nav1">
         <div class="r1"></div>
         <div class="r2"></div>

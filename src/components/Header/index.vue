@@ -177,7 +177,7 @@
           @keyup.enter.native="sySearchClick"
         >
         </el-input>
-        <template v-if="isLogin != 'false' && isLogin != 'null'">
+        <template v-if="isLogin != 'false' && isLogin != 'null' && isLogin != null">
           <div v-if="user_level != 2" @click="daochu" class="l3-dr" style="margin-right: 0px">
             <div class="r1"></div>
             <div class="r2"></div>
@@ -300,7 +300,7 @@ export default {
       console.log(this.isLogin);
       if (to.path == "/Shouye") {
         this.name = "今日教育";
-        if (this.isLogin == "false" || this.isLogin == "null") {
+        if (this.isLogin == "false" || this.isLogin == "null" || this.isLogin == null) {
         this.name = "游客";
       }
         if (this.user_level == 2) {
@@ -321,7 +321,7 @@ export default {
         this.$store.commit("isSmallHeader", false);
       } else if (to.path == "/ShouyePage/Shaixuanriqi") {
         this.name = "今日教育";
-        if (this.isLogin == "false" || this.isLogin == "null") {
+        if (this.isLogin == "false" || this.isLogin == "null" || this.isLogin == null) {
         this.name = "游客";
       }
         if (this.user_level == 2) {
@@ -337,7 +337,7 @@ export default {
         this.$store.commit("isSmallHeader", true);
       } else if (to.path == "/Zhanghao/Quanxianguanli") {
         this.name = "今日教育";
-        if (this.isLogin == "false" || this.isLogin == "null") {
+        if (this.isLogin == "false" || this.isLogin == "null" || this.isLogin == null) {
         this.name = "游客";
       }
         if (this.user_level == 2) {
@@ -346,7 +346,7 @@ export default {
         this.$store.commit("isSmallHeader", false);
       } else if (to.path == "/Zhanghao/Zhanghaoguanli") {
         this.name = "今日教育";
-        if (this.isLogin == "false" || this.isLogin == "null") {
+        if (this.isLogin == "false" || this.isLogin == "null" || this.isLogin == null) {
         this.name = "游客";
       }
         if (this.user_level == 2) {
@@ -355,7 +355,7 @@ export default {
         this.$store.commit("isSmallHeader", false);
       } else if (to.path == "/") {
         this.name = "今日教育";
-        if (this.isLogin == "false" || this.isLogin == "null") {
+        if (this.isLogin == "false" || this.isLogin == "null" || this.isLogin == null) {
         this.name = "游客";
       }
         if (this.user_level == 2) {
@@ -445,9 +445,10 @@ export default {
     console.log(this.isLogin,123)
     this.user_level = sessionStorage.getItem("user_level")
     this.url = this.$route.path;
-    if (this.$route.path == "/Shouye") {
+    if (this.$route.path == "/Shouye" || this.$route.path == "/") {
       this.name = "今日教育";
-      if (this.isLogin == "false" || this.isLogin == "null") {
+      console.log(this.isLogin,1231)
+      if (this.isLogin == "false" || this.isLogin == "null" || this.isLogin == null) {
         this.name = "游客";
       }
       if (this.user_level == 2) {
@@ -469,7 +470,7 @@ export default {
       this.$store.commit("isSmallHeader", false);
     } else if (this.$route.path == "/ShouyePage/Shaixuanriqi") {
       this.name = "今日教育";
-      if (this.isLogin == "false" || this.isLogin == "null") {
+      if (this.isLogin == "false" || this.isLogin == "null" || this.isLogin == null) {
         this.name = "游客";
       }
       if (this.user_level == 2) {
@@ -485,7 +486,7 @@ export default {
       this.$store.commit("isSmallHeader", true);
     } else if (this.$route.path == "/Zhanghao/Quanxianguanli") {
       this.name = "今日教育";
-      if (this.isLogin == "false" || this.isLogin == "null") {
+      if (this.isLogin == "false" || this.isLogin == "null" || this.isLogin == null) {
         this.name = "游客";
       }
       if (this.user_level == 2) {
@@ -494,7 +495,7 @@ export default {
       this.$store.commit("isSmallHeader", false);
     } else if (this.$route.path == "/Zhanghao/Zhanghaoguanli") {
       this.name = "今日教育";
-      if (this.isLogin == "false" || this.isLogin == "null") {
+      if (this.isLogin == "false" || this.isLogin == "null" || this.isLogin == null) {
         this.name = "游客";
       }
       if (this.user_level == 2) {
@@ -503,7 +504,7 @@ export default {
       this.$store.commit("isSmallHeader", false);
     } else if (this.$route.path == "/") {
       this.name = "今日教育";
-      if (this.isLogin == "false" || this.isLogin == "null") {
+      if (this.isLogin == "false" || this.isLogin == "null" || this.isLogin == null) {
         this.name = "游客";
       }
       if (this.user_level == 2) {
