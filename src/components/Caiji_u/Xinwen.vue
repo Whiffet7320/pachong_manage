@@ -601,6 +601,7 @@ export default {
         this.total = res.total;
       } else if (res.total == 0) {
         this.tableData = [];
+        this.total = res.total;
       } else {
         this.$message("没有更多了");
       }
@@ -626,6 +627,7 @@ export default {
         this.total = res.total;
       } else if (res.total == 0) {
         this.tableData = [];
+        this.total = res.total;
       } else {
         this.$message("没有更多了");
       }
@@ -652,6 +654,7 @@ export default {
         this.total = res.total;
       } else if (res.total == 0) {
         this.tableData = [];
+        this.total = res.total;
       } else {
         this.$message("没有更多了");
       }

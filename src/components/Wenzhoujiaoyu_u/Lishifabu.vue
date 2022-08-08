@@ -575,6 +575,7 @@ export default {
         this.total = res.total;
       } else if (res.total == 0) {
         this.tableData = [];
+        this.total = res.total;
       } else {
         this.$message("没有更多了");
       }
@@ -599,6 +600,7 @@ export default {
         this.total = res.total;
       } else if (res.total == 0) {
         this.tableData = [];
+        this.total = res.total;
       } else {
         this.$message("没有更多了");
       }
@@ -623,6 +625,7 @@ export default {
         this.total = res.total;
       } else if (res.total == 0) {
         this.tableData = [];
+        this.total = res.total;
       } else {
         this.$message("没有更多了");
       }
@@ -817,11 +820,14 @@ export default {
       });
     },
     tuichu() {
+      // console.log(1111)
       sessionStorage.setItem("token", null);
       sessionStorage.setItem("isLogin", null);
       sessionStorage.setItem("user_level", '');
       this.$router.push({ path: "/Shouye" });
-      this.$router.go(0);
+      setTimeout(()=>{
+        this.$router.go(0);
+      },200)
     },
     tabEdit(row) {
       console.log(row);

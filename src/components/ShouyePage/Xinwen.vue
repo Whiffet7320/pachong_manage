@@ -66,7 +66,9 @@ export default {
         start_day: this.syStartTime,
         end_day: this.syEndTime,
         page: this.page,
-        pagesize: 15
+        pagesize: 15,
+        category: 2,
+        is_hotwords:this.$route.params.is_hotwords,
       });
       if (res.list) {
         this.tableData1 = this.tableData1.concat(res.list);

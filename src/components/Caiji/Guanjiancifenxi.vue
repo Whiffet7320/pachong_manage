@@ -545,7 +545,9 @@ export default {
       sessionStorage.setItem("isLogin", null);
       sessionStorage.setItem("user_level", '');
       this.$router.push({ path: "/Shouye" });
-      this.$router.go(0);
+      setTimeout(()=>{
+        this.$router.go(0);
+      },500)
     },
     zd() {
       this.issd = false;

@@ -188,13 +188,18 @@
         <vxe-column show-overflow field="title" title="标题"></vxe-column>
         <vxe-column show-overflow field="source" title="来源"></vxe-column>
         <vxe-column show-overflow field="content" title="内容"></vxe-column>
-        <!-- <vxe-column show-overflow field="age" title="链接">
+        <vxe-column
+          field="create_time"
+          show-overflow
+          title="发布时间"
+        ></vxe-column>
+        <vxe-column show-overflow field="age" title="链接">
           <template #default="{ row }">
-            <a style="color: #04f9db" :href="`${row.url}`" target="_black">{{
+            <a style="color: #04f9db" :href="`${row.new_url}`" target="_black">{{
               row.url
             }}</a>
           </template>
-        </vxe-column> -->
+        </vxe-column>
         <vxe-table-column width="160">
           <template slot-scope="scope">
             <div style="display: flex">
@@ -253,7 +258,7 @@
           </template>
         </vxe-column> -->
         <vxe-column
-          field="comment_time"
+          field="create_time"
           show-overflow
           title="发布时间"
         ></vxe-column>
@@ -819,13 +824,13 @@ export default {
         });
         console.log(res);
       } else {
-        res = await this.$api.update_info({
+        res = await this.$api.news_edit({
           id: this.id,
           title: this.addForm.title,
           content: this.addForm.content,
           source: this.addForm.source,
-          // url: this.addForm.url,
-          day: this.time,
+          urls: this.addForm.url,
+          // day: this.time,
         });
         console.log(res);
       }

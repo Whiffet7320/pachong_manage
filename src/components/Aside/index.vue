@@ -16,7 +16,7 @@
         active-text-color="#fff"
         router
       >
-        <template v-if="false">
+        <template v-if="true">
           <el-menu-item v-if="isHaveSY" :route="{ name: 'Shouye' }" index="1-1">
             <i class="el-icon-s-home"></i>
             <span slot="title">首页</span>
@@ -61,7 +61,7 @@
             </el-menu-item>
           </template>
         </template>
-        <template v-if="true && (user_level == 1 || user_level == 3)">
+        <template v-if="false && (user_level == 1 || user_level == 3)">
           <el-menu-item :route="{ name: 'Shouye' }" index="1-1">
             <i class="el-icon-s-home"></i>
             <span slot="title">首页</span>
@@ -99,6 +99,12 @@
                 :route="{ name: 'FabuXinwen' }"
                 index="80-3-3"
                 >视频</el-menu-item
+              >
+              <el-menu-item
+                @click="clickFabu('温州教育', '80-3-4')"
+                :route="{ name: 'Lishifabu' }"
+                index="80-3-4"
+                >温州教育</el-menu-item
               >
             </el-submenu>
           </el-submenu>
@@ -176,6 +182,12 @@
                 index="80-3-3"
                 >视频</el-menu-item
               >
+              <el-menu-item
+                @click="clickFabu('温州教育', '80-3-4')"
+                :route="{ name: 'Lishifabu' }"
+                index="80-3-4"
+                >温州教育</el-menu-item
+              >
             </el-submenu>
           </el-submenu>
           <el-submenu index="82">
@@ -227,6 +239,8 @@ export default {
         this.menuActiveIndex = "80-3-2";
       } else if (this.caijiFabuName == "视频") {
         this.menuActiveIndex = "80-3-3";
+      } else if (this.caijiFabuName == "温州教育") {
+        this.menuActiveIndex = "80-3-4";
       }
     },
     $route(to) {
@@ -540,10 +554,20 @@ export default {
         this.menuActiveIndex = "80-1";
       } else if (to.path == "/Caiji/Yuntureci") {
         this.menuActiveIndex = "80-2";
-      }  else if (to.path == "/Caiji/Guanjiancifenxi") {
+      } else if (to.path == "/Caiji/Guanjiancifenxi") {
         this.menuActiveIndex = "80-4";
       } else if (to.path == "/Caiji/FabuXinwen") {
-        this.menuActiveIndex = "80-3-1";
+          if (this.caijiFabuName == "新闻") {
+            this.menuActiveIndex = "80-3-1";
+          } else if (this.caijiFabuName == "舆情") {
+            this.menuActiveIndex = "80-3-2";
+          } else if (this.caijiFabuName == "视频") {
+            this.menuActiveIndex = "80-3-3";
+          }
+
+        // this.menuActiveIndex = "80-3-1";
+      } else if (to.path == "/Wenzhoujiaoyu/Lishifabu") {
+        this.menuActiveIndex = "80-3-4";
       } else if (to.path == "/Zhanghao/Quanxianguanli") {
         this.menuActiveIndex = "81-1";
       } else if (to.path == "/Zhanghao/Zhanghaoguanli") {
@@ -557,7 +581,7 @@ export default {
   },
   data() {
     return {
-      menu_wzedu:null,
+      menu_wzedu: null,
       activeIndex: 0,
       menuActiveIndex: "",
       userInfo: null,
@@ -579,7 +603,7 @@ export default {
       this.isHaveSY = false;
     }
     this.menu.forEach((ele) => {
-      if(ele.name == "温州教育"){
+      if (ele.name == "温州教育") {
         this.haveWZJY = true;
       }
       ele.sub_menu.forEach((ele2) => {
@@ -596,9 +620,11 @@ export default {
   },
   methods: {
     clickFabu(val, i) {
-      this.$store.commit("caijiFabuName", val);
+      setTimeout(()=>{
+        this.$store.commit("caijiFabuName", val);
       this.$store.commit("caijiFabuIndex", i);
       this.menuActiveIndex = this.caijiFabuIndex;
+      },200)
     },
     myisColl() {
       this.isCollapse = !this.isCollapse;
@@ -614,10 +640,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/deep/ .el-menu-item i{
+/deep/ .el-menu-item i {
   color: #fff;
 }
-/deep/ .el-submenu i{
+/deep/ .el-submenu i {
   color: #fff;
 }
 .aside {

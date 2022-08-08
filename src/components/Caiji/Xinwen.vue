@@ -222,6 +222,7 @@
           title="作者"
         ></vxe-column>
         <vxe-column show-overflow field="title" title="标题"></vxe-column>
+        <vxe-column show-overflow field="content" title="内容"></vxe-column>
         <vxe-column show-overflow field="age" title="链接">
           <template #default="{ row }">
             <a
@@ -240,6 +241,11 @@
             </div>
           </template>
         </vxe-column>
+        <vxe-column
+          field="news_day"
+          show-overflow
+          title="发布时间"
+        ></vxe-column>
         <vxe-table-column width="80">
           <template slot-scope="scope">
             <div style="display: flex">
@@ -264,7 +270,7 @@
       >
         <vxe-column show-overflow type="checkbox" width="60"></vxe-column>
         <vxe-column
-          field="news_name"
+          field="title"
           show-overflow
           title="新闻标题"
         ></vxe-column>
@@ -276,14 +282,14 @@
         ></vxe-column>
         <vxe-column
           show-overflow
-          field="comment_content"
+          field="content"
           title="评论内容"
         ></vxe-column>
-        <vxe-column
+        <!-- <vxe-column
           field="user_name"
           show-overflow
           title="评论用户"
-        ></vxe-column>
+        ></vxe-column> -->
         <vxe-column show-overflow field="age" title="链接">
           <template #default="{ row }">
             <a
@@ -295,7 +301,7 @@
           </template>
         </vxe-column>
         <vxe-column
-          field="comment_time"
+          field="news_day"
           show-overflow
           title="发布时间"
         ></vxe-column>
@@ -601,6 +607,7 @@ export default {
         this.total = res.total;
       } else if (res.total == 0) {
         this.tableData = [];
+        this.total = res.total;
       } else {
         this.$message("没有更多了");
       }
@@ -626,6 +633,7 @@ export default {
         this.total = res.total;
       } else if (res.total == 0) {
         this.tableData = [];
+        this.total = res.total;
       } else {
         this.$message("没有更多了");
       }
@@ -651,6 +659,7 @@ export default {
         this.total = res.total;
       } else if (res.total == 0) {
         this.tableData = [];
+        this.total = res.total;
       } else {
         this.$message("没有更多了");
       }

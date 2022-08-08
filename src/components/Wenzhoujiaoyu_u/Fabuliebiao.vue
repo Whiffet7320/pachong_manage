@@ -335,7 +335,7 @@ export default {
     };
   },
   created() {
-    this.$store.commit('redulianjiebiaoPage',1)
+    this.$store.commit("redulianjiebiaoPage", 1);
     const menu = JSON.parse(sessionStorage.getItem("menu"));
     console.log(menu);
     menu.forEach((ele) => {
@@ -393,12 +393,14 @@ export default {
     tuichu() {
       sessionStorage.setItem("token", null);
       sessionStorage.setItem("isLogin", null);
-      sessionStorage.setItem("user_level", '');
+      sessionStorage.setItem("user_level", "");
       this.$router.push({ path: "/Shouye" });
-      this.$router.go(0);
+      setTimeout(() => {
+        this.$router.go(0);
+      }, 200);
     },
-    searchKey(){
-      this.getData()
+    searchKey() {
+      this.getData();
     },
     async getData() {
       const loading = this.$loading({
@@ -665,7 +667,7 @@ export default {
         this.$message.error(res.msg);
       }
     },
-     tabEdit(row) {
+    tabEdit(row) {
       console.log(row);
       this.isAdd = false;
       this.id = row.id;
@@ -1165,7 +1167,7 @@ export default {
   //   color: #ffffff;
   // }
 }
-/deep/ .vxe-body--column.col--ellipsis{
+/deep/ .vxe-body--column.col--ellipsis {
   line-height: 48px;
 }
 </style>

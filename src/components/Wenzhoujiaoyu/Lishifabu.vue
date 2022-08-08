@@ -2,7 +2,7 @@
   <div class="index">
     <div class="nav1 bt">
       <div class="flex">
-        <div class="n1-tit1">历史发布</div>
+        <div class="n1-tit1">温州教育</div>
         <div class="titt" style="margin-left: 20px">
           <div class="n1-tit2">
             <div class="txt2-1">选择日期：</div>
@@ -53,9 +53,11 @@
       </div> -->
     </div>
     <div class="nav2">
-      <div class="n2-tit1">温州教育</div>
+      <div class="n2-tit1">采集</div>
       <i class="el-icon-arrow-right"></i>
       <div class="n2-tit2">历史发布</div>
+      <i class="el-icon-arrow-right"></i>
+      <div class="n2-tit2">温州教育</div>
     </div>
     <div class="nav3">
       <div class="n3-tit1">
@@ -192,13 +194,18 @@
         <vxe-column show-overflow field="title" title="标题"></vxe-column>
         <vxe-column show-overflow field="source" title="来源"></vxe-column>
         <vxe-column show-overflow field="content" title="内容"></vxe-column>
-        <!-- <vxe-column show-overflow field="age" title="链接">
+        <vxe-column
+          field="news_day"
+          show-overflow
+          title="发布时间"
+        ></vxe-column>
+        <vxe-column show-overflow field="age" title="链接">
           <template #default="{ row }">
             <a style="color: #04f9db" :href="`${row.url}`" target="_black">{{
-              row.url
+              row.new_url
             }}</a>
           </template>
-        </vxe-column> -->
+        </vxe-column>
         <vxe-table-column width="160">
           <template slot-scope="scope">
             <div style="display: flex">
@@ -279,13 +286,19 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <!-- <el-row>
+          <el-row>
             <el-col :span="20">
-              <el-form-item label="时间：">
-                <el-input size="small" v-model="addForm.time"></el-input>
+              <el-form-item label="日期：">
+                <el-date-picker
+                  size="mini"
+                  value-format="yyyy-MM-dd"
+                  v-model="addForm.time"
+                  type="date"
+                  placeholder="选择日期"
+                ></el-date-picker>
               </el-form-item>
             </el-col>
-          </el-row> -->
+          </el-row>
           <!-- <el-row>
             <el-col :span="20">
               <el-form-item label="确认密码：">
@@ -346,6 +359,7 @@ export default {
         content: "",
         source: "",
         url: "",
+        time:"",
       },
       isAdd: false,
       arr1: [],
@@ -433,8 +447,10 @@ export default {
         spinner: "el-icon-loading",
         background: "rgba(0, 0, 0, 0.7)",
       });
-      const res = await this.$api.info_list({
+      const res = await this.$api.news_list({
+        category: 1,
         keyword: this.keyword,
+        site_id:18,
         start_day: this.time && this.time.length > 1 ? this.time[0] : '',
         end_day: this.time && this.time.length > 1 ? this.time[1] : '',
         page: this.redulianjiebiaoPage,
@@ -601,7 +617,7 @@ export default {
     },
     async tabDel(row) {
       let res = null;
-      res = await this.$api.del_info({ id: row.id });
+      res = await this.$api.news_del({ id: row.id });
       if (res.result == 1) {
         this.$message({
           message: res.msg,
@@ -653,12 +669,13 @@ export default {
         });
         console.log(res);
       } else {
-        res = await this.$api.update_info({
+        res = await this.$api.news_edit({
           id: this.id,
           title: this.addForm.title,
           content: this.addForm.content,
           source: this.addForm.source,
-          url: this.addForm.url,
+          urls: this.addForm.url,
+          news_day: this.addForm.time,
         });
         console.log(res);
       }
@@ -678,9 +695,10 @@ export default {
       this.isAdd = false;
       this.id = row.id;
       this.addForm.title = row.title;
-      this.addForm.url = row.url;
+      this.addForm.url = row.new_url;
       this.addForm.content = row.content;
       this.addForm.source = row.source;
+      this.addForm.time = row.news_day;
       this.addDialogVisible = true;
     },
     async tabFabu(row) {

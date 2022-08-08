@@ -103,9 +103,9 @@
         <!-- <vxe-column show-overflow type="checkbox" width="60"></vxe-column> -->
         <vxe-column show-overflow field="title" title="关键词"></vxe-column>
         <vxe-column show-overflow field="num" title="次数"></vxe-column>
-        <vxe-column show-overflow field="news_title" title="标题"></vxe-column>
+        <!-- <vxe-column show-overflow field="news_title" title="标题"></vxe-column> -->
         <!-- <vxe-column show-overflow field="content" title="内容"></vxe-column> -->
-        <vxe-column show-overflow field="age" title="链接">
+        <!-- <vxe-column show-overflow field="age" title="链接">
           <template #default="{ row }">
             <a
               style="color: #04f9db"
@@ -114,8 +114,8 @@
               >{{ row.new_url }}</a
             >
           </template>
-        </vxe-column>
-        <vxe-column show-overflow width="200" field="address" title="采集来源">
+        </vxe-column> -->
+        <!-- <vxe-column show-overflow width="200" field="address" title="采集来源">
           <template #default="{ row }">
             <div class="cjyl">
               <div
@@ -128,7 +128,7 @@
               <div class="txt">{{ row.from_user }}</div>
             </div>
           </template>
-        </vxe-column>
+        </vxe-column> -->
         <vxe-table-column width="160">
           <template slot-scope="scope">
             <div style="display: flex">
@@ -184,7 +184,7 @@
                 @close="removeTag(item)"
                 size="small"
                 closable
-                >{{ item.title }}</el-tag
+                >{{ item.keyword }}</el-tag
               >
             </div>
           </div>

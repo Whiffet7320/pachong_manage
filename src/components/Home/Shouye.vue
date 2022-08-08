@@ -118,7 +118,7 @@
                     新闻
                   </div>
                   <div
-                    v-if="user_level != ''"
+                    v-if="user_level != '' && isLogin != 'false' && isLogin != 'null' && isLogin != null"
                     @click="changeTabIndex(1)"
                     :class="{ txt: true, active: sytableIndex == 1 }"
                   >
@@ -594,7 +594,7 @@
               </el-form-item>
             </el-col>
           </el-row> -->
-          <el-row v-if="this.sytableIndex == 3 && this.syisAdd">
+          <el-row >
             <el-col :span="20">
               <el-form-item label="内容：">
                 <el-input
@@ -925,6 +925,7 @@ export default {
     async AddOnSubmit() {
       let res = null;
       if (this.syisAdd) {
+        this.$store.commit("syisAdd", false);
         res = await this.$api.add_hotlink({
           id: this.id,
           title: this.addForm.title,
@@ -973,6 +974,8 @@ export default {
           type: "success",
         });
         this.$store.commit("syaddDialogVisible", false);
+        this.tableData1 = [];
+        this.page = 1
         if (this.sytableIndex == 3) {
           this.getData4();
         } else if (this.sytableIndex == 4) {

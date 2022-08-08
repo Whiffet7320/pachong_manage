@@ -113,16 +113,17 @@
       </div>
       <div class="n3-tit2">
         <el-button
-          @click="zqDialogVisible = true"
+          v-if="this.nowIndex != 3"
+          @click="zhaiqu"
           type="primary"
           icon="el-icon-plus"
           >摘取关键词</el-button
         >
-        <el-button style="width:90px" @click="yijiancaiji" type="primary"
+        <el-button style="width: 90px" @click="yijiancaiji" type="primary"
           >一键采集</el-button
         >
       </div>
-      
+
       <!-- <div class="n3-tit2">
         <el-button
           type="primary"
@@ -259,6 +260,7 @@
             </div>
           </template>
         </vxe-column>
+        <vxe-column show-overflow field="news_day" title="日期"></vxe-column>
         <!-- <vxe-column show-overflow field="source" title="来源"></vxe-column> -->
         <vxe-table-column width="210">
           <template slot-scope="scope">
@@ -287,7 +289,7 @@
       >
         <vxe-column show-overflow type="checkbox" width="60"></vxe-column>
         <vxe-column
-          field="news_name"
+          field="title"
           show-overflow
           title="新闻标题"
         ></vxe-column>
@@ -299,14 +301,14 @@
         ></vxe-column>
         <vxe-column
           show-overflow
-          field="comment_content"
+          field="content"
           title="评论内容"
         ></vxe-column>
-        <vxe-column
+        <!-- <vxe-column
           field="user_name"
           show-overflow
           title="评论用户"
-        ></vxe-column>
+        ></vxe-column> -->
         <vxe-column show-overflow field="age" title="链接">
           <template #default="{ row }">
             <a
@@ -319,9 +321,9 @@
         </vxe-column>
         <!-- <vxe-column show-overflow field="source" title="来源"></vxe-column> -->
         <vxe-column
-          field="comment_time"
+          field="news_day"
           show-overflow
-          title="发布时间"
+          title="日期"
         ></vxe-column>
         <vxe-table-column width="210">
           <template slot-scope="scope">
@@ -612,7 +614,7 @@ export default {
     };
   },
   created() {
-    this.$store.commit('redulianjiebiaoPage',1)
+    this.$store.commit("redulianjiebiaoPage", 1);
     const menu = JSON.parse(sessionStorage.getItem("menu"));
     console.log(menu);
     menu.forEach((ele) => {
@@ -684,10 +686,14 @@ export default {
         this.getData3();
       }
     },
+    zhaiqu(){
+      this.getGjcData()
+      this.zqDialogVisible = true
+    },
     tuichu() {
       sessionStorage.setItem("token", null);
       sessionStorage.setItem("isLogin", null);
-      sessionStorage.setItem("user_level", '');
+      sessionStorage.setItem("user_level", "");
       // this.$router.push({ path: "/login" });
       // this.$router.go(0);
       this.$router.push({ path: "/Shouye" });
@@ -774,16 +780,16 @@ export default {
     zqHandleClose() {
       this.zqDialogVisible = false;
     },
-    async yijiancaiji(){
-      const res = await this.$api.manual_reptile()
+    async yijiancaiji() {
+      const res = await this.$api.manual_reptile();
       if (res.result == 1) {
-          this.$message({
-            message: res.msg,
-            type: "success",
-          });
-        } else {
-          this.$message.error(res.msg);
-        }
+        this.$message({
+          message: res.msg,
+          type: "success",
+        });
+      } else {
+        this.$message.error(res.msg);
+      }
     },
     async piliangDel() {
       if (this.nowIndex == 1) {
@@ -999,7 +1005,7 @@ export default {
           forward_num: this.addForm.forward_num,
           video: this.addForm.video,
           comment: this.addForm.comment,
-          types:this.nowIndex == 1 ? 0 : 1, 
+          types: this.nowIndex == 1 ? 0 : 1,
         });
         console.log(res);
       } else {
@@ -1010,7 +1016,7 @@ export default {
             source: this.addForm.source,
             news_day: this.addForm.news_day,
             urls: this.addForm.new_url,
-            content:this.addForm.content
+            content: this.addForm.content,
           });
           console.log(res);
         } else if (this.nowIndex == 2) {
